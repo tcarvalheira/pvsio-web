@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   
+   viewBox="0 0 79.374998 79.375002"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="alarmoff.svg">
+  <g
+     id="layer1"
+     transform="translate(0,-217.62498)">
+    <path
+       style="fill:none;stroke:#FF0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 9.9673446,285.4814 c 60.1255954,0.23942 59.6433044,0.23942 59.6433044,0.23942 l -29.419743,-57.4613 z"
+       id="path18"
+       />
+    <path
+       style="fill:none;stroke:#FF0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 14.951017,234.78446 44.209996,57.39261 z"
+       id="path22"
+       />
+    <path
+       style="fill:none;stroke:#FF0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 15.111781,292.33783 64.144686,234.30217 Z"
+       id="path24"
+       />
+  </g>
+</svg>
