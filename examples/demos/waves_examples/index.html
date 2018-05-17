@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Wave widget example</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <link href="../../client/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="../../client/app/plugins/graphbuilder/graph.css" rel="stylesheet" type="text/css"/>
+        <link href="../../client/css/style.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Wave example</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+
+        
+        <div id="content" class="content" style="display:none;margin-top: 50px;">
+            <div id="alarm">
+                <h1>Alarms</h1>
+                <div class="col-xs-12 text-center">
+                        Alarm controls: <br>
+                        <button id="muteBtn" state="unmute">Mute</button>
+                        <button id="volUp">Volume Up</button>
+                        <button id="volDown">Volume down</button>
+                    </div>
+                <div id="sound-container" style="height: 100px;">
+                    <!--
+                    SoundWidget widget will append SoundWidget HTML here
+                    --> 
+                </div>
+            </div>
+
+            <!-- Temperature detail -->
+            <div class="col-xs-12" id="basic-display-section">
+                <h1>TemperatureDetail</h1>
+                <input id="temp" placeholder="Temperature" value="37.0" style="z-index:100"/>
+                <input id="min-temp" placeholder="Temperature minimum" value="36.0" style="z-index:90"/>
+                <input id="max-temp" placeholder="Temperature maximum" value="39.0" style="z-index:80"/>
+                <button id="upd_temp_btn" >Update temperatures Core</button>
+                <button id="upd_temp_btn_skin" >Update temperatures Skin</button>
+                <div id="temperature-detail-container" style="height: 100px;"></div>
+            </div>
+
+            <!-- Other detail -->
+            <div class="col-xs-12" id="basic-display-section">
+                <h1>Other Detail</h1>
+                <div id="other-detail-container" style="height: 100px;"></div>
+            </div>
+
+            <!-- BasicDisplayEVO -->
+            <div class="col-xs-12" id="basic-display-section">
+                <h1>BasicDisplay / ArrowDisplay</h1>
+                ArrowDisplay uses BasicDisplay and then rotate it keeping background straight
+                <div id="basic-display-container" style="height: 100px;"></div>
+                <div id="blood-pressure-container" style="height: 100px;"></div>
+            </div>
+            
+            <!-- waves -->
+            <div class="col-xs-12" id="wave-section">
+                <h1>Wave</h1>
+                <div id="wave-container" style="height: 450px;"></div>
+            </div>
+            <!-- waves -->
+            <div class="col-xs-12" id="images-section">
+                <h1>Images</h1>
+                <div id="images-container" style="height: 450px;"></div>
+            </div>
+        </div>
+
+
+        <!-- Loading screen -->
+        <div id="splash" class="demo-splash">
+            <div class="loader">
+                <div class="version">SVG Widgets Library</div>
+                <div class="bar">
+                    Loading
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <script type="application/javascript" src="../../client/lib/layout.js"></script>
+        <script type="application/javascript" src="../../client/lib/promise-0.1.1.js"></script>
+        <!-- <script type="application/javascript" src="../../client/lib/speakClient.js"></script> -->
+        <script type="application/javascript" src="../../client/lib/keys.js"></script>
+        <script type="text/javascript" src="../../client/lib/jquery.js"></script>
+        <script type="text/javascript" src="../../client/lib/underscore/underscore.js"></script>
+        <script type="text/javascript" src="../../client/lib/d3/d3.js"></script>
+        <script type="text/javascript" src="../../client/lib/backbone.js"></script>
+        <script type="text/javascript" src="../../client/lib/handlebars-v1.3.0.js"></script>
+        <script type="text/javascript" src="../../client/lib/bootstrap/js/bootstrap.min.js"></script>
+        <!-- Recently included files -->
+        <script type="text/javascript" src="../../client/require.js" data-main="js/index.js"></script>
+    </body>
+</html>
