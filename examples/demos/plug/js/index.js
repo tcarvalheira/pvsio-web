@@ -85,22 +85,20 @@ require([
                     parent: 'plug-container', 
                     image_unplugged: 'img/vga_small_unplugged.png',
                     image_plugged: 'img/vga_small_plugged.png',
-                    image_socket: 'img/vga_small_socket.png'
+                    image_socket: 'img/vga_small_socket.png',
+                    isPlugged: false
                  }
             )
         };
 
-        function muteSound(){
-            widgets.alarm.mute()
-        }
-
         // Render widgets
         function render(res) {
             widgets.vgaPlug.render();
+            //widgets.vgaPlug.hide()
         }
 
 
-        var demoFolder = "waves_examples";
+        var demoFolder = "plug";
         //register event listener for websocket connection from the client
         client.addListener('WebSocketConnectionOpened', function (e) {
             //start pvs process
