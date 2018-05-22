@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Wave widget example</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <link href="../../client/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="../../client/app/plugins/graphbuilder/graph.css" rel="stylesheet" type="text/css"/>
+        <link href="../../client/css/style.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Wave example</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+
+        
+        <div id="content" class="content" style="display:none;margin-top: 50px;">
+
+            <!-- Plug detail -->
+            <div class="col-xs-12" id="basic-display-section">
+                <h1>Plug</h1>
+                
+                <div id="plug-container" ></div>
+                <!-- <p>The final plug widget should render three images, one of the socket unplugged, one of the plug unplugged and another of the plug and socket plugged together</p> -->
+            </div>
+        </div>
+
+
+        <!-- Loading screen -->
+        <div id="splash" class="demo-splash">
+            <div class="loader">
+                <div class="version">SVG Widgets Library</div>
+                <div class="bar">
+                    Loading
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <script type="application/javascript" src="../../client/lib/layout.js"></script>
+        <script type="application/javascript" src="../../client/lib/promise-0.1.1.js"></script>
+        <!-- <script type="application/javascript" src="../../client/lib/speakClient.js"></script> -->
+        <script type="application/javascript" src="../../client/lib/keys.js"></script>
+        <script type="text/javascript" src="../../client/lib/jquery.js"></script>
+        <script type="text/javascript" src="../../client/lib/underscore/underscore.js"></script>
+        <script type="text/javascript" src="../../client/lib/d3/d3.js"></script>
+        <script type="text/javascript" src="../../client/lib/backbone.js"></script>
+        <script type="text/javascript" src="../../client/lib/handlebars-v1.3.0.js"></script>
+        <script type="text/javascript" src="../../client/lib/bootstrap/js/bootstrap.min.js"></script>
+        <!-- Recently included files -->
+        <script type="text/javascript" src="../../client/require.js" data-main="js/index.js"></script>
+    </body>
+</html>
