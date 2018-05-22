@@ -93,7 +93,7 @@ define(function(require, exports, module){
         
 
         /** get element by id so that it can be played and muted */
-        /* TODO: maybe a have a problem with ids if i set more than one widget */
+        /* TODO: maybe there is a problem with ids if i set more than one widget */
         alarm = document.getElementById("audio")
         alarm.volume=opt.volume
 
@@ -118,7 +118,8 @@ define(function(require, exports, module){
      * @instance
      */
     Alarm.prototype.hide = () =>{
-        return alarmDiv.style("visibility", "hidden")
+        alarmDiv.style("visibility", "hidden")
+        return this
     }
 
      /**
@@ -128,7 +129,8 @@ define(function(require, exports, module){
       * @instance
       */
      Alarm.prototype.reveal = () =>{
-        return alarmDiv.style("visibility", "visible")
+        alarmDiv.style("visibility", "visible")
+        return this
     }
 
     /**
@@ -148,13 +150,13 @@ define(function(require, exports, module){
         }else{
             alarm.play()
         }
-        return
+        return this
     }
 
     /**
      * @function <a name="isPaused">isPaused</a>
      * @description returns if sound is paused or not
-     * @param
+     * @return
      * @memberof module:Alarm
      * @instance
      */
@@ -170,7 +172,8 @@ define(function(require, exports, module){
      * @instance
      */
     Alarm.prototype.pause = () => {
-        return alarm.pause()
+        alarm.pause()
+        return this
     }
 
     /**
@@ -182,7 +185,8 @@ define(function(require, exports, module){
      */
     Alarm.prototype.setVolume = (volume) => {
         volume = parseInt(volume) || 0.5
-        return alarm.volume = volume
+        alarm.volume = volume
+        return this
     }
 
     /**
@@ -197,7 +201,7 @@ define(function(require, exports, module){
         if(alarm.volume + value <= 1){
             alarm.volume += value
         }
-        return alarm.volume
+        return this
     }
 
     /**
@@ -212,7 +216,7 @@ define(function(require, exports, module){
         if(alarm.volume - value >= 0){
             alarm.volume -= value
         }
-        return alarm
+        return
     }
 
     /**
@@ -223,7 +227,7 @@ define(function(require, exports, module){
      */
     Alarm.prototype.mute = () => {
         audio.mute = true
-        return
+        return this
     }
 
     /**
@@ -246,7 +250,7 @@ define(function(require, exports, module){
      */
     Alarm.prototype.unmute = () => {
         audio.mute = false
-        return
+        return this
     }
 
     /**
@@ -257,10 +261,6 @@ define(function(require, exports, module){
      */
     Alarm.prototype.render = () => {
         return Alarm.prototype.reveal()
-    }
-Alarm.prototype.newFunc = function (firstP, secondP){
-        let c = firstP + secondP
-        return c
     }
 
     module.exports = Alarm;

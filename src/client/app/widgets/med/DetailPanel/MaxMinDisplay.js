@@ -68,39 +68,14 @@ define(function (require, exports, module) {
          this.type = this.type || "MaxMinDisplay";
          this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : id;
 
-         // override default style options of WidgetEVO as necessary before creating the DOM element with the constructor of module WidgetEVO
-         
-         
         opt.backgroundColor = opt.backgroundColor || "black";
         opt.cursor = opt.cursor || "default";
         opt.overflow = "hidden";
         
         this.setProperties(opt)
         
-        //this.title = opt.title
-        //this.decimalPlaces = opt.decimalPlaces || 1
-
-        //this.bracket = opt.bracket || 'none'
-        // this.type = opt.type || 'Float'
-        /*  switch(this.type){
-             case 'Float':
-                this.value = parseFloat(opt.value) || 0
-                this.valueMin = parseFloat(opt.valueMin) || 0 
-                this.valueMax = parseFloat(opt.valueMax) || 0 
-             break
-             case 'Integer':
-                this.value = parseInt(opt.value) || 0
-                this.valueMin = parseInt(opt.valueMin) || 0
-                this.valueMax = parseInt(opt.valueMax) || 0
-             break
-             case 'String':
-                this.value = opt.value || ''
-                this.valueMin = opt.valueMin || '' 
-                this.valueMax = opt.valueMax || '0'
-             break
-         } */
          // invoke WidgetEVO constructor to create the widget
-         WidgetEVO.apply(this, [ id, coords, opt ]);
+        WidgetEVO.apply(this, [ id, coords, opt ]);
 
 
         let coordsTitle = Object.assign({},coords)
@@ -166,9 +141,9 @@ define(function (require, exports, module) {
         */
 
         // render content
-        let min
-        let max
-        let val
+        let min = 0
+        let max = 0
+        let val = 0
         let openBrackets = ''
         let closeBrackets = ''
         switch(this.type){
@@ -269,6 +244,8 @@ define(function (require, exports, module) {
                    this.valueMax = newOpts.valueMax || this.valueMax || ''
                 break
             }
+
+            return this
      }
 
      module.exports = MaxMinDisplay

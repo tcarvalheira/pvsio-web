@@ -79,7 +79,6 @@ define(function (require, exports, module) {
                          
  
           this.image = this.div.append("div").attr("id", id + "_drawnimage").html(imagesvg)
-                            //.style('fill', '#00FF00')
                             .attr('display', 'block')
         
         this.image.select('svg')
@@ -87,7 +86,8 @@ define(function (require, exports, module) {
 
         this.setBackgroundColor(this.backColor)
         this.setColor(this.color)
-         // invoke WidgetEVO constructor to create the widget
+
+        // invoke WidgetEVO constructor to create the widget
          WidgetEVO.apply(this, [ id, coords, opt ]);
          return this;
      }
@@ -103,6 +103,7 @@ define(function (require, exports, module) {
     */
         ImageRender.prototype.render = function () {
             this.image.style('display','block') 
+            return this
         }
 
     /**
@@ -113,6 +114,7 @@ define(function (require, exports, module) {
     */
         ImageRender.prototype.hide = function () {
         this.image.style('display','none')
+        return this
     }
 
     /**
@@ -165,7 +167,7 @@ define(function (require, exports, module) {
     }
 
     	/**
-         * @privated
+        * @private
         * @function <a name="isValidColor">isValidColor</a>
         * @description Function for private usage that will check if color is a valid hex color. As three digit color in hex is 
         *                   corrctely interpreted by browser it will return true as well.

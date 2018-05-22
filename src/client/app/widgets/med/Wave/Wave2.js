@@ -363,7 +363,7 @@ define(function (require, exports, module) {
             this.wavesPerScreen = newOpt.wavesPerScreen || this.wavesPerScreen
             this.setUpWave()
                 .reRender()
-    
+            return this
     }
 
     module.exports = Wave;

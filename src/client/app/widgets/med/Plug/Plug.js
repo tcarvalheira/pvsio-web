@@ -201,6 +201,7 @@ define(function (require, exports, module) {
      }
 
      	/**
+          * @private
          * @function <a name="drag">drag</a>
          * @description 
          * @param ... {Object} ... 
@@ -215,6 +216,7 @@ define(function (require, exports, module) {
      }  
 
      	/**
+          * @private
          * @function <a name="allowDrag">allowDrag</a>
          * @description 
          * @param ... {Object} ... 
@@ -226,6 +228,7 @@ define(function (require, exports, module) {
      }
 
      	/**
+          * @private
          * @function <a name="drop">drop</a>
          * @description 
          * @param ... {Object} ... 
@@ -270,6 +273,7 @@ define(function (require, exports, module) {
          */
          Plug.prototype.plug = function () {
             connectPlug(this.id)
+            return this
      }
 
      	/**
@@ -279,10 +283,12 @@ define(function (require, exports, module) {
          * @instance
          */
          Plug.prototype.unplug = function () {
-        deconnectPlug(this.id)
-     }
+            deconnectPlug(this.id)
+            return this
+        }
 
     	/**
+         * @private
         * @function <a name="connectPlug">connectPlug</a>
         * @description This method will perform the necessary operations to connect a plug into a socket
         * @param code {String} the reference code to deconnect the plug. This code will be, usually, the plug id 
@@ -320,6 +326,7 @@ define(function (require, exports, module) {
     }
 
     	/**
+         * @private
         * @function <a name="deconnectPlug">deconnectPlug</a>
         * @description This method will perform the needed operations to deconnect a plug from a socket
         * @param code {String} the reference code to deconnect the plug. This code will be, usually, the plug id 
