@@ -242,6 +242,20 @@ define(function(require, exports, module){
         return audio.mute || false
     }
 
+    	/**
+        * @function <a name="toggle">toggle</a>
+        * @description Toggle on or off the alarm
+        * @memberof module:Alarm
+        * @instance
+        */
+        Alarm.prototype.toggle = function () {
+        if(this.isMuted()){
+            this.unmute()
+        }else{
+            this.mute()
+        }
+    } 
+
     /**
      * @function unmute
      * @description This method unmutes the alarm making the sound audible again.
