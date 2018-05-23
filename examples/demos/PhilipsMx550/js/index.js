@@ -26,6 +26,7 @@ require([
         "widgets/med/DetailPanel/MaxMinDisplay",
         "widgets/core/BasicDisplayEVO",
         "widgets/med/Alarm/Alarm",
+        "widgets/core/ButtonEVO",
         "stateParser",
         "PVSioWebClient",
         "NCDevice"],
@@ -36,6 +37,7 @@ require([
               MaxMinDisplay,
               BasicDisplayEVO,
               Alarm,
+              ButtonEVO,
               stateParser,
               PVSioWebClient,
               NCDevice) {
@@ -137,21 +139,21 @@ require([
 
 
         // append displays
-        var radical = {};
-        /* radical.spo2_display = new PatientMonitorDisplay("spo2_display",
+        var mx550 = {};
+        /* mx550.spo2_display = new PatientMonitorDisplay("spo2_display",
             {top: 56, left: 150, height: 34, width: 160},
             {parent: "prototype", label: "%SpO2"});
-        radical.rra_display = new PatientMonitorDisplay("rra_display",
+        mx550.rra_display = new PatientMonitorDisplay("rra_display",
             {top: 102, left: 150, height: 34, width: 160},
             {parent: "prototype", label: "RRa", fontColor: "aqua"});
-        radical.btn_on = new Button("btn_on", {
+        mx550.btn_on = new Button("btn_on", {
             top: 112, left: 364
         }, { callback: onMessageReceived }); */
 
 
         // ALARMS
 
-        radical.pulseAlarm = new Alarm(
+        mx550.pulseAlarm = new Alarm(
             'pulse-alarm',
             {top: 0, left: 0, width: 0, height: 0},
             {
@@ -159,12 +161,24 @@ require([
                 volume: '0.2',
                 loop: true,
                 loop_frequency: 1000,
-                muted: true
+                muted: false
             }
         ),
 
+        mx550.btnAlarmOff = new ButtonEVO("btn-alarm-off", {
+            top: 140, left: 885, height: 24, width: 24
+          }, {
+            // softLabel: "Ok",
+            // fontColor: "black",
+            // backgroundColor: "blue",
+            // fontsize: 16,
+            callback: function (err, data) {
+                mx550.pulseAlarm.toggle()
+            }
+          });
+
         // WAVES
-        radical.ecgII_wave = new Wave('ecgii-wave',
+        mx550.ecgII_wave = new Wave('ecgii-wave',
             {top: 120, left: 5, height: 70, width: 730},
             { 
                 waveType: 'ecg',
@@ -175,8 +189,8 @@ require([
                 background: "#000000",
                 scanBarWidth:20
              })
-        radical.ecgV_wave = new Wave('ecgv-wave',
-             {top: 170, left: 5, height: 70, width: 730},
+        mx550.ecgV_wave = new Wave('ecgv-wave',
+             {top: 180, left: 5, height: 70, width: 730},
              { 
                  waveType: 'ecg',
                  title: 'V',
@@ -186,7 +200,7 @@ require([
                  background: "#000000",
                  scanBarWidth:20
               })
-        radical.spo2_wave = new Wave('spo2-wave',
+        mx550.spo2_wave = new Wave('spo2-wave',
               {top: 220, left: 5, height: 70, width: 730},
               { 
                   waveType: 'pleth',
@@ -198,7 +212,7 @@ require([
                   scanBarWidth:20
                })
         
-        radical.abp_wave = new Wave('ecgv-wave',
+        mx550.abp_wave = new Wave('ecgv-wave',
              {top: 280, left: 5, height: 70, width: 730},
              { 
                  waveType: 'abp',
@@ -210,7 +224,7 @@ require([
                  scanBarWidth:20
               })
         
-        radical.pap_wave = new Wave('ecgv-wave',
+        mx550.pap_wave = new Wave('ecgv-wave',
               {top: 340, left: 5, height: 70, width: 730},
               { 
                   waveType: 'pap',
@@ -222,7 +236,7 @@ require([
                   scanBarWidth:20
                })
 
-        radical.cvp_wave = new Wave('ecgv-wave',
+        mx550.cvp_wave = new Wave('ecgv-wave',
                {top: 400, left: 5, height: 70, width: 730},
                { 
                    waveType: 'cvp',
@@ -234,7 +248,7 @@ require([
                    scanBarWidth:20
                 })
 
-        radical.icp_wave = new Wave('ecgv-wave',
+        mx550.icp_wave = new Wave('ecgv-wave',
                 {top: 460, left: 5, height: 70, width: 730},
                 { 
                     waveType: 'icp',
@@ -248,7 +262,7 @@ require([
 
 
                
-        radical.co2_wave = new Wave(
+        mx550.co2_wave = new Wave(
             'co2-wave',
             { top: 500, left: 5, height:70, width: 730 },
             { 
@@ -265,15 +279,15 @@ require([
 
 
         // DISPLAYs
-        radical.hr_display = new MaxMinDisplay(
+        mx550.hr_display = new MaxMinDisplay(
             'heartrate-display',
-            {top: 115, left: 750, width: 100, height: 50},
+            {top: 135, left: 750, width: 100, height: 50},
             {
                 parent: 'prototype',
                 fontColor: '#00FF00',
                 fontSize: 24,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'HR',
                 type: 'Integer',
@@ -282,26 +296,26 @@ require([
                 value: '75',
             }
         )
-        radical.pulse_display = new BasicDisplayEVO('pulse-display', 
+        mx550.pulse_display = new BasicDisplayEVO('pulse-display', 
             {top: 135, left: 920, width: 50, height: 50},
             {
                 fontColor: "#0FF0FF",
-                background: 'blue',
+                backgroundColor: 'none',
                 visibleWhen: "true",
                 fontSize: 24,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
             }
         )
 
-        radical.spo2_display = new MaxMinDisplay(
+        mx550.spo2_display = new MaxMinDisplay(
             'sop2-display',
-            {top: 230, left: 750, width: 100, height: 50},
+            {top: 246, left: 750, width: 100, height: 50},
             {
                 parent: 'prototype',
                 fontColor: '#0FF0FF',
                 fontSize: 24,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'SpO2',
                 type: 'Integer',
@@ -311,18 +325,18 @@ require([
             }
         )
         
-        radical.perf_display = new BasicDisplayEVO('perf-display', 
+        mx550.perf_display = new BasicDisplayEVO('perf-display', 
             {top: 250, left: 920, width: 70, height: 50},
             {
                 fontColor: "#0FF0FF",
-                background: 'blue',
+                backgroundColor: 'none',
                 visibleWhen: "true",
                 fontSize: 26,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
             }
         )
         
-        radical.tCore_display = new MaxMinDisplay(
+        mx550.tCore_display = new MaxMinDisplay(
             'tcore-display',
             {top: 570, left: 750, width: 100, height: 60},
             {
@@ -330,7 +344,7 @@ require([
                 fontColor: '#00FF00',
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'Tcore',
                 type: 'Float',
@@ -340,7 +354,7 @@ require([
             }
         )
 
-        radical.tSkin_display = new MaxMinDisplay(
+        mx550.tSkin_display = new MaxMinDisplay(
             'tskin-display',
             {top: 570, left: 900, width: 100, height: 60},
             {
@@ -348,7 +362,7 @@ require([
                 fontColor: '#F98BFB',
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'Tskin',
                 type: 'Float',
@@ -358,7 +372,7 @@ require([
             }
         )
 
-        radical.nbp_display = new MaxMinDisplay(
+        mx550.nbp_display = new MaxMinDisplay(
             'nbp-display',
             {top: 570, left: 5, width: 100, height: 60},
             {
@@ -366,7 +380,7 @@ require([
                 fontColor: '#F47F7E',
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'NBP',
                 type: 'String',
@@ -376,15 +390,15 @@ require([
             }
         )
 
-        radical.abp_display = new MaxMinDisplay(
+        mx550.abp_display = new MaxMinDisplay(
             'abp-display',
-            {top: 270, left: 750, width: 200, height: 60},
+            {top: 300, left: 750, width: 200, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#E33632',
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'ABP',
                 subtitle: 'Sys.',
@@ -395,15 +409,15 @@ require([
             }
         )
 
-        radical.pap_display = new MaxMinDisplay(
+        mx550.pap_display = new MaxMinDisplay(
             'pap-display',
-            {top: 330, left: 750, width: 200, height: 60},
+            {top: 350, left: 750, width: 200, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#FAE15C',
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'PAP',
                 subtitle: 'Dia.',
@@ -414,15 +428,15 @@ require([
             }
         )
 
-        radical.cvp_display = new MaxMinDisplay(
+        mx550.cvp_display = new MaxMinDisplay(
             'cvp-display',
-            {top: 380, left: 750, width: 200, height: 60},
+            {top: 400, left: 750, width: 200, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#41DAF9',
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'CVP',
                 subtitle: 'Mean',
@@ -434,7 +448,7 @@ require([
             }
         )
 
-        radical.icp_display = new MaxMinDisplay(
+        mx550.icp_display = new MaxMinDisplay(
             'icp-display',
             {top: 450, left: 750, width: 200, height: 60},
             {
@@ -442,7 +456,7 @@ require([
                 fontColor: '#E827F4',
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'ICP',
                 subtitle: 'Mean',
@@ -453,7 +467,7 @@ require([
                 value: '9',
             }
         )
-        radical.cpp_display = new MaxMinDisplay(
+        mx550.cpp_display = new MaxMinDisplay(
             'cpp-display',
             {top: 450, left: 900, width: 100, height: 60},
             {
@@ -461,7 +475,7 @@ require([
                 fontColor: '#E827F4',
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'ICP',
                 type: 'Integer',
@@ -471,7 +485,7 @@ require([
             }
         )
 
-        radical.etco2_display = new MaxMinDisplay(
+        mx550.etco2_display = new MaxMinDisplay(
             'etco2-display',
             {top: 520, left: 750, width: 100, height: 50},
             {
@@ -479,7 +493,7 @@ require([
                 fontColor: '#999a9b',
                 fontSize: 24,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'etCO2',
                 type: 'Integer',
@@ -489,7 +503,7 @@ require([
             }
         )
 
-        radical.awRR_display = new MaxMinDisplay(
+        mx550.awRR_display = new MaxMinDisplay(
             'awrr-display',
             {top: 520, left: 900, width: 100, height: 50},
             {
@@ -497,7 +511,7 @@ require([
                 fontColor: '#999a9b',
                 fontSize: 24,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                background: 'black',
+                backgroundColor: 'none',
                 visibleWhen: 'true',
                 title: 'awRR',
                 type: 'Integer',
@@ -519,109 +533,46 @@ require([
 
         // alarm
         function render_alarms(res){
-            radical.pulseAlarm.render()
-            radical.pulseAlarm.play()
+            mx550.pulseAlarm.render()
+            mx550.pulseAlarm.play()
+            mx550.btnAlarmOff.render();
         }
 
         // waves
         function render_waves(res){
-            radical.ecgII_wave.render()
-            radical.ecgV_wave.render()
-            radical.spo2_wave.render()
-            radical.co2_wave.render()
-            radical.abp_wave.render()
-            radical.pap_wave.render()
-            radical.cvp_wave.render()
-            radical.icp_wave.render()
+            mx550.ecgII_wave.render()
+            mx550.ecgV_wave.render()
+            mx550.spo2_wave.render()
+            mx550.co2_wave.render()
+            mx550.abp_wave.render()
+            mx550.pap_wave.render()
+            mx550.cvp_wave.render()
+            mx550.icp_wave.render()
         }
 
         function render_displays(res){
-            radical.hr_display.render()
-            radical.pulse_display.render('75')
-            radical.spo2_display.render()
-            radical.perf_display.render('2.1')
-            radical.etco2_display.render()
-            radical.awRR_display.render()
-            radical.tCore_display.render()
-            radical.tSkin_display.render()
-            radical.nbp_display.render()
-            radical.abp_display.render()
-            radical.pap_display.render()
-            radical.cvp_display.render()
-            radical.icp_display.render()
-            radical.cpp_display.render()
+            mx550.hr_display.render()
+            mx550.pulse_display.render('75')
+            mx550.spo2_display.render()
+            mx550.perf_display.render('2.1')
+            mx550.etco2_display.render()
+            mx550.awRR_display.render()
+            mx550.tCore_display.render()
+            mx550.tSkin_display.render()
+            mx550.nbp_display.render()
+            mx550.abp_display.render()
+            mx550.pap_display.render()
+            mx550.cvp_display.render()
+            mx550.icp_display.render()
+            mx550.cpp_display.render()
         }
-
-        // spo2
-        /* function render_spo2(res) {
-            if (res.isOn === "TRUE") {
-                radical.spo2_display.set_alarm({min: parseFloat(res.spo2_min), max: parseFloat(res.spo2_max)});
-                radical.spo2_display.set_range({min: 0, max: 100});
-                if (res.spo2_fail === "FALSE") {
-                    if (res.spo2_alarm === "off") {
-                        radical.spo2_display.render(evaluate(res.spo2));
-                    } else {
-                        radical.spo2_display.render(evaluate(res.spo2), {fontColor: "red"});
-                    }
-                } else {
-                    radical.spo2_display.fail("FAIL");
-                }
-                start_tick();
-            } else {
-                radical.spo2_display.hide();
-                stop_tick();
-            }
-        } */
-
-        // RRa
-        /* function render_rra(res) {
-            if (res.isOn === "TRUE") {
-                radical.rra_display.set_alarm({min: parseFloat(res.rra_min), max: parseFloat(res.rra_max)});
-                radical.rra_display.set_range({min: 0, max: 70});
-                if (res.rra_fail === "FALSE") {
-                    if (res.rra_alarm === "off") {
-                        radical.rra_display.render(evaluate(res.rra));
-                    } else {
-                        radical.rra_display.render(evaluate(res.rra), {fontColor: "red"});
-                    }
-                } else {
-                    radical.rra_display.fail("FAIL");
-                }
-                start_tick();
-            } else {
-                radical.rra_display.hide();
-                stop_tick();
-            }
-        } */
-
-        // alarms
-        /* function render_alarms(res) {
-            if (res.isOn === "TRUE") {
-                if (res.spo2_alarm === "off") {
-                    radical.spo2_display.alarm("off");
-                } else if (res.spo2_alarm === "alarm") {
-                    radical.spo2_display.alarm("glyphicon-bell");
-                } else if (res.spo2_alarm === "mute") {
-                    radical.spo2_display.alarm("glyphicon-mute");
-                }
-                if (res.rra_alarm === "off") {
-                    radical.rra_display.alarm("off");
-                } else if (res.rra_alarm === "alarm") {
-                    radical.rra_display.alarm("glyphicon-bell");
-                } else if (res.rra_alarm === "mute") {
-                    radical.rra_display.alarm("glyphicon-mute");
-                }
-            } else {
-                radical.spo2_display.hide();
-                radical.rra_display.hide();
-            }
-        } */
 
         /**
          function to handle when an output has been received from the server after sending a guiAction
          if the first parameter is truthy, then an error occured in the process of evaluating the gui action sent
          */
         function onMessageReceived(err, event) {
+            console.log(event)
             function prettyprintState(str) {
                 var state = stateParser.parse(str);
                 state.spo2_label = state.spo2_label.replace(/"/g, "");
@@ -663,7 +614,7 @@ require([
                         render_waves(res)
                         render_displays(res)
                         render_alarms(res)
-                        //radical.btn_on.render(res);
+                        //mx550.btn_on.render(res);
                     }
                 }
             } else {
