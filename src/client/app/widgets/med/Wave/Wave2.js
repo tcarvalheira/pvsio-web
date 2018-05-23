@@ -51,8 +51,11 @@ define(function (require, exports, module) {
      *          <li>backgroundColor (uInt). widget background color. Default is #000</li>
      *          <li>waveType (String) Define the wave type that will be rendered. options are: ecg, co2, pleth, userDefined. Default is ecg</li>
      *          <li>userDefinedWave (Array[Integer]) [optional] when waveType is userDefined the wave rendered will be the points in this array</li>
-     *          <li>filledDown (boolean) when true wave will be filledDown, Default is false</li>
-     *          <li>filledUp (boolean) when true wave will be filledUp, Default is false</li>
+     *          <li>filled (string): Default is none
+     *                  <li>none</li>
+     *                  <li>up</li>
+     *                  <li>down</li>
+     *          <li>fillColor (uInt). Default is wavecolor</li>
      *          <li>wavesPerScreen (Integer) [optional] set the number of waves that should be rendered in each line of the screen at 60bps</li>
      *          <li>scanBarWidth (Integer) [optional] set scanBarWidth, Default is 50</li>
      * @memberof module:Wave
@@ -103,6 +106,8 @@ define(function (require, exports, module) {
         this.parentElem.width = this.width
         this.parentElem.height = this.height
         this.title = opt.title || ''
+        this.filled = opt.filled || 'none'
+        this.fillColor = opt.fillColor || this.waveColor
         
         /* set how many wave it should be on each screen if heartrate is 60bps. */
         this.wavesPerScreen = parseInt(opt.wavesPerScreen) || 0
@@ -179,9 +184,25 @@ define(function (require, exports, module) {
             this.ctx.clearRect(this.px, 0, this.scanBarWidth, this.h);
 
             for(let xx = 0; xx < 1; xx++){
+                
+                if(this.filled === 'down'){
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.px, this.py);
+                    this.ctx.lineTo(this.px, this.height);
+                    this.ctx.strokeStyle = this.fillColor
+                    this.ctx.stroke();
+                }
+                if(this.filled === 'up'){
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.px, 0);
+                    this.ctx.lineTo(this.px, this.py);
+                    this.ctx.strokeStyle = this.fillColor
+                    this.ctx.stroke();
+                }
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.opx, this.opy);
                 this.ctx.lineTo(this.px, this.py);
+                this.ctx.strokeStyle = this.waveColor
                 this.ctx.stroke();
                 
                 this.opx = this.px;
@@ -241,21 +262,37 @@ define(function (require, exports, module) {
         * @instance
         */
         Wave.prototype.setUpWave = function () {
-            this.ecg = [100,100,100,100,100,100,100,100,98,96,94,92,90,90,90,90,90,92,94,96,98,100,100,100,100,100,100,100,105,110,115,100,75,55,40,55,75,100,120,115,110,100,100,100,100,100,100,100,100,96,91,87,85,85,85,85,87,91,96,100]
+            const ecg = [100,100,100,100,100,100,100,100,98,96,94,92,90,90,90,90,90,92,94,96,98,100,100,100,100,100,100,100,105,110,115,100,75,55,20,55,75,100,140,115,110,100,100,100,100,100,100,100,100,96,91,87,80,80,80,80,87,91,96,100]
             /*TODO: define this wave better */
-            this.co2 = [150,150,150,150,150,150,150,150,130,110,90,70,70,68,68,67,67,66,66,65,65,64,64,63,63,62,62,62,62,62,61,61,60,60,59,59,58,58,57,57,56,56,55,55,54,54,53,53,52,52,51,51,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,54,58,65,70,82,130,150]
+            const co2 = [150,150,150,150,150,150,150,150,130,110,90,70,70,68,68,67,67,66,66,65,65,64,64,63,63,62,62,62,62,62,61,61,60,60,59,59,58,58,57,57,56,56,55,55,54,54,53,53,52,52,51,51,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,54,58,65,70,82,130,150]
             /*TODO: Define this wave better */
-            this.pleth = [150,145,140,135,130,125,120,115,110,105,100,95,90,85,80,75,70,65,60,58,56,55,55,55,56,58,60,65,70,75,80,85,90,95,98,100,102,104,105,107,109,110,115,120,125,125,123,123,121,121,120,120,121,123,123,125,130,135,140,145, 147, 149,150, 150, 150]
+            const pleth = [150,145,140,135,130,125,120,115,110,105,100,95,90,85,80,75,70,65,60,58,56,55,56,58,60,65,70,75,80,85,90,95,98,100,102,104,105,107,109,110,115,120,125,125,123,123,121,121,120,120,121,123,123,125,130,135,140,145, 147, 149,150, 150, 150]
             /*TODO: Define more wave types */
+            const abp = [50]
+            const pap = [50]
+            const cvp = [50]
+            const icp = [50]
             switch(this.waveType){
                 case 'ecg':
-                    this.wave = this.ecg
+                    this.wave = ecg
                 break;
                 case 'co2':
-                    this.wave = this.co2
+                    this.wave = co2
                 break
                 case 'pleth':
-                    this.wave = this.pleth
+                    this.wave = pleth
+                break
+                case 'abp':
+                    this.wave = abp
+                    break
+                case 'pap':
+                    this.wave = pap
+                    break
+                case 'cvp':
+                    this.wave = cvp
+                break
+                case 'icp':
+                this.wave = icp
                 break
                 case 'userdefined':
                     this.wave = this.userDefinedWave
@@ -361,6 +398,8 @@ define(function (require, exports, module) {
             this.scanBarWidth = newOpt.scanBarWidth || this.scanBarWidth
             this.userDefinedWave = newOpt.userDefinedWave || this.userDefinedWave
             this.wavesPerScreen = newOpt.wavesPerScreen || this.wavesPerScreen
+            this.filled = newOpt.filled || this.filled
+            this.fillColor = newOpt.fillColor || this.fillColor
             this.setUpWave()
                 .reRender()
             return this
