@@ -76,41 +76,61 @@ define(function (require, exports, module) {
         
          // invoke WidgetEVO constructor to create the widget
         WidgetEVO.apply(this, [ id, coords, opt ]);
+        let top = coords.top - 20
+        if(this.title !== ''){
+            let coordsTitle = Object.assign({},coords)
+            coordsTitle.top = top
+            let optTitle = Object.assign({},opt)
+            optTitle.fontSize = '8'
+            optTitle.opacity = '1'
+            optTitle.backgroundColor = 'rgba(0, 0, 0, 0)'
+            optTitle.fontWeight = '900'
+            this.titleDisplay = new BasicDisplay(id+'_titledisplay', coordsTitle, optTitle)
+            top = top+10
+        }
+
+        if(this.subtitle !== ''){
+            let coordsSubTitle = Object.assign({},coords)
+            coordsSubTitle.top = top
+            let optSubTitle = Object.assign({},opt)
+            optSubTitle.fontSize = '6'
+            optSubTitle.opacity = '1'
+            optSubTitle.backgroundColor = 'rgba(0, 0, 0, 0)'
+            optSubTitle.fontWeight = '900'
+            this.subTitleDisplay = new BasicDisplay(id+'_subtitledisplay', coordsSubTitle, optSubTitle)
+            top = top+10
+        }
 
 
-        let coordsTitle = Object.assign({},coords)
-        coordsTitle.top = coords.top - 20
-        let optTitle = Object.assign({},opt)
-        optTitle.fontSize = '8'
-        optTitle.opacity = '1'
-        optTitle.backgroundColor = 'rgba(0, 0, 0, 0)'
-        optTitle.fontWeight = '900'
-        this.titleDisplay = new BasicDisplay(id+'_titledisplay', coordsTitle, optTitle)
-
-        let coordsMin = Object.assign({},coords)
-        coordsMin.top = coords.top
-        let optMin = Object.assign({},opt)
-        optMin.fontSize = '8'
-        optMin.opacity = '0.6',
-        optMin.align = 'right'
-        optMin.backgroundColor = 'rgba(0, 0, 0, 0)'
-        this.tMinDisplay = new BasicDisplay(id+'_tmindisplay', coordsMin, optMin)
+        if(this.valueMin != ''){
+            let coordsMin = Object.assign({},coords)
+            coordsMin.top = top
+            let optMin = Object.assign({},opt)
+            optMin.fontSize = '8'
+            optMin.opacity = '0.6',
+            optMin.align = 'right'
+            optMin.backgroundColor = 'rgba(0, 0, 0, 0)'
+            this.tMinDisplay = new BasicDisplay(id+'_tmindisplay', coordsMin, optMin)
+            top = top +10
+        }
         
-        let coordsMax = Object.assign({},coords)
-        coordsMax.top = coords.top - 9
-        let optMax = Object.assign({},opt)
-        optMax.fontSize = '8'
-        optMax.opacity = '0.6'
-        optMax.backgroundColor = 'rgba(0, 0, 0, 0)'
-        this.tMaxDisplay = new BasicDisplay(id+'_tmaxdisplay', coordsMax, optMax)
-
+        if(this.valueMax !== ''){
+            let coordsMax = Object.assign({},coords)
+            coordsMax.top = top
+            let optMax = Object.assign({},opt)
+            optMax.fontSize = '8'
+            optMax.opacity = '0.6'
+            optMax.backgroundColor = 'rgba(0, 0, 0, 0)'
+            this.tMaxDisplay = new BasicDisplay(id+'_tmaxdisplay', coordsMax, optMax)
+        }
+        
 
         let coordsTemp = coords
         let optTemp = opt
         coordsTemp.top = coords.top
         coordsTemp.left = coords.left + 30
         optTemp.backgroundColor = 'rgba(0,0,0,0)'
-        optTemp.fontSize = '26'
+        optTemp.fontSize = opt.fontSize
         this.tempDisplay = new BasicDisplay(id+'_tdisplay', coordsTemp, optTemp)
         
 
@@ -178,9 +198,19 @@ define(function (require, exports, module) {
                 closeBrackets = ''
         }
 
-        this.tMinDisplay.render(`${min}`, {align: 'left'})
-        this.tMaxDisplay.render(`${max}`, {align: 'left'})
-        this.titleDisplay.render(`${this.title}`,{fontWeight: '900', align: 'left'})
+        if(this.tMinDisplay !== undefined){
+            this.tMinDisplay.render(`${min}`, {align: 'left'})
+        }
+        if(this.tMaxDisplay !== undefined){
+            this.tMaxDisplay.render(`${max}`, {align: 'left'})
+        }
+        if(this.titleDisplay !== undefined){
+            this.titleDisplay.render(`${this.title}`,{fontWeight: '900', align: 'left'})
+        }
+        if(this.subTitleDisplay !== undefined){
+            this.subTitleDisplay.render(`${this.subtitle}`,{fontWeight: '900', align: 'left'})
+        }
+        
         this.tempDisplay.render(`${openBrackets}${val}${closeBrackets}`, {align: 'left'})
         this.reveal();
         return this;
