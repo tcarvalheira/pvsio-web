@@ -147,8 +147,9 @@ define(function (require, exports, module) {
       */
      BasicDisplayEVO.prototype.renderGlyphicon = function (icon, opt) {
          this.setStyle(opt);
+         this.blinking = opt.blinking !== undefined ? opt.blinking : true 
          if (icon) {
-             this.base.classed("blink glyphicon " + icon, true).style("font-family", "");
+             this.base.classed(`${this.blinking === true ? 'blink' : ''} glyphicon ${icon}`, true).style("font-family", "");
          }
          this.reveal();
          return this;
