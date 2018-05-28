@@ -78,11 +78,16 @@ define(function (require, exports, module) {
                          .style('display','block')
                          
  
-          this.image = this.div.append("div").attr("id", id + "_drawnimage").html(imagesvg)
+          this.image = this.div.append("div")
+                            .attr("id", id + "_drawnimage")
+                            .style("width","100%")
+                            .style('height','100%')
                             .attr('display', 'block')
-        
-        this.image.select('svg')
-                    .style('width', this.width).style('height',this.heigh)
+                            .html(imagesvg)
+                                
+                            
+
+        this.image.select("svg")
 
         this.setBackgroundColor(this.backColor)
         this.setColor(this.color)
@@ -127,7 +132,10 @@ define(function (require, exports, module) {
     ImageRender.prototype.setImage = function (img) {
         let svg = img
         this.image.remove()
-        this.image = this.div.append("div").attr("id", this.id + "_drawnimage").html(svg)
+        this.image = this.div.append("div").attr("id", this.id + "_drawnimage")
+                        .style('height','100%')
+                        .style('width','100%')
+                        .html(svg)
                         .style('fill', '#00FF00')    
                         .attr('display', 'block')
         
