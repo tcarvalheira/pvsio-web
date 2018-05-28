@@ -27,6 +27,7 @@ require([
         "widgets/core/BasicDisplayEVO",
         "widgets/med/Alarm/Alarm",
         "widgets/core/ButtonEVO",
+        "widgets/med/ImageRender/ImageRender",
         "stateParser",
         "PVSioWebClient",
         "NCDevice"],
@@ -38,6 +39,7 @@ require([
               BasicDisplayEVO,
               Alarm,
               ButtonEVO,
+              ImageRender,
               stateParser,
               PVSioWebClient,
               NCDevice) {
@@ -46,8 +48,26 @@ require([
 
         var deviceID = "Mx550";
         var deviceType = "SpO2 Monitor";
-
-
+        let alarmsOn = true
+        let triangle0 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%" viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" /></g></svg>'
+        let triangle1 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
+        let triangle2 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
+        let triangle3 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
+        let triangle4 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
+        let triangle5 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
+        let triangle6 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
+        let triangle7 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
+        let triangle8 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e293bcff;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
+        let rectangle0 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458333 79.375002"   id="svg16">0  <g     id="layer1"     transform="translate(0,-217.62498)">    <rect       style="fill:none;stroke:#04d5e2;stroke-width:4"       id="rect3732"       width="25.324404"       height="78.241081"       x="0.66145831"       y="218.09744"       ry="5.6843419e-14" />    <rect style="fill:#04d5e2;stroke:#04d5e2;stroke-width:0.26458332" id="rect8" width="17.105249" height="43.564945" x="4.2816849" y="221.57956" ry="5.6843348e-14" /></g></svg>'
+        let rectangle1 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%"   height="100%"   viewBox="0 0 26.458333 79.375002"   id="svg16">  <g     id="layer1"     transform="translate(0,-217.62498)">    <rect       style="fill:none;stroke:#04d5e2;stroke-width:4"       id="rect3732"       width="25.324404"       height="78.241081"       x="0.66145831"       y="218.09744"       ry="5.6843419e-14" />    <rect       style="fill:#04d5e2;stroke:#04d5e2;stroke-width:0.26458332"       id="rect8"       width="17.105249"       height="43.564945"       x="4.8108516"       y="234.45891"       ry="5.6843348e-14" />  </g></svg>'
+        let rectangle2 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458333 79.375002"   id="svg16" >  <g     id="layer1"     transform="translate(0,-217.62498)">    <rect       style="fill:none;stroke:#04d5e2;stroke-width:4"       id="rect3732"       width="25.324404"       height="78.241081"       x="0.66145831"       y="218.09744"       ry="5.6843419e-14" />    <rect       style="fill:#04d5e2;stroke:#04d5e2;stroke-width:0.26458332"       id="rect8"       width="17.105249"       height="43.564945"       x="4.6472802"       y="249.06947"       ry="5.6843348e-14" />  </g></svg>' 
+        let alarmVol = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458332 13.229167"   id="svg8">  <g     id="layer1"     transform="translate(0,-283.77082)">    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 0.42522322,296.62201 H 25.749628 v -12.33147 z"       id="path12"/>  </g></svg>'
+        let alarmVol = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458332 13.229167"   id="svg8">  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(0,-283.77082)">    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 0.42522322,296.62201 H 25.749628 v -12.33147 z"       id="path12"       inkscape:connector-curvature="0" />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 9.4966516,292.27528 c 0,4.20499 0.047247,4.39398 0.047247,4.39398 z"       id="path33"       inkscape:connector-curvature="0" />    <path       style="fill:#cccccc;stroke:#ffffff;stroke-width:2px"       d="m 6.228187,46.993884 c 1.0803571,-0.540989 8.03125,-3.936161 15.446429,-7.544828 l 13.482142,-6.561213 0.109025,4.38556 c 0.05996,2.412057 0.120231,5.811898 0.133929,7.555202 l 0.0249,3.169643 -15.580358,-0.01037 -15.5803567,-0.01038 1.9642857,-0.983615 z"       id="path4637"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />  </g></svg>'
+        let alarmVol = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458332 13.229167"   id="svg8">  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(0,-283.77082)">    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 0.42522322,296.62201 H 25.749628 v -12.33147 z"       id="path12"       inkscape:connector-curvature="0" />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 9.4966516,292.27528 c 0,4.20499 0.047247,4.39398 0.047247,4.39398 z"       id="path33"       inkscape:connector-curvature="0" />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 15.827753,289.15698 v 7.37054 z"       id="path54"       inkscape:connector-curvature="0" />    <path       style="fill:#cccccc;stroke:#FFFFFF;stroke-width:2px"       d="m 6.228187,46.993884 c 1.0803571,-0.540989 8.03125,-3.936161 15.446429,-7.544828 l 13.482142,-6.561213 0.109025,4.38556 c 0.05996,2.412057 0.120231,5.811898 0.133929,7.555202 l 0.0249,3.169643 -15.580358,-0.01037 -15.5803567,-0.01038 1.9642857,-0.983615 z"       id="path4624"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#cccccc;stroke:#FFFFFF;stroke-width:2px"       d="m 36.592602,42.417891 c -0.06773,-3.069197 -0.09708,-6.622013 -0.06521,-7.895148 l 0.05794,-2.31479 9.821428,-4.795051 c 5.401786,-2.637278 10.484375,-5.106035 11.294643,-5.486126 l 1.473215,-0.691075 V 34.616974 47.998248 H 47.945184 36.715753 Z"       id="path4626"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />  </g></svg>'        
+        let alarmVol = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458332 13.229167" >  <g     id="layer1"     transform="translate(0,-283.77082)">    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 0.42522322,296.62201 H 25.749628 v -12.33147 z"       id="path12"       />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 9.4966516,292.27528 c 0,4.20499 0.047247,4.39398 0.047247,4.39398 z"       id="path33"       />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 15.827753,289.15698 v 7.37054 z"       id="path54"       />    <path       style="fill:#b3b3b3;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 20.930431,286.55839 v 9.96913 z"       id="path75"       />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="M 4.4229713,47.904654 C 4.5245611,47.803064 35.179145,32.851951 35.213164,32.887401 c 0.01138,0.01186 0.06525,3.41665 0.119706,7.566204 l 0.09902,7.544642 H 19.880632 c -8.55319,0 -15.5091371,-0.04212 -15.4576607,-0.09359 z"       id="path4608"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="m 36.648901,46.257176 c -0.06341,-0.957589 -0.113809,-4.513393 -0.111993,-7.901786 l 0.0033,-6.160714 10.452986,-5.089286 c 5.749142,-2.799107 10.84992,-5.268522 11.335059,-5.48759 L 59.21033,21.219496 V 34.608871 47.998247 H 47.987263 36.764196 Z"       id="path4610"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="M 60.46033,34.283378 V 20.568506 l 9.017857,-4.393376 9.017858,-4.393376 V 29.890001 47.998247 H 69.478187 60.46033 Z"       id="path4612"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />  </g></svg>'
+        let alarmVol = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458332 13.229167"   id="svg8">  <g     id="layer1"     transform="translate(0,-283.77082)">    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 0.42522322,296.62201 H 25.749628 v -12.33147 z"       id="path12"       inkscape:connector-curvature="0" />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 9.4966516,292.27528 c 0,4.20499 0.047247,4.39398 0.047247,4.39398 z"       id="path33"       inkscape:connector-curvature="0" />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 15.827753,289.15698 v 7.37054 z"       id="path54"       inkscape:connector-curvature="0" />    <path       style="fill:#b3b3b3;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 20.930431,286.55839 v 9.96913 z"       id="path75"       inkscape:connector-curvature="0" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="M 4.4229713,47.904654 C 4.5245611,47.803064 35.179145,32.851951 35.213164,32.887401 c 0.01138,0.01186 0.06525,3.41665 0.119706,7.566204 l 0.09902,7.544642 H 19.880632 c -8.55319,0 -15.5091371,-0.04212 -15.4576607,-0.09359 z"       id="path4608"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="m 36.648901,46.257176 c -0.06341,-0.957589 -0.113809,-4.513393 -0.111993,-7.901786 l 0.0033,-6.160714 10.452986,-5.089286 c 5.749142,-2.799107 10.84992,-5.268522 11.335059,-5.48759 L 59.21033,21.219496 V 34.608871 47.998247 H 47.987263 36.764196 Z"       id="path4610"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="M 60.46033,34.283378 V 20.568506 l 9.017857,-4.393376 9.017858,-4.393376 V 29.890001 47.998247 H 69.478187 60.46033 Z"       id="path4612"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="m 79.789853,29.567242 0.04548,-18.431004 8.303572,-4.0570687 c 4.566964,-2.2313879 8.363839,-4.0624357 8.4375,-4.0689954 0.07366,-0.00656 0.133928,10.1130731 0.133928,22.4880731 v 22.5 h -8.482977 -8.482977 z"       id="path4614"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />  </g></svg>'
+        
+        let contador = 0;
         function parseNCUpdate(event) {
 
             var from = event.from;
@@ -174,6 +194,16 @@ require([
             // fontsize: 16,
             callback: function (err, data) {
                 mx550.pulseAlarm.toggle()
+                if(alarmsOn){
+                    mx550.alarmsoff_display.reveal()
+                    mx550.alarmsoff_img.reveal()
+                    alarmsOn = false
+                }else{
+                    mx550.alarmsoff_display.hide()
+                    mx550.alarmsoff_img.hide()
+                    alarmsOn = true
+                }
+                
             }
           });
 
@@ -201,7 +231,7 @@ require([
                  scanBarWidth:20
               })
         mx550.spo2_wave = new Wave('spo2-wave',
-              {top: 220, left: 5, height: 70, width: 730},
+              {top: 230, left: 5, height: 70, width: 730},
               { 
                   waveType: 'pleth',
                   title: 'Pleth',
@@ -213,7 +243,7 @@ require([
                })
         
         mx550.abp_wave = new Wave('ecgv-wave',
-             {top: 280, left: 5, height: 70, width: 730},
+             {top: 290, left: 5, height: 70, width: 730},
              { 
                  waveType: 'abp',
                  title: 'ABP',
@@ -225,7 +255,7 @@ require([
               })
         
         mx550.pap_wave = new Wave('ecgv-wave',
-              {top: 340, left: 5, height: 70, width: 730},
+              {top: 350, left: 5, height: 70, width: 730},
               { 
                   waveType: 'pap',
                   title: 'PAP',
@@ -237,7 +267,7 @@ require([
                })
 
         mx550.cvp_wave = new Wave('ecgv-wave',
-               {top: 400, left: 5, height: 70, width: 730},
+               {top: 410, left: 5, height: 70, width: 730},
                { 
                    waveType: 'cvp',
                    title: 'CVP',
@@ -249,7 +279,7 @@ require([
                 })
 
         mx550.icp_wave = new Wave('ecgv-wave',
-                {top: 460, left: 5, height: 70, width: 730},
+                {top: 470, left: 5, height: 70, width: 730},
                 { 
                     waveType: 'icp',
                     title: 'ICP',
@@ -279,6 +309,31 @@ require([
 
 
         // DISPLAYs
+        mx550.alarmsoff_display = new BasicDisplayEVO('alarmsoff-display', 
+            {top: 113, left: 820, width: 200, height: 17},
+            {
+                fontColor: "#FF0000",
+                backgroundColor: '#FFFFFF',
+                visibleWhen: "true",
+                align: 'left',
+                fontSize: 14,
+                fontFamily: 'Arial, Helvetica, sans-serif',
+                fontWeight: 'bold'
+            }
+        )
+        mx550.alarmsoff_img = new BasicDisplayEVO('alarmsoff-img', 
+            {top: 112, left: 800, width: 20, height: 17},
+            {
+                fontColor: "#FF0000",
+                backgroundColor: '#FFFFFF',
+                visibleWhen: "true",
+                align: 'left',
+                fontSize: 12,
+                fontFamily: 'Arial, Helvetica, sans-serif',
+                fontWeight: 'bold'
+            }
+        )
+
         mx550.hr_display = new MaxMinDisplay(
             'heartrate-display',
             {top: 135, left: 750, width: 100, height: 50},
@@ -342,7 +397,7 @@ require([
             {
                 parent: 'prototype',
                 fontColor: '#00FF00',
-                fontSize: 30,
+                fontSize: 35,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
@@ -360,7 +415,7 @@ require([
             {
                 parent: 'prototype',
                 fontColor: '#F98BFB',
-                fontSize: 30,
+                fontSize: 35,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
@@ -521,6 +576,31 @@ require([
             }
         )
 
+        mx550.spo2_graphics = new ImageRender(
+            'spo2_graphics',
+            {top: 280, left: 750, width: 20, height: 20},
+            {
+                parent: 'prototype',
+            }
+        )
+
+        mx550.spo2_rec = new ImageRender(
+            'spo2_rectangle',
+            {top: 240, left: 885, width: 10, height: 70},
+            {
+                parent: 'prototype',
+            }
+        )
+
+        mx550.alarmVol = new ImageRender(
+            'wifi',
+            {top: 95, left: 980, width: 50, height:15},
+            {
+                parent: 'prototype'
+            }
+        )
+
+
         // utility function
         function evaluate(str) {
             var v = +str;
@@ -536,6 +616,13 @@ require([
             mx550.pulseAlarm.render()
             mx550.pulseAlarm.play()
             mx550.btnAlarmOff.render();
+            mx550.alarmsoff_display.render('ALARMS OFF')
+            mx550.alarmsoff_img.renderGlyphicon('glyphicon-bell',{'blinking':false});
+            /* toggle the images on and off */
+            if(alarmsOn){
+                mx550.alarmsoff_display.hide()
+                mx550.alarmsoff_img.hide()
+            }
         }
 
         // waves
@@ -565,6 +652,62 @@ require([
             mx550.cvp_display.render()
             mx550.icp_display.render()
             mx550.cpp_display.render()
+            mx550.spo2_graphics.render()
+            mx550.spo2_rec.render()
+            mx550.alarmVol.render()
+            setInterval(function() {
+                // method to be executed;
+              
+                    switch(contador % 9){
+                        case 0: 
+                                mx550.spo2_graphics.setImage(triangle0)
+                                mx550.spo2_rec.setImage(rectangle0)
+                                mx550.alarmVol.setImage(wifi0)
+                        break
+                        case 1: 
+                                mx550.spo2_graphics.setImage(triangle1)
+                                mx550.spo2_rec.setImage(rectangle0)
+                                mx550.alarmVol.setImage(wifi1)
+                                break
+                        case 2: 
+                                mx550.spo2_graphics.setImage(triangle2)
+                                mx550.spo2_rec.setImage(rectangle1)
+                                mx550.alarmVol.setImage(wifi2)
+                                break
+                        case 3: 
+                                mx550.spo2_graphics.setImage(triangle3)
+                                mx550.spo2_rec.setImage(rectangle1)
+                                mx550.alarmVol.setImage(wifi3)
+                        break
+                        case 4: 
+                                mx550.spo2_graphics.setImage(triangle4)
+                                mx550.spo2_rec.setImage(rectangle2)
+                                mx550.alarmVol.setImage(wifi4)
+                                break
+                        case 5: 
+                                mx550.spo2_graphics.setImage(triangle5)
+                                mx550.spo2_rec.setImage(rectangle2)
+                                mx550.alarmVol.setImage(wifi4)
+                                break
+                        case 6: 
+                                mx550.spo2_graphics.setImage(triangle6)
+                                mx550.spo2_rec.setImage(rectangle1)
+                                mx550.alarmVol.setImage(wifi3)
+                                break
+                        case 7: 
+                                mx550.spo2_graphics.setImage(triangle7)
+                                mx550.spo2_rec.setImage(rectangle1)
+                                mx550.alarmVol.setImage(wifi2)
+                                break
+                        case 8: 
+                                mx550.spo2_graphics.setImage(triangle8)
+                                mx550.spo2_rec.setImage(rectangle0)
+                                mx550.alarmVol.setImage(wifi1)
+                                break
+                    }
+
+                    contador += 1
+                }, 1000);
         }
 
         /**
