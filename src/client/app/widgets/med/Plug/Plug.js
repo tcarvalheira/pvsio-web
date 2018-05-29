@@ -121,6 +121,7 @@ define(function (require, exports, module) {
                         .attr('class','plug_plugged')
                         .style('width', `${this.width}px`)
                         .style('height', `${this.height}px`)
+                        .style('background-color', 'none')
                         .style('z-index','-2')
                         
                         .append('img')
@@ -168,17 +169,33 @@ define(function (require, exports, module) {
 
         
         /* add listeners to set the DIV's where the image can be droped */
-        this.socket_div.addEventListener('drop', event => this.drop(event, this))
-        this.socket_div.addEventListener('dragover', event => this.allowDrop(event, this))
-        this.plugged_div.addEventListener('drop', event => this.drop(event, this))
-        this.plugged_div.addEventListener('dragover', event => this.allowDrop(event, this))
-        this.unplugged_div.addEventListener('drop', event => this.drop(event, this))
-        this.unplugged_div.addEventListener('dragover', event => this.allowDrop(event, this))
+        if(this.socket_div !== undefined && this.socket_div !== null){
+            this.socket_div.addEventListener('drop', event => this.drop(event, this))
+        }
+        if(this.socket_div !== undefined && this.socket_div !== null){
+            this.socket_div.addEventListener('dragover', event => this.allowDrop(event, this))
+        }
+        if(this.plugged_div !== undefined && this.socket_div !== null){
+            this.plugged_div.addEventListener('drop', event => this.drop(event, this))
+        }
+        if(this.plugged_div !== undefined && this.socket_div !== null){
+            this.plugged_div.addEventListener('dragover', event => this.allowDrop(event, this))
+        }
+        if(this.unplugged_div !== undefined && this.socket_div !== null){
+            this.unplugged_div.addEventListener('drop', event => this.drop(event, this))
+        }
+        if(this.unplugged_div !== undefined && this.socket_div !== null){
+            this.unplugged_div.addEventListener('dragover', event => this.allowDrop(event, this))
+        }
         
         /* add listeners to set the images that can be dragged */
         //this.socket_img.addEventListener('dragstart', event => this.drag(event, this))
-        this.plugged_img.addEventListener('dragstart', event => this.drag(event, this) )
-        this.unplugged_img.addEventListener('dragstart', event => this.drag(event, this))
+        if(this.plugged_img !== undefined && this.plugged_img !== null){
+            this.plugged_img.addEventListener('dragstart', event => this.drag(event, this) )
+        }
+        if(this.unplugged_img !== undefined && this.unplugged_img !== null){
+            this.unplugged_img.addEventListener('dragstart', event => this.drag(event, this))
+        }
 
          // invoke WidgetEVO constructor to create the widget
          WidgetEVO.apply(this, [ id, coords, opt ]);
@@ -279,7 +296,8 @@ define(function (require, exports, module) {
                 dragged.style.border="none";
             }
             let code = dragged.getAttribute('data-code')
-            if(ev.target.getAttribute('data-type') === 'socket' && dragged.getAttribute('data-type') === 'unplugged'){
+            let socket_code = ev.target.getAttribute('data-code')
+            if( code === socket_code && ev.target.getAttribute('data-type') === 'socket' && dragged.getAttribute('data-type') === 'unplugged'){
                 plug.connectPlug(code)
             }else if(ev.target.getAttribute('data-type') === 'unplugged' && dragged.getAttribute('data-type') === 'plugged'){
                 plug.deconnectPlug(code)
@@ -334,14 +352,16 @@ define(function (require, exports, module) {
             let plugged = document.getElementsByClassName(`drag-plugged ${code}`)[0]
             let unplugged = document.getElementsByClassName(`drag-unplugged ${code}`)[0]
 
-            let socket_div = socket.parentElement
-            let plugged_div = plugged.parentElement
-            let unplugged_div = unplugged.parentElement
+            
 
             /* If some of the images are undefined i can't do the procedures */
             if(socket === undefined || plugged === undefined || unplugged === undefined){
                 return this
             }
+
+            let socket_div = socket.parentElement
+            let plugged_div = plugged.parentElement
+            let unplugged_div = unplugged.parentElement
             
             socket.hidden = true
             plugged.hidden = false
@@ -373,14 +393,16 @@ define(function (require, exports, module) {
             let plugged = document.getElementsByClassName(`drag-plugged ${code}`)[0]
             let unplugged = document.getElementsByClassName(`drag-unplugged ${code}`)[0]
 
-            let socket_div = socket.parentElement
-            let plugged_div = plugged.parentElement
-            let unplugged_div = unplugged.parentElement
+            
 
 
             if(socket === undefined || plugged === undefined || unplugged === undefined){
                 return this
             }
+
+            let socket_div = socket.parentElement
+            let plugged_div = plugged.parentElement
+            let unplugged_div = unplugged.parentElement
 
             socket.hidden = false
             plugged.hidden = true
