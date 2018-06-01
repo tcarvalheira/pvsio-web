@@ -257,7 +257,7 @@ require([
               })
         
         mx550.pap_wave = new Wave('ecgv-wave',
-              {top: 350, left: 5, height: 70, width: 730},
+              {top: 330, left: 5, height: 70, width: 730},
               { 
                   waveType: 'pap',
                   title: 'PAP',
@@ -269,7 +269,7 @@ require([
                })
 
         mx550.cvp_wave = new Wave('ecgv-wave',
-               {top: 410, left: 5, height: 70, width: 730},
+               {top: 390, left: 5, height: 60, width: 730},
                { 
                    waveType: 'cvp',
                    title: 'CVP',
@@ -281,7 +281,7 @@ require([
                 })
 
         mx550.icp_wave = new Wave('ecgv-wave',
-                {top: 470, left: 5, height: 70, width: 730},
+                {top: 450, left: 5, height: 70, width: 730},
                 { 
                     waveType: 'icp',
                     title: 'ICP',
@@ -296,7 +296,7 @@ require([
                
         mx550.co2_wave = new Wave(
             'co2-wave',
-            { top: 500, left: 5, height:70, width: 730 },
+            { top: 520, left: 5, height:50, width: 730 },
             { 
                 waveType: 'co2', 
                 parent: 'prototype',
@@ -311,6 +311,18 @@ require([
 
 
         // DISPLAYs
+        mx550.date_display = new BasicDisplayEVO('date-display', 
+            {top: 93, left: 560, width: 200, height: 17},
+            {
+                fontColor: "#FFFFFF",
+                backgroundColor: 'none',
+                visibleWhen: "true",
+                align: 'left',
+                fontSize: 8,
+                fontFamily: 'Arial, Helvetica, sans-serif',
+                fontWeight: 'bold'
+            }
+        )
         mx550.alarmsoff_display = new BasicDisplayEVO('alarmsoff-display', 
             {top: 113, left: 820, width: 200, height: 17},
             {
@@ -686,6 +698,9 @@ require([
             mx550.spo2_graphics.render()
             mx550.spo2_rec.render()
             mx550.alarmVol.render()
+            let today = new Date()
+            mx550.date_display.render(today.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric', hour: "2-digit", minute: "2-digit"  }))
+            /* this is here just to simulate animation of the imagerender widget */
             setInterval(function() {
                 // method to be executed;
               
@@ -746,7 +761,7 @@ require([
          if the first parameter is truthy, then an error occured in the process of evaluating the gui action sent
          */
         function onMessageReceived(err, event) {
-            console.log(event)
+            //console.log(event)
             function prettyprintState(str) {
                 var state = stateParser.parse(str);
                 state.spo2_label = state.spo2_label.replace(/"/g, "");
