@@ -159,10 +159,17 @@ require([
                             {"id": "config", "title": "Pump Configuration"}, 
                             {"id": "data_mgm", "title": "Event Data Management"} ],
                 parent: "device",
-                callback: onMessageReceived
+                callback: onMessageReceived,
+                onSlideBsCarousel: () => {
+                    //console.log('Carousel INIT')
+                },
+                onSlidBsCarousel: () => {
+                    //console.log('Carousel END')
+                }
             })
 
-        device.next_screen = new ButtonEVO("next_screen", {
+            /* moved carousel navigation inside Carousel */
+        /* device.next_screen = new ButtonEVO("next_screen", {
             width: 70,
             height: 50,
             top: 210,
@@ -189,7 +196,7 @@ require([
             fontsize: 34,
             parent: "giip",
             callback: onMessageReceived
-        });
+        }); */
 
         // basal profile screen
         device.edit_basal_profiles = new ButtonEVO("edit_basal_profiles", {
@@ -341,10 +348,6 @@ require([
             parent: "giip-data_mgm",
             callback: onMessageReceived
         });
-
-
-        
-
 
         function hide_all_screens(res) {
             d3.select("#power_on_screen").style("display", "none");
@@ -530,8 +533,8 @@ require([
             device.review_alarm_log.render();
             device.review_infusion_statistics.render();
             // navigator
-            device.next_screen.render();
-            device.previous_screen.render();
+            //device.next_screen.render();
+            //device.previous_screen.render();
             // set carousel options
             $('.carousel').carousel({
                 wrap: false
