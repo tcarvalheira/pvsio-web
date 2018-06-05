@@ -20,11 +20,13 @@ require.config({
 
 require([
         "widgets/container/Pagination",
+        "widgets/container/Tab",
         "widgets/ButtonActionsQueue",
         "stateParser",
         "PVSioWebClient"
     ], function (
         Pagination,
+        Tab,
         ButtonActionsQueue,
         stateParser,
         PVSioWebClient
@@ -80,7 +82,34 @@ require([
                 },
                 {
                     pages: ["Page1", "Page2", "Page3", "Page4","Page5", "Page6", "Page7", "Page8", "Page9", "Page10","Page11", "Page12", "Page13", "Page14"],
-                    callback: onMessageReceived
+                    callback: onMessageReceived,
+                    parent: 'pagination'
+                }),
+            tab: new Tab('nav-tab',
+                {
+                    top: 300,
+                    left: 50,
+                    width: 500,
+                    height: 50
+                },
+                {
+                    pages: [{id: 'page1', title: 'Page 1'},{id: 'page2', title: 'Page 2'},{id: 'page3', title: 'Page 3'},{id: 'page4', title: 'Page 4'}],
+                    type: 'tab',
+                    callback: onMessageReceived,
+                    parent: 'tabs'
+                }),
+            pill: new Tab('nav-pill',
+                {
+                    top: 500,
+                    left: 50,
+                    width: 500,
+                    height: 50
+                },
+                {
+                    pages: [{id: 'page1', title: 'Page 1'},{id: 'page2', title: 'Page 2'},{id: 'page3', title: 'Page 3'},{id: 'page4', title: 'Page 4'}],
+                    type: 'pill',
+                    callback: onMessageReceived,
+                    parent: 'pills'
                 })
            
         };
@@ -103,6 +132,13 @@ require([
         // Render widgets
         function render(res) {
             widgets.pagination.render()
+            widgets.tab.render()
+            widgets.pill.render()
+            setTimeout(() => {
+                // console.log(`Set new TAB`)
+                widgets.tab.setActiveTab('page2')
+                widgets.pill.setActiveTab('page3')
+            }, 5000)
         }
 
         $('#PrevBtn').on('click', function (e) {
