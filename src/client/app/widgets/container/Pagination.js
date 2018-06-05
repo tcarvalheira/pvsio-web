@@ -61,7 +61,7 @@ define(function (require, exports, module) {
         opt.cursor = opt.cursor || "default";
         opt.overflow = "hidden";
         this.coords = coords
-
+        this.plainParent = opt.parent || 'body'
         this.parent =(opt.parent) ? (`#${opt.parent}`) : 'body'
         this.previousButton = opt.previousButton !== undefined ? opt.previousButton : true
         this.nextButton = opt.nextButton !== undefined ? opt.nextButton : true
@@ -69,8 +69,9 @@ define(function (require, exports, module) {
         this.pages = opt.pages || []
         this.activeIndex = opt.activeIndex || 1
         this.alignment = opt.alignment || 'left'
-        this.callback = opt.callback || ((id) => ids)
+        this.callback = opt.callback || ((id) => id)
         this.div = d3.select(this.parent)
+        
         
         this.buttons = []
 
@@ -214,13 +215,14 @@ define(function (require, exports, module) {
         let element_coords =  x.node().getBoundingClientRect()
         let found = false
         found = this.buttons.find(function(element) {return element.id == index})
+        console.log(element_coords.top)
         if(index !== -1 && !found){
             this.buttons.push({
                 id: index,
-                button: new ButtonEVO(`${this.parent}_page_${index}`, {
+                button: new ButtonEVO(`${this.plainParent}_page_${index}`, {
                     width: element_coords.width,
                     height: element_coords.height,
-                    top: this.coords.top,
+                    top: element_coords.top-20, // this 20 is the margin, but i can't figure out how to work it arround
                     left: element_coords.left
                 }, {
                     softLabel: "",
@@ -299,7 +301,7 @@ define(function (require, exports, module) {
                         button : new ButtonEVO(`${buttonTitle}_page`, {
                             width: element_coords.width,
                             height: element_coords.height,
-                            top: this.coords.top,
+                            top: element_coords.top-20, // this 20 is the margin, but i can't figure out how to work it arround
                             left: element_coords.left
                         }, {
                             softLabel: "",
