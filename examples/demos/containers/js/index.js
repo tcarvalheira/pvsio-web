@@ -75,22 +75,49 @@ require([
                 {
                     top: 100,
                     left: 100,
-                    width: 200,
+                    width: 400,
                     height: 50
                 },
                 {
-                    pages: ["Page1", "Page2", "Page3"]
+                    pages: ["Page1", "Page2", "Page3", "Page4","Page5", "Page6", "Page7", "Page8", "Page9", "Page10","Page11", "Page12", "Page13", "Page14"],
+                    callback: onMessageReceived
                 })
            
         };
 
+        function onMessageReceived(err, event) {
+            if (!err) {
+                // get new state
+                client.getWebSocket().lastState(event.data);
+                // parse and render new state
+                var res = event.data.toString();
+                if (res.indexOf("(#") === 0) {
+                    render(stateParser.parse(res));
+                    console.log(res.replace(/\s\s+/g, ' '));
+                }
+            } else {
+                console.log(err);
+            }
+        }
        
         // Render widgets
         function render(res) {
             widgets.pagination.render()
         }
 
-
+        $('#PrevBtn').on('click', function (e) {
+            let active = widgets.pagination.getActiveIndex()
+            if( active !== 1){
+                widgets.pagination.setActivePage(active-1)
+            }
+            
+        })
+        $('#NextBtn').on('click', function (e) {
+            let active = widgets.pagination.getActiveIndex()
+            if(active !== 14){
+                widgets.pagination.setActivePage(active+1)
+            }
+        })
 
         var demoFolder = "waves_examples";
         //register event listener for websocket connection from the client
@@ -102,7 +129,7 @@ require([
                 d3.select(".demo-splash").style("display", "none");
                 d3.select("#content").style("display", "block");
                 // start the simulation
-                start_tick();
+                //start_tick();
             });
         }).addListener("WebSocketConnectionClosed", function (e) {
 
