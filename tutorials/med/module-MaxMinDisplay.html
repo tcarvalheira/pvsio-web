@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: MaxMinDisplay</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: MaxMinDisplay</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">Renders a digital display for rendering text.
+             This module provide APIs for setting up the visual appearance of the widget, e.g., font size and color.</div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>TiagoCarvalheira</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+        <p class="code-caption">Example use of the widget.</p>
+    
+    <pre class="prettyprint"><code> // Example pvsio-web demo that uses MaxMinDisplay
+ // The following configuration assumes the pvsio-web demo is stored in a folder within pvsio-web/examples/demo/
+ require.config({
+     baseUrl: "../../client/app",
+     paths: { d3: "../lib/d3", text: "../lib/text" }
+ });
+ require(["widgets/med/DetailPanel/MaxMinDisplay"], function (MaxMinDisplay) {
+      "use strict";
+      var disp = new MaxMinDisplay("disp", {
+        top: 200, left: 120, height: 24, width: 120
+      }, {
+          parent: 'container',
+          color: '#00ce08',
+          backgroundColor: 'black',
+          title: 'Tcore',
+          value: '37.0', 
+          valueMax: '39.0',
+          vaueMin: '36.0',
+          type: 'float',
+          bracket: 'none'
+      });
+      disp.render();
+ });</code></pre>
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="%3Caname=%22MaxMinDisplay%22%3EMaxMinDisplay%3C/a%3E"><span class="type-signature"></span><a name="MaxMinDisplay">MaxMinDisplay</a><span class="signature">(id, coords, opt)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Constructor. Create a MaxMinDisplay, extending WidgetEVO
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the touchscreen button.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>coords</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The four coordinates (top, left, width, height) of the display, specifying
+       the left, top corner, and the width and height of the (rectangular) widget area.
+       Default is { top: 0, left: 0, width: 32, height: 20 }.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>opt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JSON object Style options defining the visual appearance of the widget.
+                    <li>parent {String} </li>
+                    <li>color {String} </li>
+                    <li>backgroundColor {String} </li>
+                    <li>title {String} </li>
+                    <li>subtitle {String} </li>
+                    <li>value {String} </li>
+                    <li>valueMax {String} </li>
+                    <li>valueMin {String} </li>
+                    <li>type {String} Integer, Float, String</li>
+                    <li>decimalPlaces {Integer} default 1 when Float
+                    <li>bracket {String} options are none | parenthesis | bracked | curly default is none </li></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="%3Caname=%22render%22%3Erender%3C/a%3E"><span class="type-signature"></span><a name="render">render</a><span class="signature">(state, opt)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Rendering function for button widgets.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JSON object with the current value of the state attributes of the modelled system</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>opt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Style options overriding the style attributes used when the widget was created.
+                    The override style options are temporary, i.e., they are applied only for the present invocation of the render method.
+                    Available options are either html style attributes or the following widget attributes:</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="%3Caname=%22setProperties%22%3EsetParameters%3C/a%3E"><span class="type-signature"></span><a name="setProperties">setParameters</a><span class="signature">(newOpts)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This method will set the given properties of the widget. None of them are mandatory as they have default value
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>newOpts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">object with one or more of the next properties
+                <li>title</li>
+                <li>subtitle</li>
+                <li>value</li>
+                <li>valueMax</li>
+                <li>valueMin</li>
+                <li>type</li>
+                <li>decimalPlaces</li>
+                <li>bracket</li></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="%3Caname=%22updateValues%22%3EupdateValues%3C/a%3E"><span class="type-signature"></span><a name="updateValues">updateValues</a><span class="signature">(values)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    These function will set the values on the widget and re-render the widget
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>values</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JSON object with a maximum of three values
+         <li>actualValue {Float}</li>
+         <li>minimalValue {Float}</li>
+         <li>maximalValue {Float}</li>
+         none of these values is mandatory. If it is not set than the values 
+         will be the already defined on widget</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Alarm.html">Alarm</a></li><li><a href="module-ArrowDisplay.html">ArrowDisplay</a></li><li><a href="module-ImageRender.html">ImageRender</a></li><li><a href="module-MaxMinDisplay.html">MaxMinDisplay</a></li><li><a href="module-PatientMonitorDisplay.html">PatientMonitorDisplay</a></li><li><a href="module-Plug.html">Plug</a></li><li><a href="module-PumpMonitorDisplay.html">PumpMonitorDisplay</a></li><li><a href="module-Syringe.html">Syringe</a></li><li><a href="module-Wave.html">Wave</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jun 07 2018 17:51:58 GMT+0100 (WEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
