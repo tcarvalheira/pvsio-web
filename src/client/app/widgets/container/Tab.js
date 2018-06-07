@@ -15,11 +15,19 @@
  });
  require(["widgets/container/Tab"], function (Tab) {
       "use strict";
-      var disp = new Tab("disp", {
-        top: 200, left: 120, height: 24, width: 120
-      }, {
-          ... 
-      });
+      var disp = new Tab('nav-tab',
+                {
+                    top: 300,
+                    left: 50,
+                    width: 500,
+                    height: 50
+                },
+                {
+                    pages: [{id: 'page1', title: 'Page 1'},{id: 'page2', title: 'Page 2'},{id: 'page3', title: 'Page 3'},{id: 'page4', title: 'Page 4'}],
+                    type: 'tab',
+                    callback: onMessageReceived,
+                    parent: 'tabs'
+                })
       disp.render();
  });
  *

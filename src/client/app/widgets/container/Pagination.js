@@ -14,11 +14,18 @@
  });
  require(["widgets/container/Pagination"], function (Pagination) {
       "use strict";
-      var disp = new Pagination("disp", {
-        top: 200, left: 120, height: 24, width: 120
-      }, {
-          ... 
-      });
+      var disp = new Pagination('pagination',
+                {
+                    top: 100,
+                    left: 100,
+                    width: 400,
+                    height: 50
+                },
+                {
+                    pages: ["Page1", "Page2", "Page3", "Page4","Page5", "Page6", "Page7", "Page8", "Page9", "Page10","Page11", "Page12", "Page13", "Page14"],
+                    callback: onMessageReceived,
+                    parent: 'pagination'
+                })
       disp.render();
  });
  *
@@ -40,12 +47,12 @@ define(function (require, exports, module) {
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
      * @param opt {Object} Style options defining the visual appearance of the widget.
      *                     Options can be given either as standard html style attributes or using the following widget attributes:
-     *              <li>previousButton: {Boolean} set if there should be a previous button or not -- default: true</li> 
-     *              <li>nextButton: {Boolean} set if there should be a next button or not -- default: true</li>
-     *              <li>useIcons: {Boolean} set if icon should be used on previous and next buttons -- default: true</li>
-     *              <li>pages: {Array} an array with the total pages of pagination -- default: []</li>
-     *              <li>activeIndex {Integer} Active index, starting on 1 -- default: 1</li>
-     *              <li>alignment {left | center | rigth}</li>
+     *              <li>{Boolean} [previousButton=true] set if there should be a previous button or not</li> 
+     *              <li>{Boolean} [nextButton=true] set if there should be a next button or not</li>
+     *              <li>{Boolean} [useIcons=true] set if icon should be used on previous and next buttons</li>
+     *              <li>{Array} [pages=[]] an array with all pages of pagination</li>
+     *              <li>{Integer} [activeIndex=1] {Integer} set the active index</li>
+     *              <li>{left | center | right} [alignment='left'] set the widget alignment </li>
      * @memberof module:Pagination
      * @instance
      */
@@ -117,9 +124,9 @@ define(function (require, exports, module) {
     }
 
     /**
+     * @protected
     * @function <a name="createHTML">createHTML</a>
-    * @description 
-    * @param ... {Object} ... 
+    * @description This method creates the necessary HTML for the pagination widget
     * @memberof module:Pagination
     * @instance
     */
@@ -191,11 +198,13 @@ define(function (require, exports, module) {
     }
 
     /**
+     * @protected
     * @function <a name="createPage">createPage</a>
-    * @description This method creates the pages inside the pagination widget
-    * @param parent {ul Element} the ul node where the html buttons will be placed
-    * @param title {String} The title of the button
-    * @param index {Integer} The index of the button on overall list 
+    * @description This method creates the pages div inside the pagination widget
+    * @param {Element} parent the ul node where the html buttons will be placed
+    * @param {String} title The title of the button
+    * @param {Integer} index The index of the button on overall list 
+    * @return {Object} this
     * @memberof module:Pagination
     * @instance
     */
@@ -235,6 +244,7 @@ define(function (require, exports, module) {
                 })
             })
         }
+        return this
     }
 
 
@@ -242,6 +252,7 @@ define(function (require, exports, module) {
     * @protected 
     * @function <a name="getNumButton">getNumButton</a>
     * @description This method return the number of visible buttons base on the container width and the width of the buttons
+    * @return {Integer} the number of button that fits on the widget
     * @memberof module:Pagination
     * @instance
     */
@@ -263,10 +274,11 @@ define(function (require, exports, module) {
     * @protected
     * @function <a name="createOuttermostPage">createOuttermostPage</a>
     * @description This method creates the previous and the next (left and right) buttons html
-    * @param parent {ul Node} the ul parent for the 
+    * @param parent {Element} the ul parent for the list 
     * @param title {String} The title of the button, shown if not useIcons.
     * @param isPrevious {Boolean} set if it is the previous or the next button
     * @param onClick {Function} onClick callback
+    * @return {Object} this
     * @memberof module:Pagination
     * @instance
     */
@@ -314,16 +326,17 @@ define(function (require, exports, module) {
                         })
                     }
                 )
-            }                    
+            }  
+            return this                  
     }
 
     /**
     * @protected 
     * @function <a name="hasButton">hasButton</a>
     * @description checks in an array button_array if the button with id value is present
-    * @param button_array {Array} array of buttons
-    * @param value {string|integer} the value to check if is on array
-    * @return true if the array contains an element with id=value, false otherwise
+    * @param {Array} button_array {Array} array of buttons
+    * @param {String} value {string|integer} the value to check if is on array
+    * @return {Boolean} true if the array contains an element with id=value, false otherwise
     * @memberof module:Pagination
     * @instance
     */
@@ -337,6 +350,7 @@ define(function (require, exports, module) {
     * @function <a name="setActivePage">setActivePage</a>
     * @description Set the active index of pagination
     * @param page {Integer} index page active
+    * @return {Object} this
     * @memberof module:Pagination
     * @instance
     */
@@ -349,6 +363,7 @@ define(function (require, exports, module) {
     /**
     * @function <a name="getActiveIndex">getActiveIndex</a>
     * @description Get the active index of the paginator
+    * @return {Number} the active page index
     * @memberof module:Pagination
     * @instance
     */
@@ -359,13 +374,13 @@ define(function (require, exports, module) {
     /**
     * @function <a name="getTotalPages">getTotalPages</a>
     * @description returns the total number of pages
+    * @return {Number} the number of existing pages
     * @memberof module:Pagination
     * @instance
     */
     Pagination.prototype.getTotalPages = function () {
         return this.pages.length
     }   
-
     module.exports = Pagination
    }
 )

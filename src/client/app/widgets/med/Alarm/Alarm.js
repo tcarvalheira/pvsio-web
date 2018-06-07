@@ -156,7 +156,7 @@ define(function(require, exports, module){
     /**
      * @function <a name="isPaused">isPaused</a>
      * @description returns if sound is paused or not
-     * @return
+     * @return this
      * @memberof module:Alarm
      * @instance
      */
@@ -167,7 +167,6 @@ define(function(require, exports, module){
     /**
      * @function <a name="pause">pause</a>
      * @description pause sound
-     * @param
      * @memberof module:Alarm
      * @instance
      */

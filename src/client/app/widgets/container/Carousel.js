@@ -1,12 +1,11 @@
 /**
  * @module Carousel
  * @version 1.0
- * @description Renders a digital display for rendering text.
- *              This module provide APIs for setting up the visual appearance of the widget, e.g., font size and color.
+ * @description Renders a carousel container with buttons to navigate through pages.
  * @author Tiago Carvalheira
  * @date 2018/06/01
  *
- * @example <caption>Example use of the widget.</caption>
+ * @example <caption>Example use of the container.</caption>
  // Example pvsio-web demo that uses Carousel
  // The following configuration assumes the pvsio-web demo is stored in a folder within pvsio-web/examples/demo/
  require.config({
@@ -15,11 +14,28 @@
  });
  require(["widgets/container/Carousel"], function (Carousel) {
       "use strict";
-      var disp = new Carousel("disp", {
-        top: 200, left: 120, height: 24, width: 120
-      }, {
-          ... 
-      });
+      var disp = new Carousel('giip',
+            {
+                width: 472,
+                height: 260,
+                top: 114,
+                left: 76
+            },
+            {
+                screens: [{"id" : "home", "title": "Home"}, 
+                            {"id": "basal_mgm", "title": "Basal Management"}, 
+                            {"id": "bolus_mgm", "title": "Bolus Management"}, 
+                            {"id": "config", "title": "Pump Configuration"}, 
+                            {"id": "data_mgm", "title": "Event Data Management"} ],
+                parent: "device",
+                callback: onMessageReceived,
+                onSlideBsCarousel: () => {
+                    //console.log('Carousel INIT')
+                },
+                onSlidBsCarousel: () => {
+                    //console.log('Carousel END')
+                }
+            })
       disp.render();
  });
  *
@@ -37,15 +53,15 @@ define(function (require, exports, module) {
      * @param coords {Object} The four coordinates (top, left, width, height) of the display, specifying
      *        the left, top corner, and the width and height of the (rectangular) widget area.
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
-     * @param opt {Object} :
-     *                  <li>interval</li> number default 5000
-     *                  <li>keyboard</li> boolean default true
-     *                  <li>pause</li> string | boolean default hover
-     *                  <li>ride</li> string default false
-     *                  <li>wrap</li> boolean default true
-     *                  <li>activeIndicators</li> boolean default false
-     *                  <li>onSlideBsCarousel</li>
-     *                  <li>onSlidBsCarousel</li>
+     * @param {Object} opt
+     *                  <li>{number} [interval=5000]</li>
+     *                  <li>{boolean} [keyboard = true]</li>
+     *                  <li>{string} [pause='hover']</li>
+     *                  <li>{string} [ride=false]</li>
+     *                  <li>{boolean} [wrap=true]</li>
+     *                  <li>{boolean} [activeIndicators=false]</li>
+     *                  <li>{function} [onSlideBsCarousel]</li>
+     *                  <li>{function} [onSlidBsCarousel]</li>
      * @memberof module:Carousel
      * @instance
      */
@@ -159,8 +175,10 @@ define(function (require, exports, module) {
     }
 
     /**
+     * @protected
      * @function <a name="createHTML">createHTML</a>
      * @description This method appends the necessary html to widget div
+     * @return {Object} this
      * @memberof module:Carousel
      * @instance
      */
@@ -224,69 +242,88 @@ define(function (require, exports, module) {
             /* left and right controls */
             counter += 1;
         });
+        return this
      }
     /**
      * @function <a name="cyle">cyle</a>
      * @description Cycles through the carousel items from left to right
-     * @param ... {Object} ... 
+     * @param opt {Object} options object:
+     *                      <li>{number} [inteval=5000] The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.</li>
+     *                      <li>{boolean} [keyboard=true] Whether the carousel should react to keyboard events.</li>
+     *                      <li>{string} [pause='hover'] If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it.
+
+On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.</li>
+     *                      <li>{string} [ride=false] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.</li>
+     *                      <li>{boolean} [wrap=true] Whether the carousel should cycle continuously or have hard stops.</li>
+     * @return {Object} this
      * @memberof module:Carousel
      * @instance
      */
     Carousel.prototype.cyle = function (opt) {
         $('.carousel').carousel(opt)
         $('.carousel').carousel('cycle')
+        return this;
     }
 
     /**
      * @function <a name="pause">pause</a>
      * @description Stops the carousel from cycling through items
-     * @param ... {Object} ... 
+     * @return {Object} this
      * @memberof module:Carousel
      * @instance
      */
     Carousel.prototype.pause = function () {
         $('.carousel').carousel('pause')
+        return this
     }
 
     /**
-         * @function <a name="prev">Previous</a>
+         * @function <a name="prev">prev</a>
          * @description Cycles carousel to the previous item
+         * @return {Object} this
          * @memberof module:Carousel
          * @instance
          */
     Carousel.prototype.prev = function () {
         $('.carousel').carousel('prev')
+        return this
     }
 
     /**
      * @function <a name="next">Next</a>
      * @description Cycles carousel to the next item
+     * @return {Object} this
      * @memberof module:Carousel
      * @instance
      */
     Carousel.prototype.next = function () {
         $('.carousel').carousel('next')
+        return this
     }
 
 
     /**
      * @function <a name="goTo">goTo</a>
      * @description Cycles the carousel to a particular frame (0 based) 
+     * @return {Object} this
      * @memberof module:Carousel
      * @instance
      */
     Carousel.prototype.goTo = function (number) {
         $('.carousel').carousel(number)
+        return this
     }
 
     /**
      * @function <a name="dispose">dispose</a>
      * @description Destroys the carousel element
+     * @return {Object} this
      * @memberof module:Carousel
      * @instance
      */
     Carousel.prototype.dispose = function (number) {
         $('.carousel').carousel('dispose')
+        return this
     }
      
     module.exports = Carousel
