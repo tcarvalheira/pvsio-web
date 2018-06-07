@@ -102,7 +102,7 @@ require([
                 {
                     top: 500,
                     left: 50,
-                    width: 500,
+                    width: 800,
                     height: 50
                 },
                 {
@@ -122,7 +122,7 @@ require([
                 var res = event.data.toString();
                 if (res.indexOf("(#") === 0) {
                     render(stateParser.parse(res));
-                    console.log(res.replace(/\s\s+/g, ' '));
+                //    console.log(res.replace(/\s\s+/g, ' '));
                 }
             } else {
                 console.log(err);
