@@ -215,7 +215,6 @@ define(function (require, exports, module) {
         let element_coords =  x.node().getBoundingClientRect()
         let found = false
         found = this.buttons.find(function(element) {return element.id == index})
-        console.log(element_coords.top)
         if(index !== -1 && !found){
             this.buttons.push({
                 id: index,
