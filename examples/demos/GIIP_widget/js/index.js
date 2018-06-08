@@ -160,6 +160,7 @@ require([
                             {"id": "data_mgm", "title": "Event Data Management"} ],
                 parent: "device",
                 callback: onMessageReceived,
+                interval: false,
                 onSlideBsCarousel: () => {
                     //console.log('Carousel INIT')
                 },
@@ -536,9 +537,9 @@ require([
             //device.next_screen.render();
             //device.previous_screen.render();
             // set carousel options
-            $('.carousel').carousel({
+            /* $('.carousel').carousel({
                 wrap: false
-            }).carousel('pause');
+            }).carousel('pause'); */
         }
         // this creates the buttons on the carousel
         init_carousel();
