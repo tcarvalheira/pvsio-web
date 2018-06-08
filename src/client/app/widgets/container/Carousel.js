@@ -53,15 +53,12 @@ define(function (require, exports, module) {
      * @param coords {Object} The four coordinates (top, left, width, height) of the display, specifying
      *        the left, top corner, and the width and height of the (rectangular) widget area.
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
-     * @param {Object} opt
-     *                  <li>{number} [interval=5000]</li>
-     *                  <li>{boolean} [keyboard = true]</li>
-     *                  <li>{string} [pause='hover']</li>
-     *                  <li>{string} [ride=false]</li>
-     *                  <li>{boolean} [wrap=true]</li>
-     *                  <li>{boolean} [activeIndicators=false]</li>
-     *                  <li>{function} [onSlideBsCarousel]</li>
-     *                  <li>{function} [onSlidBsCarousel]</li>
+     * @param {number} [opt.number=5000] The amount of time to delay between automatically cycle an item. If false, carousel will not automatically cycle
+     * @param {boolean} [opt.keyboard=true] Whether the carousel should react to keyboard events
+     * @param {string | boolean} [pause='hover'] If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it. 
+     * On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.
+     * @param {string} [ride='false'] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.
+     * @param {boolean} [wrap='true'] Whether the carousel should cycle continuously or have hard stops.
      * @memberof module:Carousel
      * @instance
      */
@@ -75,12 +72,12 @@ define(function (require, exports, module) {
         opt.backgroundColor = opt.backgroundColor || "black";
         opt.cursor = opt.cursor || "default";
         opt.overflow = "hidden";
-        this.interval = opt.interval || 5000
+        this.interval = opt.interval !== undefined ? opt.interval : 5000
         this.keyboard = opt.keyboard !== undefined ? opt.keyboard : true
-        this.pause = opt.pause || 'hover'
+        this.pause = opt.pause !== undefined ? opt.pause : 'hover'
         this.ride = opt.ride !== undefined ? opt.ride : false
         this.wrap = opt.wrap !== undefined ? opt.wrap : true
-        this.activeIndicators = opt.activeIndicators || false
+        this.activeIndicators = opt.activeIndicators !== undefined ? opt.activeIndicators : false
         this.onSlideBsCarousel = opt.onSlideBsCarousel || ((id) => id)
         this.onSlidBsCarousel = opt.onSlidBsCarousel || ((id) => id)
 
@@ -150,7 +147,7 @@ define(function (require, exports, module) {
     /**
      * @function <a name="render">render</a>
      * @description Rendering function for button widgets.
-     * @param state {Object} JSON object with the current value of the state attributes of the modelled system
+     * @param {Object} state JSON object with the current value of the state attributes of the modelled system
      * @memberof module:Carousel
      * @instance
      */
@@ -163,14 +160,6 @@ define(function (require, exports, module) {
         this.next_screen.render()
 
         this.reveal();
-        /* just api tests */
-        /* this.cyle({
-            interval: 2000
-            }); */
-        
-        /* test pause cycle after 15s 
-            setInterval(this.pause, 15000) 
-        */
         return this;
     }
 
