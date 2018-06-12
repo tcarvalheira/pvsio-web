@@ -121,10 +121,13 @@ require([
                     height: 30
                 },
                 {
-                    fontColor: "green",
+                    fontColor: "#00FFFF",
                     backgroundColor: "transparent",
                     fontsize: 11,
-                    parent: "battery"
+                    parent: "battery",
+                    battery_level: 80,
+                    show_icon:true,
+                    show_text:true
                 }
 
             )
@@ -158,6 +161,8 @@ require([
             widgets.battery.render();
             setTimeout(() => {
                 widgets.battery.setBatteryLevel(8)
+                //widgets.battery.hideText()
+                //widgets.battery.hideIcon()
             }, 5000)
         }
 
