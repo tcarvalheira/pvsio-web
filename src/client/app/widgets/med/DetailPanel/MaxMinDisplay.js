@@ -46,17 +46,17 @@ define(function (require, exports, module) {
      *        the left, top corner, and the width and height of the (rectangular) widget area.
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
      * @param {Object} opt JSON object Style options defining the visual appearance of the widget.
-     * @param {String} [opt.parent=] set widget parent
-     * @param {String} [opt.color=] set widget color
-     * @param {String} [opt.backgroundColor=] set widget background
-     * @param {String} [opt.title=] set title for the widget
-     * @param {String} [opt.subtitle=] set the subtitle of the widget
-     * @param {String} [opt.value=] sets the current value
-     * @param {String} [opt.valueMax=] sets the maximal value
-     * @param {String} [opt.valueMin=] sets the minimal value 
-     * @param {'Integer'||'Float'||'String'} [opt.type='Float'] set widget type. 
+     * @param {String} [opt.parent] set widget parent
+     * @param {String} [opt.color] set widget color
+     * @param {String} [opt.backgroundColor] set widget background
+     * @param {String} [opt.title] set title for the widget
+     * @param {String} [opt.subtitle] set the subtitle of the widget
+     * @param {String} [opt.value] sets the current value
+     * @param {String} [opt.valueMax] sets the maximal value
+     * @param {String} [opt.valueMin] sets the minimal value 
+     * @param {('Integer'|'Float'|'String')} [opt.type='Float'] set widget type. 
      * @param {Integer} [decimalPlaces=1] Set the number of decimal places
-     * @param {'none' | 'parenthesis' | 'bracked' | 'curly'} [bracket='none'] options are  default is none
+     * @param {('none' | 'parenthesis' | 'bracked' | 'curly')} [bracket='none'] options are  default is none
      * @memberof module:MaxMinDisplay
      * @instance
      */

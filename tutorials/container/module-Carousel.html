@@ -185,7 +185,7 @@
     
 
     
-    <h4 class="name" id="%3Caname=%22Carousel%22%3ECarousel%3C/a%3E"><span class="type-signature"></span><a name="Carousel">Carousel</a><span class="signature">(id, coords, opt)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="%3Caname=%22Carousel%22%3ECarousel%3C/a%3E"><span class="type-signature"></span><a name="Carousel">Carousel</a><span class="signature">(id, coords, opt, pause<span class="signature-attributes">opt</span>, ride<span class="signature-attributes">opt</span>, wrap<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -217,7 +217,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -242,7 +246,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">The ID of the touchscreen button.</td>
@@ -265,7 +281,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">The four coordinates (top, left, width, height) of the display, specifying
@@ -290,17 +318,251 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><li>{number} [interval=5000]</li>
-                 <li>{boolean} [keyboard = true]</li>
-                 <li>{string} [pause='hover']</li>
-                 <li>{string} [ride=false]</li>
-                 <li>{boolean} [wrap=true]</li>
-                 <li>{boolean} [activeIndicators=false]</li>
-                 <li>{function} [onSlideBsCarousel]</li>
-                 <li>{function} [onSlidBsCarousel]</li></td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Optional values for the widget:
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>number</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    5000
+                
+                </td>
+            
+
+            <td class="description last">The amount of time to delay between automatically cycle an item. If false, carousel will not automatically cycle</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keyboard</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last">Whether the carousel should react to keyboard events</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pause</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'hover'
+                
+                </td>
+            
+
+            <td class="description last">If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it. 
+On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ride</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'false'
+                
+                </td>
+            
+
+            <td class="description last">Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wrap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'true'
+                
+                </td>
+            
+
+            <td class="description last">Whether the carousel should cycle continuously or have hard stops.</td>
         </tr>
 
     
@@ -534,13 +796,233 @@
             
 
             <td class="description last">options object:
-                     <li>{number} [inteval=5000] The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.</li>
-                     <li>{boolean} [keyboard=true] Whether the carousel should react to keyboard events.</li>
-                     <li>{string} [pause='hover'] If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it.
+                <h6>Properties</h6>
+                
 
-On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.</li>
-                     <li>{string} [ride=false] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.</li>
-                     <li>{boolean} [wrap=true] Whether the carousel should cycle continuously or have hard stops.</li></td>
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>inteval</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    5000
+                
+                </td>
+            
+
+            <td class="description last">The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.</li></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keyboard</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last">Whether the carousel should react to keyboard events.</li></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pause</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'hover'
+                
+                </td>
+            
+
+            <td class="description last">If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it.
+
+On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.</li></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ride</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.</li></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wrap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last">Whether the carousel should cycle continuously or have hard stops.</li></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -735,7 +1217,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
     
 
     
-    <h4 class="name" id="%3Caname=%22goTo%22%3EgoTo%3C/a%3E"><span class="type-signature"></span><a name="goTo">goTo</a><span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="%3Caname=%22goTo%22%3EgoTo%3C/a%3E"><span class="type-signature"></span><a name="goTo">goTo</a><span class="signature">(number)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -752,6 +1234,55 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>number</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Goto page number</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -1293,7 +1824,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jun 07 2018 17:51:49 GMT+0100 (WEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jun 12 2018 17:12:53 GMT+0100 (WEST)
 </footer>
 
 <script> prettyPrint(); </script>

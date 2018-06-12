@@ -47,7 +47,7 @@ define(function (require, exports, module) {
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
      * @param {Object} opt Style options defining the visual appearance of the widget.
      *                     Options can be given either as standard html style attributes or using the following widget attributes:
-     * @param {tab || pills} [opt.type='tab']
+     * @param {'tab' | 'pills'} [opt.type='tab']
      * @param { array<Objects> } [opt.pages=[]] these objects should have the following schema {id: ... , title: ...}
      * @param { function } [opt.callback=id] callback function to pass into widgets.
      * @param { String } [opt.activePage=1] set the active page
