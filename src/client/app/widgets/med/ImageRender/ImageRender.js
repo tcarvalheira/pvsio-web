@@ -39,8 +39,10 @@ define(function (require, exports, module) {
      * @param coords {Object} The four coordinates (top, left, width, height) of the display, specifying
      *        the left, top corner, and the width and height of the (rectangular) widget area.
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
-     * @param opt {Object} Style options defining the visual appearance of the widget.
-     *                     Options can be given either as standard html style attributes or using the following widget attributes:
+     * @param {Object} opt
+     * @param {String} [opt.svg='alarmoff.svg'] svg file
+     * @param {String} [opt.position='absolute'] set the position style
+     * @param {Number} [opt.opacity] value between 0 and 1
      * @memberof module:ImageRender
      * @instance
      */
@@ -103,8 +105,6 @@ define(function (require, exports, module) {
     /**
     * @function render
     * @description this method will render the widget
-    * @param {*} level 
-    * @param {*} opt 
     */
         ImageRender.prototype.render = function () {
             this.image.style('display','block') 
@@ -125,7 +125,7 @@ define(function (require, exports, module) {
     /**
     * @function <a name="setImage">setImage</a>
     * @description This method will change the rendered image to another passed by argument.
-    * @param img {svg} The image should be a svg object that will be rendered
+    * @param {SVG} img The image should be a svg object that will be rendered
     * @memberof module:ImageRender
     * @instance
     */
@@ -145,7 +145,7 @@ define(function (require, exports, module) {
     	/**
         * @function <a name="setColor">setColor</a>
         * @description Sets color of all image paths to the given color
-        * @param color {string} color in hex. ex. #FF0000
+        * @param {String} color color in hex. ex. #FF0000
         * @memberof module:ImageRender
         * @instance
         */
@@ -161,7 +161,7 @@ define(function (require, exports, module) {
     	/**
         * @function <a name="setBackgroundColor">setBackgroundColor</a>
         * @description Set the image background color
-        * @param color {string} color in hex. Ex. #FF0000
+        * @param {String} color color in hex. Ex. #FF0000
         * @memberof module:ImageRender
         * @instance
         */
@@ -179,7 +179,7 @@ define(function (require, exports, module) {
         * @function <a name="isValidColor">isValidColor</a>
         * @description Function for private usage that will check if color is a valid hex color. As three digit color in hex is 
         *                   corrctely interpreted by browser it will return true as well.
-        * @param color {string} the string to test 
+        * @param {String} color the string to test 
         * @memberof module:ImageRender
         * @instance
         */

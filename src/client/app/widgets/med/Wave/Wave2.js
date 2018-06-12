@@ -44,20 +44,17 @@ define(function (require, exports, module) {
      *        the left, top corner, and the width and height of the div element containing the syringe.
      *        Default is { top: 0, left: 0, width: 80, height: 200 }.
      * @param opt {Object} Options:
-     *          <li>parent (String): the HTML element where the display will be appended (default is "body")</li>
-     *          <li>title (String): presented on top left corner with wave's color
-     *          <li>heartRate (Integer) Heart rate in BPM. This will affect the speed of wave. Default is 60</li>
-     *          <li>waveColor (uInt). Default is #00FF00 </li>
-     *          <li>backgroundColor (uInt). widget background color. Default is #000</li>
-     *          <li>waveType (String) Define the wave type that will be rendered. options are: ecg, co2, pleth, userDefined. Default is ecg</li>
-     *          <li>userDefinedWave (Array[Integer]) [optional] when waveType is userDefined the wave rendered will be the points in this array</li>
-     *          <li>filled (string): Default is none
-     *                  <li>none</li>
-     *                  <li>up</li>
-     *                  <li>down</li>
-     *          <li>fillColor (uInt). Default is wavecolor</li>
-     *          <li>wavesPerScreen (Integer) [optional] set the number of waves that should be rendered in each line of the screen at 60bps</li>
-     *          <li>scanBarWidth (Integer) [optional] set scanBarWidth, Default is 50</li>
+     * @param {String} [opt.parent='body'] (String): the HTML element where the display will be appended (default is "body")
+     * @param {String} [opt.title] presented on top left corner with wave's color
+     * @param {Integer} [opt.heartRate=60] Heart rate in BPM. This will affect the speed of wave. Default is 60
+     * @param {uInt} [opt.waveColor='#00FF00'] (uInt). Default is #00FF00 
+     * @param {uInt} [opt.backgroundColor='#000000'] widget background color. Default is #000
+     * @param {('ecg'| 'co2' | 'pleth' | 'userDefined')} [opt.waveType='ecg'] Define the wave type that will be rendered. options are: ecg, co2, pleth, userDefined. Default is ecg
+     * @param {Integer[]} opt.userDefinedWave (Array[Integer]) [optional] when waveType is userDefined the wave rendered will be the points in this array
+     * @param {('none' | 'up' | 'down')} [opt.filled='none'] (string): Default is none
+     * @param {uInt} [opt.fillColor=waveColor] (uInt). Default is wavecolor
+     * @param {Integer} [opt.wavesPerScreen] set the number of waves that should be rendered in each line of the screen at 60bps
+     * @param {Integer} [opt.scanBarWidth=50]  set scanBarWidth, Default is 50
      * @memberof module:Wave
      * @instance
      */
@@ -170,7 +167,7 @@ define(function (require, exports, module) {
     };
 
     	/**
-        * @private
+        * @protected
         * @function <a name="animationLoop">animationLoop</a>
         * @description This function is responsible for render wave. It is recursive so that the function is a render loop. In majoraty of
         *               Browsers the requestAnimationFrame is called at 60Hz so it is assumed that at speed 1, as we set process 2 pixel per 
@@ -224,7 +221,7 @@ define(function (require, exports, module) {
     /**
     * @function <a name="setColor">setColor</a>
     * @description Rendering function for button widgets.
-    * @param color {uInt | string} ex. #f0a204 or blue
+    * @param {(uInt | string)} color ex. #f0a204 or blue
     * @memberof module:Wave
     * @instance
     */
@@ -236,10 +233,9 @@ define(function (require, exports, module) {
     }
    
     	/**
-        * @private
+        * @protected
         * @function <a name="addArrayElems">addArrayElems</a>
         * @description This function defines the points of wave in order to get the suitable size
-        * @param ... {Object} ... 
         * @memberof module:Wave
         * @instance
         */
@@ -257,7 +253,6 @@ define(function (require, exports, module) {
         * @private
         * @function <a name="setUpWave">setUpWave </a>
         * @description Setup wave with new params
-        * @param 
         * @memberof module:Wave
         * @instance
         */
@@ -351,7 +346,6 @@ define(function (require, exports, module) {
         * @private 
         * @function <a name="reRender">rerender</a>
         * @description Call the necessary functions to reRender the wave
-        * @param . 
         * @memberof module:Wave
         * @instance
         */
@@ -374,18 +368,19 @@ define(function (require, exports, module) {
             return this
     }  */ 
 
+
     	/**
         * @function <a name="setParameters">setParameters</a>
         * @description Set new parameters to waves. It can be setted one or more parameters at once.
-        * @param newOpt {Object} - object with the parameters to be setted
-        *                   <li>title</li>
-        *                   <li>heartRate</li> 
-        *                   <li>waveColor</li> 
-        *                   <li>backgroundColor</li> 
-        *                   <li>waveType</li> 
-        *                   <li>scanBarWidth</li> 
-        *                   <li>userDefinedWave</li> 
-        *                   <li>wavesPerScreen</li>
+        * @param {Object} newOpt Options
+        * @param {String} newOpt.title
+        * @param {Number} newOpt.heartRate
+        * @param {uInt} newOpt.waveColor
+        * @param {uInt} newOpt.backgroundColor
+        * @param {String} newOpt.waveType
+        * @param {Number} newOpt.scanBarWidth
+        * @param {Integer[]} newOpt.userDefinedWave
+        * @param {Number}newOpt.wavesPerScreen
         * @memberof module:Wave
         * @instance
         * @returns {Wave} this wave instance to be used in a chain
@@ -395,6 +390,7 @@ define(function (require, exports, module) {
             this.heartRate = newOpt.heartRate || this.heartRate
             this.waveColor = newOpt.waveColor || this.waveColor
             this.backgroundColor = newOpt.backgroundColor || this.backgroundColor
+            /*** TODO: wave type is enumerable. Check if it is one of the options before set waveType */
             this.waveType = newOpt.waveType || this.waveType
             this.scanBarWidth = newOpt.scanBarWidth || this.scanBarWidth
             this.userDefinedWave = newOpt.userDefinedWave || this.userDefinedWave

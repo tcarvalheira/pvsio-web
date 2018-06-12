@@ -46,12 +46,12 @@ define(function (require, exports, module) {
      * @param coords {Object} The six coordinates (top, left, width, height, top_plug, left_plug) of the display, specifying
      *        the left, top corner, and the width and height of the (rectangular) widget area and the adicional area for the plug rest.
      *        Default is { top: 0, left: 0, width: 32, height: 20, top_plug: 0, left_plug: 200 }.
-     * @param opt {Object} Style options defining the visual appearance of the widget.
+     * @param {Object} opt Style options defining the visual appearance of the widget.
      *                     Options can be given either as standard html style attributes or using the following widget attributes:
-     *                     <li>image_plugged</li> (string) path for the pugged image
-     *                     <li>image_unplugged</li> (string) path for the unplugged image
-     *                     <li>image_socket</li> (string) path for the socket image
-     *                     <li>isPlugged</li> (boolean) set if the plug should be plugged in ou unplugged from the socket. Default is false
+     * @param {String} image_plugged path for the pugged image
+     * @param {String} image_unplugged path for the unplugged image
+     * @param {String} image_socket path for the socket image
+     * @param {Boolean} isPlugged set if the plug should be plugged in ou unplugged from the socket. Default is false
      * @memberof module:Plug
      * @instance
      */
@@ -216,7 +216,7 @@ define(function (require, exports, module) {
      /**
       * @function <a name="render">render</a>
       * @description Rendering function for button widgets.
-      * @param state {Object} JSON object with the current value of the state attributes of the modelled system
+      * @param {Object} state JSON object with the current value of the state attributes of the modelled system
       * @memberof module:Plug
       * @instance
       */
@@ -252,8 +252,8 @@ define(function (require, exports, module) {
          * @private
          * @function <a name="drag">drag</a>
          * @description Set the border of the dragged object.
-         * @param ev {Object} - the drag event object
-         * @param obj {Object} - the plug object it self 
+         * @param {Object} ev the drag event object
+         * @param {Object} obj the plug object it self 
          * @memberof module:Plug
          * @instance
          */
@@ -268,8 +268,8 @@ define(function (require, exports, module) {
           * @private
          * @function <a name="allowDrag">allowDrag</a>
          * @description This method sets if the target objet allows drop event
-         * @param ev {Object} the drag event object
-         * @param obj {Object} the plug object it self 
+         * @param {Object} ev the drag event object
+         * @param {Object} obj the plug object it self 
          * @memberof module:Plug
          * @instance
          */
@@ -282,8 +282,8 @@ define(function (require, exports, module) {
           * @private
          * @function <a name="drop">drop</a>
          * @description Set what should be done when drop an object over other object
-         * @param ev {Object} drag event object
-         * @param plug {Object} Plug object it self 
+         * @param {Object} ev drag event object
+         * @param {Object} plug Plug object it self 
          * @memberof module:Plug
          * @instance
          */
@@ -342,7 +342,7 @@ define(function (require, exports, module) {
          * @private
         * @function <a name="connectPlug">connectPlug</a>
         * @description This method performs the necessary operations to connect a plug into a socket
-        * @param code {String} the reference code to deconnect the plug. This code will be, usually, the plug id 
+        * @param {String} code the reference code to deconnect the plug. This code will be, usually, the plug id 
         * @memberof module:Plug
         * @instance
         */
@@ -384,7 +384,7 @@ define(function (require, exports, module) {
          * @private
         * @function <a name="deconnectPlug">deconnectPlug</a>
         * @description This method performs the needed operations to deconnect a plug from a socket
-        * @param code {String} the reference code to deconnect the plug. This code will be, usually, the plug id 
+        * @param {String} code the reference code to deconnect the plug. This code will be, usually, the plug id 
         * @memberof module:Plug 
         * @instance
         */

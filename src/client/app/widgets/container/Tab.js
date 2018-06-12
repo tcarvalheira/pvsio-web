@@ -45,12 +45,12 @@ define(function (require, exports, module) {
      * @param coords {Object} The four coordinates (top, left, width, height) of the display, specifying
      *        the left, top corner, and the width and height of the (rectangular) widget area.
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
-     * @param opt {Object} Style options defining the visual appearance of the widget.
+     * @param {Object} opt Style options defining the visual appearance of the widget.
      *                     Options can be given either as standard html style attributes or using the following widget attributes:
-     *              <li>type {tab || pills} default is tab</li>
-     *              <li>pages { array<Objects> } </li> these objects should have the following schema {id: ... , title: ...}
-     *              <li>callback { function } - callback function to pass into widgets. default is id function</li>
-     *              <li>activePage { String } - set the active page, default is first page of pages array</li>
+     * @param {tab || pills} [opt.type='tab']
+     * @param { array<Objects> } [opt.pages=[]] these objects should have the following schema {id: ... , title: ...}
+     * @param { function } [opt.callback=id] callback function to pass into widgets.
+     * @param { String } [opt.activePage=1] set the active page
      * @memberof module:Tab
      * @instance
      */
@@ -167,7 +167,7 @@ define(function (require, exports, module) {
     /**
     * @function <a name="setActiveTab">setActiveTab</a>
     * @description Sets new active tab. This can be used on the callback method to change active page based on PVS state
-    * @param tab { String } page id to turn active
+    * @param { String } tab page id to turn active
     * @memberof module:Tab
     * @instance
     */
@@ -184,8 +184,8 @@ define(function (require, exports, module) {
     /**
      * @function <a name="render">render</a>
      * @description Rendering function for button widgets.
-     * @param state {Object} JSON object with the current value of the state attributes of the modelled system
-     * @param opt {Object} Style options overriding the style attributes used when the widget was created.
+     * @param {Object} state JSON object with the current value of the state attributes of the modelled system
+     * @param {Object} opt Style options overriding the style attributes used when the widget was created.
      *                     The override style options are temporary, i.e., they are applied only for the present invocation of the render method.
      *                     Available options are either html style attributes or the following widget attributes:
      * @memberof module:Tab

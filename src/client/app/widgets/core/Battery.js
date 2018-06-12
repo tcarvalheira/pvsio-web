@@ -139,9 +139,9 @@ define(function (require, exports, module) {
       * @function <a name="render">render</a>
       * @description Rendering function for button widgets.
       * @param state {Object} JSON object with the current value of the state attributes of the modelled system
-      * @param opt {Object} Style options overriding the style attributes used when the widget was created.
+      * @param {Object} opt Style options overriding the style attributes used when the widget was created.
       *                     The override style options are temporary, i.e., they are applied only for the present invocation of the render method.
-      *                     Available options are either html style attributes or the following widget attributes:
+      * @param {String} [opt.fontColor=] sets new font color. This color is overriden by red if value is smaller then blinkingValue 
       * @memberof module:Battery
       * @instance
       */

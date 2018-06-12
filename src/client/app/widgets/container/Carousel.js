@@ -53,12 +53,13 @@ define(function (require, exports, module) {
      * @param coords {Object} The four coordinates (top, left, width, height) of the display, specifying
      *        the left, top corner, and the width and height of the (rectangular) widget area.
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
-     * @param {number} [opt.number=5000] The amount of time to delay between automatically cycle an item. If false, carousel will not automatically cycle
-     * @param {boolean} [opt.keyboard=true] Whether the carousel should react to keyboard events
-     * @param {string | boolean} [pause='hover'] If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it. 
+     * @param {Object} opt Optional values for the widget:
+     * @param {Number} [opt.number=5000] The amount of time to delay between automatically cycle an item. If false, carousel will not automatically cycle
+     * @param {Boolean} [opt.keyboard=true] Whether the carousel should react to keyboard events
+     * @param {String | boolean} [pause='hover'] If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it. 
      * On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.
-     * @param {string} [ride='false'] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.
-     * @param {boolean} [wrap='true'] Whether the carousel should cycle continuously or have hard stops.
+     * @param {String} [ride='false'] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.
+     * @param {Boolean} [wrap='true'] Whether the carousel should cycle continuously or have hard stops.
      * @memberof module:Carousel
      * @instance
      */
@@ -236,14 +237,14 @@ define(function (require, exports, module) {
     /**
      * @function <a name="cyle">cyle</a>
      * @description Cycles through the carousel items from left to right
-     * @param opt {Object} options object:
-     *                      <li>{number} [inteval=5000] The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.</li>
-     *                      <li>{boolean} [keyboard=true] Whether the carousel should react to keyboard events.</li>
-     *                      <li>{string} [pause='hover'] If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it.
+     * @param {Object} opt options object:
+     * @param {Number} [opt.inteval=5000] The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.</li>
+     * @param {Boolean} [opt.keyboard=true] Whether the carousel should react to keyboard events.</li>
+     * @param {String} [opt.pause='hover'] If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it.
 
 On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.</li>
-     *                      <li>{string} [ride=false] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.</li>
-     *                      <li>{boolean} [wrap=true] Whether the carousel should cycle continuously or have hard stops.</li>
+     * @param {String} [opt.ride=false] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.</li>
+     * @param {Boolean} [opt.wrap=true] Whether the carousel should cycle continuously or have hard stops.</li>
      * @return {Object} this
      * @memberof module:Carousel
      * @instance
@@ -293,7 +294,8 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
     /**
      * @function <a name="goTo">goTo</a>
-     * @description Cycles the carousel to a particular frame (0 based) 
+     * @description Cycles the carousel to a particular frame (0 based)
+     * @param {Number} number Goto page number 
      * @return {Object} this
      * @memberof module:Carousel
      * @instance

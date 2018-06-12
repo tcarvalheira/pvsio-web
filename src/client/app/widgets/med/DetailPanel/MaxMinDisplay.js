@@ -45,18 +45,18 @@ define(function (require, exports, module) {
      * @param coords {Object} The four coordinates (top, left, width, height) of the display, specifying
      *        the left, top corner, and the width and height of the (rectangular) widget area.
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
-     * @param opt {Object} JSON object Style options defining the visual appearance of the widget.
-     *                     <li>parent {String} </li>
-     *                     <li>color {String} </li>
-     *                     <li>backgroundColor {String} </li>
-     *                     <li>title {String} </li>
-     *                     <li>subtitle {String} </li>
-     *                     <li>value {String} </li>
-     *                     <li>valueMax {String} </li>
-     *                     <li>valueMin {String} </li>
-     *                     <li>type {String} Integer, Float, String</li>
-     *                     <li>decimalPlaces {Integer} default 1 when Float
-     *                     <li>bracket {String} options are none | parenthesis | bracked | curly default is none </li>
+     * @param {Object} opt JSON object Style options defining the visual appearance of the widget.
+     * @param {String} [opt.parent=] set widget parent
+     * @param {String} [opt.color=] set widget color
+     * @param {String} [opt.backgroundColor=] set widget background
+     * @param {String} [opt.title=] set title for the widget
+     * @param {String} [opt.subtitle=] set the subtitle of the widget
+     * @param {String} [opt.value=] sets the current value
+     * @param {String} [opt.valueMax=] sets the maximal value
+     * @param {String} [opt.valueMin=] sets the minimal value 
+     * @param {'Integer'||'Float'||'String'} [opt.type='Float'] set widget type. 
+     * @param {Integer} [decimalPlaces=1] Set the number of decimal places
+     * @param {'none' | 'parenthesis' | 'bracked' | 'curly'} [bracket='none'] options are  default is none
      * @memberof module:MaxMinDisplay
      * @instance
      */
@@ -156,10 +156,6 @@ define(function (require, exports, module) {
 
         this.setStyle(opt);
 
-        /* TODO: check type of display and show it with or without (), with decimal point, etc
-             this could be set on opts
-        */
-
         // render content
         let min = 0
         let max = 0
@@ -219,12 +215,11 @@ define(function (require, exports, module) {
      	/**
          * @function <a name="updateValues">updateValues</a>
          * @description These function will set the values on the widget and re-render the widget
-         * @param values {Object} JSON object with a maximum of three values
-         *          <li>actualValue {Float}</li>
-         *          <li>minimalValue {Float}</li>
-         *          <li>maximalValue {Float}</li>
-         *          none of these values is mandatory. If it is not set than the values 
+         * @param values {Object} JSON object with a maximum of three values. none of these values is mandatory. If it is not set than the values 
          *          will be the already defined on widget
+         * @param {Float} [values.actualValue=] sets current values
+         * @param {Float} [values.minimalValue=] sets minimal value
+         * @param {Float} [values.maximalValue=] sets maximal value
          * @memberof module:MaxMinDisplay
          * @instance
          */
@@ -239,15 +234,15 @@ define(function (require, exports, module) {
      	/**
          * @function <a name="setProperties">setParameters</a>
          * @description This method will set the given properties of the widget. None of them are mandatory as they have default value
-         * @param newOpts {Object} object with one or more of the next properties
-         *                 <li>title</li>
-         *                 <li>subtitle</li>
-         *                 <li>value</li>
-         *                 <li>valueMax</li>
-         *                 <li>valueMin</li>
-         *                 <li>type</li>
-         *                 <li>decimalPlaces</li>
-         *                 <li>bracket</li>
+         * @param {Object} newOpts object with one or more of the next properties
+         * @param {String} [newOpts.title=]
+         * @param {String} [newOpts.subtitle=]
+         * @param {String} [newOpts.value=]
+         * @param {String} [newOpts.valueMax=]
+         * @param {String} [newOpts.valueMin=]
+         * @param {String} [newOpts.type=]
+         * @param {String} [newOpts.decimalPlaces=]
+         * @param {String} [newOpts.bracket=]
          * @memberof module:MaxMinDisplay
          * @instance
          */

@@ -55,14 +55,14 @@ define(function(require, exports, module){
      * @function constructor
      * @description Constructor for Alarm widget
      * @param id {String} widget instance id
-     * @param coords {Object} coordinates of widget: top, left, with, height 
+     * @param {Object} coords coordinates of widget: top, left, with, height 
      *                 Default {top: 100, left: 100, width: 100, height: 100}
-     * @param opt {Object} options:
-     *          <li>parent (String): HTML element where widget will be appended. Default: alarm</li>
-     *          <li>audio (Object): is the location of sound. Could be a location inside server or an external url. Default is /alarms/alarm.mp3</li>
-     *          <li>loop (Boolean): set if alarm should play in loop or not. Default is false</li>
-     *          <li>loop_frequency (integer): . Default 1000</li>
-     *          <li>volume (Float): set alarm volume (0-1). Default 50</li>
+     * @param {Object} opt options object
+     * @param {String} [opt.parent='alarm'] HTML element where widget will be appended
+     * @param {Object} [opt.audio='/alarms/alarm.mp3'] is the location of sound. Could be a location inside server or an external url
+     * @param {Boolean} [opt.loop=false] set if alarm should play in loop or not
+     * @param {Iumber}  [opt.loop_frequency=1000] Loop freency for the alarm. The alarm will sound each loop_frequency ms.
+     * @param {Float}   [opt.volume=50] set alarm volume
      * @memberof module: Alarms
      * @instance
      */

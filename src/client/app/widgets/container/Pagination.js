@@ -41,18 +41,18 @@ define(function (require, exports, module) {
     /**
      * @function <a name="Pagination">Pagination</a>
      * @description Constructor.
-     * @param id {String} The ID of the touchscreen button.
-     * @param coords {Object} The four coordinates (top, left, width, height) of the display, specifying
+     * @param {String} id The ID of the touchscreen button.
+     * @param {Object} coords The four coordinates (top, left, width, height) of the display, specifying
      *        the left, top corner, and the width and height of the (rectangular) widget area.
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
-     * @param opt {Object} Style options defining the visual appearance of the widget.
+     * @param {Object} opt Style options defining the visual appearance of the widget.
      *                     Options can be given either as standard html style attributes or using the following widget attributes:
-     *              <li>{Boolean} [previousButton=true] set if there should be a previous button or not</li> 
-     *              <li>{Boolean} [nextButton=true] set if there should be a next button or not</li>
-     *              <li>{Boolean} [useIcons=true] set if icon should be used on previous and next buttons</li>
-     *              <li>{Array} [pages=[]] an array with all pages of pagination</li>
-     *              <li>{Integer} [activeIndex=1] {Integer} set the active index</li>
-     *              <li>{left | center | right} [alignment='left'] set the widget alignment </li>
+     * @param {Boolean} [opt.previousButton=true] set if there should be a previous button or not
+     * @param {Boolean} [opt.nextButton=true] set if there should be a next button or not
+     * @param {Boolean} [opt.useIcons=true] set if icon should be used on previous and next buttons
+     * @param {Array} [opt.pages=[]] an array with all pages of pagination
+     * @param {Integer} [opt.activeIndex=1] {Integer} set the active index
+     * @param {left | center | right} [opt.alignment='left'] set the widget alignment
      * @memberof module:Pagination
      * @instance
      */
@@ -93,8 +93,8 @@ define(function (require, exports, module) {
     /**
      * @function <a name="render">render</a>
      * @description Rendering function. It will create the HTML and the relative Buttons
-     * @param state {Object} JSON object with the current value of the state attributes of the modelled system
-     * @param opt {Object} Style options overriding the style attributes used when the widget was created.
+     * @param {Object} state JSON object with the current value of the state attributes of the modelled system
+     * @param {Object} opt Style options overriding the style attributes used when the widget was created.
      *                     The override style options are temporary, i.e., they are applied only for the present invocation of the render method.
      *                     Available options are either html style attributes or the following widget attributes:
      * @memberof module:Pagination
@@ -274,10 +274,10 @@ define(function (require, exports, module) {
     * @protected
     * @function <a name="createOuttermostPage">createOuttermostPage</a>
     * @description This method creates the previous and the next (left and right) buttons html
-    * @param parent {Element} the ul parent for the list 
-    * @param title {String} The title of the button, shown if not useIcons.
-    * @param isPrevious {Boolean} set if it is the previous or the next button
-    * @param onClick {Function} onClick callback
+    * @param {Element} parent the ul parent for the list 
+    * @param {String} title The title of the button, shown if not useIcons.
+    * @param {Boolean} isPrevious set if it is the previous or the next button
+    * @param {Function} onClick onClick callback
     * @return {Object} this
     * @memberof module:Pagination
     * @instance
@@ -349,7 +349,7 @@ define(function (require, exports, module) {
     /**
     * @function <a name="setActivePage">setActivePage</a>
     * @description Set the active index of pagination
-    * @param page {Integer} index page active
+    * @param {Integer} page index page active
     * @return {Object} this
     * @memberof module:Pagination
     * @instance
