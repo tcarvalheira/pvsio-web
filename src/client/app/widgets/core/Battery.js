@@ -29,6 +29,7 @@
 define(function (require, exports, module) {
     "use strict";
     var WidgetEVO = require("widgets/core/WidgetEVO");
+    var BasicDisplayEVO = require("widgets/core/BasicDisplayEVO")
     /**
      * @function <a name="Battery">Battery</a>
      * @description Constructor.
@@ -43,15 +44,56 @@ define(function (require, exports, module) {
      */
      function Battery(id, coords, opt) {
          coords = coords || {};
+         this.coords = coords
          opt = this.normaliseOptions(opt);
          // set widget type & display key
          this.type = this.type || "Battery";
          this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : id;
 
          // override default style options of WidgetEVO as necessary before creating the DOM element with the constructor of module WidgetEVO
-         opt.backgroundColor = opt.backgroundColor || "black";
-         opt.cursor = opt.cursor || "default";
-         opt.overflow = "hidden";
+        opt.backgroundColor = opt.backgroundColor || "black";
+        opt.cursor = opt.cursor || "default";
+        opt.overflow = "hidden";
+        this.id = id
+        this.opt = opt
+        this.opt.fontColor = opt.fontColor || 'black'
+        
+        /*** optional parameters on opt*/
+        this.battery_level = opt.battery_level !== undefined ? opt.battery_level : 100
+        this.show_icon = opt.show_icon !== undefined ? opt.show_icon : true
+        this.show_text = opt.show_text !== undefined ? opt.show_text : true
+        this.blinkingValue = opt.blinkingValue || 10
+
+        
+        this.parent =(opt.parent) ? (`#${opt.parent}`) : 'body'
+        this.div = d3.select(this.parent)
+                            .append('div')
+                            .attr('id',this.id)
+                            // add icon
+        this.icon = this.div
+                        .append('i')
+                        .attr('id',`${this.id}-battery-icon`)
+                        .attr('aria-hidden', 'true')
+                        .style('position', 'absolute')
+                        .style('top', `${this.coords.top}px`)
+                        .style('left', `${this.coords.left}px`)
+                        .style('width', `${this.coords.width}px`)
+                        .style('height', `${this.coords.height}px`)
+                            // add text
+
+        this.levelText = new BasicDisplayEVO(`${this.id}-battery-level`, {
+                    width: this.coords.width,
+                    height: this.coords.height,
+                    top: this.coords.top + 30,
+                    left: this.coords.left
+                }, {
+                    fontColor: "white",
+                    backgroundColor: "transparent",
+                    fontsize: opt.fontsize,
+                    parent: "battery"
+                });
+
+        
 
          // invoke WidgetEVO constructor to create the widget
          WidgetEVO.apply(this, [ id, coords, opt ]);
@@ -61,18 +103,43 @@ define(function (require, exports, module) {
      Battery.prototype.parentClass = WidgetEVO.prototype;
      Battery.prototype.constructor = Battery;
 
-
     	/**
-        * @function <a name="createHTML">createHTML</a>
+         * @protected
+        * @function <a name="getIconClass">getIconClass</a>
         * @description 
-        * @param ... {Object} ... 
         * @memberof module:Battery
         * @instance
         */
-        Battery.prototype.createHTML = function () {
-            
+        Battery.prototype.getIconClass = function () {
+            let icon  = 'fa-battery-full'
+            if(this.battery_level > 90){
+                icon = 'fa-battery-full'
+            }else if(this.battery_level > 70 && this.battery_level <= 90){
+                icon = 'fa-battery-three-quarters'
+            }else if(this.battery_level > 40 && this.battery_level <= 70){
+                icon = 'fa-battery-half'
+            }else if(this.battery_level > 10 && this.battery_level <= 40){
+                icon = 'fa-battery-quarter'
+            }else if(this.battery_level <= 10){
+                icon = 'fa-battery-empty'
+            }
+            return icon
     }
-
+    	/**
+        * @function <a name="setBatteryLevel">setBatteryLevel</a>
+        * @description 
+        * @param {Integer} level new level for the battery 
+        * @memberof module:Battery
+        * @instance
+        */
+        Battery.prototype.setBatteryLevel = function (level) {
+            let level_int = parseInt(level)
+            if(level != NaN){
+                this.battery_level = parseInt(level)
+                this.render()
+            }
+            return this            
+    }
 
 
      /**
@@ -87,12 +154,23 @@ define(function (require, exports, module) {
       */
      Battery.prototype.render = function (state, opt) {
          // set style
-         opt = this.normaliseOptions(opt);
-
-         this.setStyle(opt);
-
-         this.reveal();
-         return this;
+        opt = this.normaliseOptions(opt);
+        
+        opt.fontColor = opt.fontColor !== undefined ? opt.fontColor : this.opt.fontColor
+        opt.fontColor = this.getIconClass() === 'fa-battery-empty' || this.getIconClass() === 'fa-battery-quarter' ? 'red' : opt.fontColor
+        this.setStyle(opt);
+        this.icon
+               .attr('class',`battery-icon fas fa-2x ${this.getIconClass()}`)
+               .style('display','block')
+               .style('color',`${opt.fontColor}`)
+               
+        if(this.battery_level < this.blinkingValue){
+            this.icon.classed('blink', true)
+        }       
+               
+        this.levelText.render(this.battery_level + "%", opt);
+        this.reveal();
+        return this;
      }
      module.exports = Battery
    }
