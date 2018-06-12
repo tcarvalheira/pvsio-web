@@ -21,12 +21,14 @@ require.config({
 require([
         "widgets/container/Pagination",
         "widgets/container/Tab",
+        "widgets/core/Battery",
         "widgets/ButtonActionsQueue",
         "stateParser",
         "PVSioWebClient"
     ], function (
         Pagination,
         Tab,
+        Battery,
         ButtonActionsQueue,
         stateParser,
         PVSioWebClient
@@ -110,8 +112,22 @@ require([
                     type: 'pill',
                     callback: onMessageReceived,
                     parent: 'pills'
-                })
-           
+                }),
+            battery: new Battery('battery_indicator',
+                {
+                    left:400,
+                    top:40,
+                    width: 50,
+                    height: 30
+                },
+                {
+                    fontColor: "green",
+                    backgroundColor: "transparent",
+                    fontsize: 11,
+                    parent: "battery"
+                }
+
+            )
         };
 
         function onMessageReceived(err, event) {
@@ -134,10 +150,14 @@ require([
             widgets.pagination.render()
             widgets.tab.render()
             widgets.pill.render()
-            setTimeout(() => {
+            /* setTimeout(() => {
                 // console.log(`Set new TAB`)
                 widgets.tab.setActiveTab('page2')
                 widgets.pill.setActiveTab('page3')
+            }, 5000) */
+            widgets.battery.render();
+            setTimeout(() => {
+                widgets.battery.setBatteryLevel(8)
             }, 5000)
         }
 
