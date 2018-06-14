@@ -132,8 +132,6 @@ define(function (require, exports, module) {
 
         this.createHTML()
 
-        /* TODO: configure the buttons  */
-        console.log(this.buttonPrevious)
         this.next_screen = new ButtonEVO("next_screen", this.buttonNext.coords, {
                 softLabel: "",
                 backgroundColor: "steelblue",
