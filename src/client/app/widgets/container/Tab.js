@@ -66,17 +66,17 @@ define(function (require, exports, module) {
         opt.cursor = opt.cursor || "default";
         opt.overflow = "hidden";
         this.id = id
-            /*** nav|tab|pill */
+        /*** nav|tab|pill */
         this.type = opt.type || 'tab'
         // [{id: 'page1', title: 'Page 1'}]
         this.pages = opt.pages || []
         this.callback = opt.callback || ((id) => id)
 
-        this.parent =(opt.parent) ? (`#${opt.parent}`) : 'body'
+        this.parent = (opt.parent) ? (`#${opt.parent}`) : 'body'
         this.div = d3.select(this.parent)
-                        .append('div')
-                        .attr('id',this.id)
-        this.activePage = opt.activePage || this.pages[0].id           
+            .append('div')
+            .attr('id', this.id)
+        this.activePage = opt.activePage || this.pages[0].id
 
         this.buttons = [] // array of ButtonEvo
         // invoke WidgetEVO constructor to create the widget
@@ -97,67 +97,67 @@ define(function (require, exports, module) {
     Tab.prototype.createHTML = function () {
         /*** create the tab menu list */
         let ul = this.div.append('ul')
-            .attr('class',`nav ${this.type === 'tab' ? 'nav-tabs' : ''} ${this.type === 'pill' ? 'nav-pills nav-fill' : ''}`)
-            .attr('id',`${this.id}_tab`)
+            .attr('class', `nav ${this.type === 'tab' ? 'nav-tabs' : ''} ${this.type === 'pill' ? 'nav-pills nav-fill' : ''}`)
+            .attr('id', `${this.id}_tab`)
             .style('position', 'absolute')
-            .style('top',`${this.coords.top}px`)
+            .style('top', `${this.coords.top}px`)
             .style('left', `${this.coords.left}px`)
             .style('width', `${this.coords.width}px`)
-            .style('height',`${this.coords.height}px`)
+            .style('height', `${this.coords.height}px`)
 
         let tabContent = this.div.append('div')
-            .attr('class','tab-content')
-            .attr('id',`${this.id}-tab-content`)
+            .attr('class', 'tab-content')
+            .attr('id', `${this.id}-tab-content`)
 
         this.pages.forEach(page => {
             // tab menu html
             let li = ul.append('li')
-                .attr('class',`nav-item ${this.activePage === page.id ? 'active' : ''} `)
-            
+                .attr('class', `nav-item ${this.activePage === page.id ? 'active' : ''} `)
+
             let a = li.append('a')
-                .attr('class',`nav-link`)
+                .attr('class', `nav-link`)
                 .attr('href', `#${this.id}-${page.id}-pane`)
-                .attr('id',`${this.id}-${page.id}-pane-tab`)
-                .attr('role','tab')
-                .attr('aria-controls',`#${this.id}-${page.id}-pane`)
-                .attr('aria-selected','true')
+                .attr('id', `${this.id}-${page.id}-pane-tab`)
+                .attr('role', 'tab')
+                .attr('aria-controls', `#${this.id}-${page.id}-pane`)
+                .attr('aria-selected', 'true')
                 .html(page.title)
 
-            let element_coords =  li.node().getBoundingClientRect()
+            let element_coords = li.node().getBoundingClientRect()
 
             // tabContent html
             let tabContentPage = tabContent.append('div')
-                                    .attr('class',`tab-pane fade ${this.activePage === page.id ? ' show active' : ''}`)
-                                    .attr('id',`${this.id}-${page.id}-pane`)
-                                    .attr('role','tabpanel')
-                                    .attr('aria-labelledby',`${this.id}-${page.id}-pane`)
-                                    .style('position','absolute')
-                                    .style('top',`${this.coords.top+50}px`)
-                                    .style('left',`${this.coords.left}px`)
-                                    .style('width',`${this.coords.width}px`)
-                                    .style('height',`${this.coords.height}px`)
-                                    .style('color','red')
-                                    .style('opacity','1')
+                .attr('class', `tab-pane fade ${this.activePage === page.id ? ' show active' : ''}`)
+                .attr('id', `${this.id}-${page.id}-pane`)
+                .attr('role', 'tabpanel')
+                .attr('aria-labelledby', `${this.id}-${page.id}-pane`)
+                .style('position', 'absolute')
+                .style('top', `${this.coords.top + 50}px`)
+                .style('left', `${this.coords.left}px`)
+                .style('width', `${this.coords.width}px`)
+                .style('height', `${this.coords.height}px`)
+                .style('color', 'red')
+                .style('opacity', '1')
 
             // pvsio buttons
             this.buttons.push(
                 {
                     id: `${this.id}_${page.id}`,
-                    button : new ButtonEVO(`${this.id}_${page.id}_page`, {
+                    button: new ButtonEVO(`${this.id}_${page.id}_page`, {
                         width: element_coords.width,
                         height: element_coords.height,
                         top: this.coords.top,
                         left: element_coords.left
                     }, {
-                        softLabel: "",
-                        backgroundColor: "steelblue",
-                        opacity: "0.2", // change to zero to put the buttons invisible
-                        borderRadius: "4px",
-                        fontsize: 34,
-                        parent: `${this.id}`,
-                        callback: this.callback,
-                        zIndex: 10
-                    })
+                            softLabel: "",
+                            backgroundColor: "steelblue",
+                            opacity: "0.2", // change to zero to put the buttons invisible
+                            borderRadius: "4px",
+                            fontsize: 34,
+                            parent: `${this.id}`,
+                            callback: this.callback,
+                            zIndex: 10
+                        })
                 }
             )
         });
@@ -172,14 +172,14 @@ define(function (require, exports, module) {
     * @instance
     */
     Tab.prototype.setActiveTab = function (tab) {
-        let found = this.pages.find((elem) => { return elem.id === tab})
-        if(found !== undefined){
+        let found = this.pages.find((elem) => { return elem.id === tab })
+        if (found !== undefined) {
             this.activePage = tab
-        }else{
+        } else {
             this.activePage = this.pages[0].id
         }
         return this.render()
-    } 
+    }
 
     /**
      * @function <a name="render">render</a>
@@ -196,7 +196,7 @@ define(function (require, exports, module) {
         this.buttons.forEach((button) => {
             button.button.remove()
         })
-        this.buttons=[]
+        this.buttons = []
         // set style
         opt = this.normaliseOptions(opt);
         this.setStyle(opt);
@@ -213,6 +213,6 @@ define(function (require, exports, module) {
         this.reveal();
         return this;
     }
-     module.exports = Tab
-   }
+    module.exports = Tab
+}
 )
