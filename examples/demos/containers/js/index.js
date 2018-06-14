@@ -22,6 +22,7 @@ require([
         "widgets/container/Pagination",
         "widgets/container/Tab",
         "widgets/core/Battery",
+        "widgets/core/DateTime",
         "widgets/ButtonActionsQueue",
         "stateParser",
         "PVSioWebClient"
@@ -29,6 +30,7 @@ require([
         Pagination,
         Tab,
         Battery,
+        DateTime,
         ButtonActionsQueue,
         stateParser,
         PVSioWebClient
@@ -127,10 +129,32 @@ require([
                     parent: "battery",
                     battery_level: 80,
                     show_icon:true,
-                    show_text:true
+                    show_text:true,
+                    //iconFontSize: '20'
                 }
 
-            )
+            ),
+            date: new DateTime('datatime',
+                {
+                    left: 600,
+                    top: 40,
+                    width: 200,
+                    height: 40
+                },
+                {
+                        parent: "datetimediv",
+                        fontColor: 'DodgerBlue',
+                        useCurrentDateTime: true,
+                        dateFontSize: '14',
+                        timeFontSize: '20',
+                        relativePosition: 'vertical',
+                        relativeOrder: 'time-date',
+                        locale: 'en-US',
+                        dateFormat: { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', timeZoneName:'short'},
+                        timeFormat: { hour12: true, hour:'numeric', minute: 'numeric'},
+                        showDate: true,
+                        showTime: true
+                })
         };
 
         function onMessageReceived(err, event) {
@@ -159,8 +183,10 @@ require([
                 widgets.pill.setActiveTab('page3')
             }, 5000) */
             widgets.battery.render();
+            widgets.date.render();
             setTimeout(() => {
                 widgets.battery.setBatteryLevel(8)
+                //widgets.date.setDate('2018/06/05 15:24:20')
                 //widgets.battery.hideText()
                 //widgets.battery.hideIcon()
             }, 5000)
