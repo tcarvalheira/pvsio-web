@@ -25,5 +25,5 @@ pvsio-web.iml
 src/server/lib/glassfish4/*
 src/client/**/*.css.map
 PVS
-tutorials
-tuturials_jsdoc
+tutorials/*
+tutorials_jsdoc/*
