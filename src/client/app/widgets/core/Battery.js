@@ -77,6 +77,8 @@ define(function (require, exports, module) {
         this.show_icon = opt.show_icon !== undefined ? opt.show_icon : true
         this.show_text = opt.show_text !== undefined ? opt.show_text : true
         this.blinkingValue = opt.blinkingValue || 10
+        this.iconFontSize = opt.iconFontSize || 20
+        this.textFontSize = opt.textFontSize || 10
 
         
         this.parent =(opt.parent) ? (`#${opt.parent}`) : 'body'
@@ -151,11 +153,12 @@ define(function (require, exports, module) {
         
         opt.fontColor = opt.fontColor !== undefined ? opt.fontColor : this.opt.fontColor
         opt.fontColor = this.getIconClass() === 'fa-battery-empty' || this.getIconClass() === 'fa-battery-quarter' ? 'red' : opt.fontColor
+        opt.fontsize = opt.textFontSize || this.textFontSize
         this.setStyle(opt);
         if(this.show_icon){
             this.createIcon()
             this.icon
-               .attr('class',`battery-icon fas fa-2x ${this.getIconClass()}`)
+               .attr('class',`battery-icon fa fa-2x ${this.getIconClass()}`)
                .style('display','block')
                .style('color',`${opt.fontColor}`)
             
@@ -170,6 +173,7 @@ define(function (require, exports, module) {
         }
                
         this.reveal();
+        
         return this;
      }
 
@@ -191,7 +195,8 @@ define(function (require, exports, module) {
                 .style('top', `${this.coords.top}px`)
                 .style('left', `${this.coords.left}px`)
                 .style('width', `${this.coords.width}px`)
-                .style('height', `${this.coords.height}px`)
+                .style('font-size', `${this.iconFontSize}pt`)
+                //.style('height', `${this.coords.height}px`)
              }
             return this
      }
@@ -205,19 +210,23 @@ define(function (require, exports, module) {
          * @instance
          */
          Battery.prototype.createText = function (opt) {
-            if(this.levelText === undefined){
-                this.levelText = new BasicDisplayEVO(`${this.id}-battery-level`, {
-                    width: this.coords.width,
-                    height: this.coords.height,
-                    top: this.coords.top + 30,
-                    left: this.coords.left
-                }, {
-                    fontColor: "white",
-                    backgroundColor: "transparent",
-                    fontsize: opt.fontsize,
-                    parent: "battery"
-                });
+            /* TODO: if there is a way to change widget position i can create the icon once. 
+            * I can't figure out how to change position (top) so that i create a new widget */
+            let iconCoords = this.icon.node().getBoundingClientRect()
+            if(this.levelText !== undefined){
+                this.levelText.remove()
             }
+            this.levelText = new BasicDisplayEVO(`${this.id}-battery-level`, {
+                width: this.coords.width,
+                height: this.coords.height,
+                top: this.coords.top + iconCoords.height,
+                left: this.coords.left
+            }, {
+                fontColor: "white",
+                backgroundColor: "transparent",
+                fontsize: opt.fontsize,
+                parent: this.id
+            });
             return this
      }
      	/**
