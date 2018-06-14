@@ -15,11 +15,28 @@
  });
  require(["widgets/core/DateTime"], function (DateTime) {
       "use strict";
-      var disp = new DateTime("disp", {
-        top: 200, left: 120, height: 24, width: 120
-      }, {
-          ... 
-      });
+      var disp = new DateTime('datatime',
+                {
+                    left: 200,
+                    top: 42,
+                    width: 240,
+                    height: 40
+                },
+                {
+                        parent: "topline_display",
+                        fontColor: 'white',
+                        useCurrentDateTime: true,
+                        fontFamilly: 'sans-serif',
+                        dateFontSize: '12',
+                        timeFontSize: '16',
+                        relativePosition: 'vertical',
+                        relativeOrder: 'time-date',
+                        locale: 'en-US',
+                        dateFormat: { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', timeZoneName:'short'},
+                        timeFormat: { hour12: true, hour:'numeric', minute: 'numeric'},
+                        showDate: true,
+                        showTime: true
+                })
       disp.render();
  });
  *
@@ -37,8 +54,27 @@ define(function (require, exports, module) {
      * @param coords {Object} The four coordinates (top, left, width, height) of the display, specifying
      *        the left, top corner, and the width and height of the (rectangular) widget area.
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
-     * @param opt {Object} Style options defining the visual appearance of the widget.
-     *                     Options can be given either as standard html style attributes or using the following widget attributes:
+     * @param {Object} opt 
+     * @param {String} [opt.backgroundColor='transparent'] widget background color
+     * @param {String} [opt.cursor='default']
+     * @param {String} [opt.overflow='hidden']
+     * @param {Boolean} [opt.shoDate=true] Whether if date should be shown or not
+     * @param {Boolean} [opt.showTime=true] Whether if time should be shown or not
+     * @param {Boolean} [useCurrentDateTime=true] If setted to true, widget will handle date and time changed every second. If set to false, date and time should be setted based on PVS model on callback function
+     * @param {String} [locale='en-US'] sets the date and time locale
+     * @param {Object} [opt.dateFormat={}] Date format. These are the date format options on JavaScript, for example:
+     * @param {String} [opt.dateFormat.weekday]
+     * @param {String} [opt.dateFormat.year]
+     * @param {String} [opt.dateFormat.month]
+     * @param {String} [opt.dateFormat.day]
+     * @param {String} [opt.dateFormat.timeZoneName]
+     * @param {Object} [opt.timeFormat={}] Date format. These are the date format options on JavaScript, for example:
+     * @param {Boolean} [opt.timeFormat.hour12] Whether to show 12 based hour or 24 based hour
+     * @param {String} [opt.timeFormat.hour]
+     * @param {String} [opt.timeFormat.minute]
+     * @param {String} [opt.timeFormat.second]
+     * @param {'vertical' | 'horizontal'} [relativePosition='vertical'] Whether date and time should be placed vertically or horizontally realtive to each other
+     * @param {'date-time' | 'time-date'} [relativeOrder='date-time'] Sets the relative order to show the date and time. If it is set to date-time, date is shown first, above or on leftmost depending on relativePosition is set to vertical or horizontal.
      * @memberof module:DateTime
      * @instance
      */
@@ -132,10 +168,8 @@ define(function (require, exports, module) {
     /**
      * @function <a name="render">render</a>
      * @description Rendering function for button widgets.
-     * @param state {Object} JSON object with the current value of the state attributes of the modelled system
-     * @param opt {Object} Style options overriding the style attributes used when the widget was created.
-     *                     The override style options are temporary, i.e., they are applied only for the present invocation of the render method.
-     *                     Available options are either html style attributes or the following widget attributes:
+     * @param {Object} state JSON object with the current value of the state attributes of the modelled system
+     * @param {Object} opt 
      * @memberof module:DateTime
      * @instance
      */
@@ -165,8 +199,8 @@ define(function (require, exports, module) {
 
 	/**
     * @function <a name="getDateString">getDateString</a>
-    * @description 
-    * @param ... {Object} ... 
+    * @description a string representation of the current date of the widget
+    * @return {String} 
     * @memberof module:DateTime
     * @instance
     */
@@ -177,8 +211,8 @@ define(function (require, exports, module) {
 
     /**
     * @function <a name="getTimeString">getTimeString</a>
-    * @description 
-    * @param ... {Object} ... 
+    * @description get a string representation of the current time of the widget
+    * @return {String} 
     * @memberof module:DateTime
     * @instance
     */
@@ -191,8 +225,10 @@ define(function (require, exports, module) {
     /**
      * @protected
     * @function <a name="setDate">setDate</a>
-    * @description 
+    * @description Auxiliary method to set the widget date inside interval functions which does not have access to this
+    * @param {Object} obj widget object (this)
     * @param {String} [date] Date string representing desired date and time. Ex. 
+    * @return self objet for chained calls
     * @memberof module:DateTime
     * @instance
     */
@@ -206,13 +242,15 @@ define(function (require, exports, module) {
     }
     /**
     * @function <a name="setDate">setDate</a>
-    * @description 
-    * @param ... {Object} ... 
+    * @description Set widget date. It will update date and rerender widget with the new date
+    * @param {String} date A date string representing desired date for the widget
+    * @return self object to chained calls
     * @memberof module:DateTime
     * @instance
     */
     DateTime.prototype.setDate = function (date) {
         this.setDateInternal(this, date)
+        return this
     }
 
     module.exports = DateTime
