@@ -60,8 +60,8 @@ define(function (require, exports, module) {
      * @param {String} [opt.overflow='hidden']
      * @param {Boolean} [opt.shoDate=true] Whether if date should be shown or not
      * @param {Boolean} [opt.showTime=true] Whether if time should be shown or not
-     * @param {Boolean} [useCurrentDateTime=true] If setted to true, widget will handle date and time changed every second. If set to false, date and time should be setted based on PVS model on callback function
-     * @param {String} [locale='en-US'] sets the date and time locale
+     * @param {Boolean} [opt.useCurrentDateTime=true] If setted to true, widget will handle date and time changed every second. If set to false, date and time should be setted based on PVS model on callback function
+     * @param {String} [opt.locale='en-US'] sets the date and time locale
      * @param {Object} [opt.dateFormat={}] Date format. These are the date format options on JavaScript, for example:
      * @param {String} [opt.dateFormat.weekday]
      * @param {String} [opt.dateFormat.year]
@@ -73,8 +73,8 @@ define(function (require, exports, module) {
      * @param {String} [opt.timeFormat.hour]
      * @param {String} [opt.timeFormat.minute]
      * @param {String} [opt.timeFormat.second]
-     * @param {'vertical' | 'horizontal'} [relativePosition='vertical'] Whether date and time should be placed vertically or horizontally realtive to each other
-     * @param {'date-time' | 'time-date'} [relativeOrder='date-time'] Sets the relative order to show the date and time. If it is set to date-time, date is shown first, above or on leftmost depending on relativePosition is set to vertical or horizontal.
+     * @param {'vertical' | 'horizontal'} [opt.relativePosition='vertical'] Whether date and time should be placed vertically or horizontally realtive to each other
+     * @param {'date-time' | 'time-date'} [opt.relativeOrder='date-time'] Sets the relative order to show the date and time. If it is set to date-time, date is shown first, above or on leftmost depending on relativePosition is set to vertical or horizontal.
      * @memberof module:DateTime
      * @instance
      */

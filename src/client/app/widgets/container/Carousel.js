@@ -50,7 +50,7 @@ define(function (require, exports, module) {
      * @function <a name="Carousel">Carousel</a>
      * @description Constructor.
      * @param id {String} The ID of the touchscreen button.
-     * @param coords {Object} The four coordinates (top, left, width, height) of the display, specifying
+     * @param {Object} coords The four coordinates (top, left, width, height) of the display, specifying
      *        the left, top corner, and the width and height of the (rectangular) widget area.
      *        Default is { top: 0, left: 0, width: 32, height: 20 }.
      * @param {Object} opt Optional values for the widget:
@@ -61,10 +61,12 @@ define(function (require, exports, module) {
      * @param {String} [opt.ride='false'] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.
      * @param {Boolean} [opt.wrap='true'] Whether the carousel should cycle continuously or have hard stops.
      * @param {Object} [opt.buttonPrevious]
-     * @param {Object} [opt.buttonPrevious.coords]
+     * @param {Object} [opt.buttonPrevious.coords] The four coordinates (top, left, width, height) of the display, specifying
+     *        the left, top corner, and the width and height of the (rectangular) widget area.
      * @param {Object} [opt.buttonPrevious.opt]
      * @param {Object} [opt.buttonNext]
-     * @param {Object} [opt.buttonNext.coords]
+     * @param {Object} [opt.buttonNext.coords] The four coordinates (top, left, width, height) of the display, specifying
+     *        the left, top corner, and the width and height of the (rectangular) widget area.
      * @param {Object} [opt.buttonNext.opt]
      * @memberof module:Carousel
      * @instance
