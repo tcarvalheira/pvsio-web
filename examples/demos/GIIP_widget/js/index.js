@@ -23,6 +23,8 @@ require([
         "widgets/SliderWidget",
         "widgets/ToggleButton",
         "widgets/container/Carousel",
+        "widgets/core/Battery",
+        "widgets/core/DateTime",
         "util/playback/Player",
         "widgets/ButtonActionsQueue",
         "stateParser",
@@ -33,6 +35,8 @@ require([
         Slider,
         ToggleButton,
         Carousel,
+        Battery,
+        DateTime,
         Player,
         ButtonActionsQueue,
         stateParser,
@@ -74,7 +78,7 @@ require([
                 var res = event.data.toString();
                 if (res.indexOf("(#") === 0) {
                     render(stateParser.parse(res));
-                    console.log(res.replace(/\s\s+/g, ' '));
+                   // console.log(res.replace(/\s\s+/g, ' '));
                 }
             } else {
                 console.log(err);
@@ -83,7 +87,7 @@ require([
 
         var device = {};
 
-        device.battery_level = new BasicDisplay("battery_level", {
+        /* device.battery_level = new BasicDisplay("battery_level", {
             width: 30,
             height: 16,
             top: 28,
@@ -94,7 +98,7 @@ require([
             // opacity: "0.2",
             fontsize: 11,
             parent: "battery"
-        });
+        }); */
         device.reservoir = new Slider("reservoir", {
             top: 48,
             left: 530,
@@ -161,6 +165,7 @@ require([
                 parent: "device",
                 callback: onMessageReceived,
                 interval: false,
+                backgroundColor: 'transparent',
                 onSlideBsCarousel: () => {
                     //console.log('Carousel INIT')
                 },
@@ -168,6 +173,49 @@ require([
                     //console.log('Carousel END')
                 }
             })
+
+        device.battery = new Battery('battery_indicator',
+            {
+                left:90,
+                top:40,
+                width: 40,
+                height: 30
+            },
+            {
+                fontColor: "#FFFFFF",
+                backgroundColor: "transparent",
+                textFontSize: 11,
+                parent: "topline_display",
+                battery_level: 20,
+                show_icon:true,
+                show_text:true,
+            }
+        )
+
+        device.date = new DateTime('datatime',
+                {
+                    left: 200,
+                    top: 42,
+                    width: 240,
+                    height: 40
+                },
+                {
+                        parent: "topline_display",
+                        fontColor: 'white',
+                        useCurrentDateTime: true,
+                        fontFamilly: 'sans-serif',
+                        dateFontSize: '12',
+                        timeFontSize: '16',
+                        relativePosition: 'vertical',
+                        relativeOrder: 'time-date',
+                        locale: 'en-US',
+                        dateFormat: { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', timeZoneName:'short'},
+                        timeFormat: { hour12: true, hour:'numeric', minute: 'numeric'},
+                        showDate: true,
+                        showTime: true
+                })
+
+        
 
             /* moved carousel navigation inside Carousel */
         /* device.next_screen = new ButtonEVO("next_screen", {
@@ -387,7 +435,9 @@ require([
 
         // todo: battery widget
         function render_battery (res) {
-            device.battery_level.render(res.battery_level + "%");
+            device.battery.setBatteryLevel(res.battery_level)
+            device.battery.render()
+            /* device.battery_level.render(res.battery_level + "%");
             d3.selectAll(".battery-icon").style("display", "none");
             if (res.battery_level > 90) {
                 d3.select("#battery-full").style("display", "block");
@@ -402,7 +452,7 @@ require([
             }
             if (res.battery_level < 10 && !d3.select("#battery_level").classed("blink")) {
                 d3.select("#battery").classed("blink", true);
-            }
+            } */
         }
 
         device.basal_profiles = {};
@@ -506,6 +556,7 @@ require([
 
             // the following elements are always visible / enabled in normal operation mode
             render_battery(res);
+            device.date.render()
             device.on_off.render();
             device.reservoir.render(res.volume);
             // tick
@@ -545,7 +596,7 @@ require([
         init_carousel();
 
         // TODO: digital clock widget
-        var hour = d3.select("#div_hour");
+        /* var hour = d3.select("#div_hour");
         var am_pm = d3.select("#div_am_pm");
         var date = d3.select("#div_date");
         var hhmmss = d3.select("#div_hhmmss");
@@ -561,7 +612,7 @@ require([
             hhmmss.text(hh + ":" + mm + ":" + ss);
         }
         set_clock();
-        var clock = setInterval(set_clock, 1000);
+        var clock = setInterval(set_clock, 1000); */
 
         var demoFolder = "GIIP";
 
