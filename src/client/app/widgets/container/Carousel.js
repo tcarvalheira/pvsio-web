@@ -56,15 +56,22 @@ define(function (require, exports, module) {
      * @param {Object} opt Optional values for the widget:
      * @param {Number} [opt.number=5000] The amount of time to delay between automatically cycle an item. If false, carousel will not automatically cycle
      * @param {Boolean} [opt.keyboard=true] Whether the carousel should react to keyboard events
-     * @param {String | boolean} [pause='hover'] If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it. 
+     * @param {String | boolean} [opt.pause='hover'] If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it. 
      * On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.
-     * @param {String} [ride='false'] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.
-     * @param {Boolean} [wrap='true'] Whether the carousel should cycle continuously or have hard stops.
+     * @param {String} [opt.ride='false'] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.
+     * @param {Boolean} [opt.wrap='true'] Whether the carousel should cycle continuously or have hard stops.
+     * @param {Object} [opt.buttonPrevious]
+     * @param {Object} [opt.buttonPrevious.coords]
+     * @param {Object} [opt.buttonPrevious.opt]
+     * @param {Object} [opt.buttonNext]
+     * @param {Object} [opt.buttonNext.coords]
+     * @param {Object} [opt.buttonNext.opt]
      * @memberof module:Carousel
      * @instance
      */
     function Carousel(id, coords, opt) {
         coords = coords || {};
+        this.coords = coords
         opt = this.normaliseOptions(opt);
         // set widget type & display key
         this.type = this.type || "Carousel";
@@ -81,64 +88,72 @@ define(function (require, exports, module) {
         this.activeIndicators = opt.activeIndicators !== undefined ? opt.activeIndicators : false
         this.onSlideBsCarousel = opt.onSlideBsCarousel || ((id) => id)
         this.onSlidBsCarousel = opt.onSlidBsCarousel || ((id) => id)
+        
+        /* set default values for prev or next buttons if not defined */
+        let prevCoords
+        let nextCoords
+        if(opt.buttonPrevious === undefined){
+            prevCoords = {width: 70, height: 50, top:this.coords.height-50, left: 0}
+        }else{
+            prevCoords = opt.buttonPrevious.coords
+        }
+        if(opt.buttonNext === undefined){
+            nextCoords = {width: 70, height: 50, top:this.coords.height-50, left: this.coords.width - 70}
+        }else{
+            nextCoords = opt.buttonNext.coords
+        }
+        
+        
+        this.buttonPrevious = opt.buttonPrevious || { coords:prevCoords, opt }
+        this.buttonNext = opt.buttonNext || { coords:nextCoords, opt }
 
         /* id of each screen should be id-<screenname> */
         this.screens = opt.screens || []
-        this.parent =(opt.parent) ? (`#${opt.parent}`) : 'body'
-        /* TODO: handle callback appropriately */
+        this.parent = (opt.parent) ? (`#${opt.parent}`) : 'body'
         this.callback = opt.callback || ((a) => (a))
         this.id = id
         this.div = d3.select(this.parent)
-                     .append('div')
-                        .attr('id',`${id}`)
-                        .attr('class','screen carousel slide')
-                        .attr('data-interval', this.interval)
-                        .attr('data-keyboard', this.keyboard)
-                        .attr('data-pause', this.pause)
-                        .attr('data-ride', this.ride)
-                        .attr('data-wrap', this.wrap)
-                        .style('left',`${coords.left}px`)
-                        .style('top',`${coords.top}px`)
-                        .style('width',`${coords.width}px`)
-                        .style('height',`${coords.height}px`)
-        
+            .append('div')
+            .attr('id', `${id}`)
+            .attr('class', 'screen carousel slide')
+            .attr('data-interval', this.interval)
+            .attr('data-keyboard', this.keyboard)
+            .attr('data-pause', this.pause)
+            .attr('data-ride', this.ride)
+            .attr('data-wrap', this.wrap)
+            .style('left', `${coords.left}px`)
+            .style('top', `${coords.top}px`)
+            .style('width', `${coords.width}px`)
+            .style('height', `${coords.height}px`)
+
 
         $(`#${id}`).on('slide.bs.carousel', this.onSlideBsCarousel)
         $(`#${id}`).on('slid.bs.carousel', this.onSlidBsCarousel)
-                        
+
         this.createHTML()
 
         /* TODO: configure the buttons  */
-        this.next_screen = new ButtonEVO("next_screen", {
-            width: 70,
-            height: 50,
-            top: 210,
-            left: 402
-        }, {
-            softLabel: "",
-            backgroundColor: "steelblue",
-            opacity: "0.2",
-            borderRadius: "4px",
-            fontsize: 34,
-            parent: `${id}`,
-            callback: this.callback
-        });
-        this.previous_screen = new ButtonEVO("previous_screen", {
-            width: 70,
-            height: 50,
-            top: 210,
-            left: 0
-        }, {
-            softLabel: "",
-            backgroundColor: "steelblue",
-            opacity: "0.2",
-            borderRadius: "4px",
-            fontsize: 34,
-            parent: `${id}`,
-            callback: this.callback
-        });
+        console.log(this.buttonPrevious)
+        this.next_screen = new ButtonEVO("next_screen", this.buttonNext.coords, {
+                softLabel: "",
+                backgroundColor: "steelblue",
+                opacity: "0.2",
+                borderRadius: "4px",
+                fontsize: 34,
+                parent: `${id}`,
+                callback: this.callback
+            });
+        this.previous_screen = new ButtonEVO("previous_screen", this.buttonPrevious.coords, {
+                softLabel: "",
+                backgroundColor: "steelblue",
+                opacity: "0.2",
+                borderRadius: "4px",
+                fontsize: 34,
+                parent: `${id}`,
+                callback: this.callback
+            });
         // invoke WidgetEVO constructor to create the widget
-        WidgetEVO.apply(this, [ id, coords, opt ]);
+        WidgetEVO.apply(this, [id, coords, opt]);
         return this;
     }
     Carousel.prototype = Object.create(WidgetEVO.prototype);
@@ -174,35 +189,35 @@ define(function (require, exports, module) {
      */
     Carousel.prototype.createHTML = function () {
         let indicators = this.div
-                            .append('ol')
-                            .attr('class','carousel-indicators')
-                            .style('bottom', `-10px;`)
+            .append('ol')
+            .attr('class', 'carousel-indicators')
+            .style('bottom', `-10px;`)
 
         let wrapper = this.div
-                            .append('div')
-                            .attr('class','carousel-inner')
+            .append('div')
+            .attr('class', 'carousel-inner')
 
-        let leftControl = this.div 
-                        .append('a')
-                        .attr('class', 'left carousel-control' )
-                        .attr('href',`#${this.id}`)
-                        .style('height', `50px`)
-                        .style('top', `210px`)
-                        .style('background-color','black')
-                        .style('border-radius','4px')
-                        .append('span')
-                            .attr('class','glyphicon glyphicon-chevron-left')
-        
-        let rightControl = this.div 
-                        .append('a')
-                        .attr('class', 'right carousel-control' )
-                        .attr('href',`#${this.id}`)
-                        .style('height', `50px`)
-                        .style('top', `210px`)
-                        .style('background-color','black')
-                        .style('border-radius','4px')
-                        .append('span')
-                            .attr('class','glyphicon glyphicon-chevron-right')
+        let leftControl = this.div
+            .append('a')
+            .attr('class', 'left carousel-control')
+            .attr('href', `#${this.id}`)
+            .style('height', `50px`)
+            .style('top', `210px`)
+            .style('background-color', 'black')
+            .style('border-radius', '4px')
+            .append('span')
+            .attr('class', 'glyphicon glyphicon-chevron-left')
+
+        let rightControl = this.div
+            .append('a')
+            .attr('class', 'right carousel-control')
+            .attr('href', `#${this.id}`)
+            .style('height', `50px`)
+            .style('top', `210px`)
+            .style('background-color', 'black')
+            .style('border-radius', '4px')
+            .append('span')
+            .attr('class', 'glyphicon glyphicon-chevron-right')
         let counter = 0
         /* foreach screen create an item */
         this.screens.forEach(screen => {
@@ -211,11 +226,11 @@ define(function (require, exports, module) {
             console.log(active)
             indicators
                 .append('li')
-                .attr('data-target',`#${this.id}`)
-                .attr('class',`${active}`)
+                .attr('data-target', `#${this.id}`)
+                .attr('class', `${active}`)
                 .attr('data-slide-to', this.activeIndicators ? counter : null)
                 .style('pointer-events:none;')
-            
+
             /* Wraper for slides */
             wrapper
                 .append('div')
@@ -223,17 +238,17 @@ define(function (require, exports, module) {
                 .attr('class', `item ${active} center`)
                 /* TODO: set w&h for each screen or inherit from parent? */
                 .style('height', `262px`)
-                .style(`width`,`480px`)
-                    .append('div')
-                    .attr('class','carousel-caption')
-                    /* How to find  */
-                    .style('top', `200px`)
-                    .html(screen.title)
+                .style(`width`, `480px`)
+                .append('div')
+                .attr('class', 'carousel-caption')
+                /* How to find  */
+                .style('top', `200px`)
+                .html(screen.title)
             /* left and right controls */
             counter += 1;
         });
         return this
-     }
+    }
     /**
      * @function <a name="cyle">cyle</a>
      * @description Cycles through the carousel items from left to right
@@ -316,7 +331,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
         $('.carousel').carousel('dispose')
         return this
     }
-     
+
     module.exports = Carousel
-   }
+}
 )

@@ -171,7 +171,7 @@ require([
                 },
                 onSlidBsCarousel: () => {
                     //console.log('Carousel END')
-                }
+                },
             })
 
         device.battery = new Battery('battery_indicator',
