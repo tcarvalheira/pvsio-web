@@ -19,22 +19,22 @@ require.config({
 });
 
 require([
-        "widgets/container/Pagination",
-        "widgets/container/Tab",
-        "widgets/core/Battery",
-        "widgets/core/DateTime",
-        "widgets/ButtonActionsQueue",
-        "stateParser",
-        "PVSioWebClient"
-    ], function (
-        Pagination,
-        Tab,
-        Battery,
-        DateTime,
-        ButtonActionsQueue,
-        stateParser,
-        PVSioWebClient
-    ) {
+    "widgets/container/Pagination",
+    "widgets/container/Tab",
+    "widgets/core/Battery",
+    "widgets/core/DateTime",
+    "widgets/ButtonActionsQueue",
+    "stateParser",
+    "PVSioWebClient"
+], function (
+    Pagination,
+    Tab,
+    Battery,
+    DateTime,
+    ButtonActionsQueue,
+    stateParser,
+    PVSioWebClient
+) {
         "use strict";
         var client = PVSioWebClient.getInstance();
         var tick;
@@ -77,7 +77,7 @@ require([
         }
 
         var widgets = {
-            pagination : new Pagination('pagination',
+            pagination: new Pagination('pagination',
                 {
                     top: 100,
                     left: 100,
@@ -85,7 +85,7 @@ require([
                     height: 50
                 },
                 {
-                    pages: ["Page1", "Page2", "Page3", "Page4","Page5", "Page6", "Page7", "Page8", "Page9", "Page10","Page11", "Page12", "Page13", "Page14"],
+                    pages: ["Page1", "Page2", "Page3", "Page4", "Page5", "Page6", "Page7", "Page8", "Page9", "Page10", "Page11", "Page12", "Page13", "Page14"],
                     callback: onMessageReceived,
                     parent: 'pagination'
                 }),
@@ -97,7 +97,7 @@ require([
                     height: 50
                 },
                 {
-                    pages: [{id: 'page1', title: 'Page 1'},{id: 'page2', title: 'Page 2'},{id: 'page3', title: 'Page 3'},{id: 'page4', title: 'Page 4'}],
+                    pages: [{ id: 'page1', title: 'Page 1' }, { id: 'page2', title: 'Page 2' }, { id: 'page3', title: 'Page 3' }, { id: 'page4', title: 'Page 4' }],
                     type: 'tab',
                     callback: onMessageReceived,
                     parent: 'tabs'
@@ -110,15 +110,15 @@ require([
                     height: 50
                 },
                 {
-                    pages: [{id: 'page1', title: 'Page 1'},{id: 'page2', title: 'Page 2'},{id: 'page3', title: 'Page 3'},{id: 'page4', title: 'Page 4'}],
+                    pages: [{ id: 'page1', title: 'Page 1' }, { id: 'page2', title: 'Page 2' }, { id: 'page3', title: 'Page 3' }, { id: 'page4', title: 'Page 4' }],
                     type: 'pill',
                     callback: onMessageReceived,
                     parent: 'pills'
                 }),
             battery: new Battery('battery_indicator',
                 {
-                    left:400,
-                    top:40,
+                    left: 400,
+                    top: 40,
                     width: 50,
                     height: 30
                 },
@@ -128,8 +128,8 @@ require([
                     fontsize: 11,
                     parent: "battery",
                     battery_level: 80,
-                    show_icon:true,
-                    show_text:true,
+                    show_icon: true,
+                    show_text: true,
                     //iconFontSize: '20'
                 }
 
@@ -142,18 +142,18 @@ require([
                     height: 40
                 },
                 {
-                        parent: "datetimediv",
-                        fontColor: 'DodgerBlue',
-                        useCurrentDateTime: true,
-                        dateFontSize: '14',
-                        timeFontSize: '20',
-                        relativePosition: 'vertical',
-                        relativeOrder: 'time-date',
-                        locale: 'en-US',
-                        dateFormat: { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', timeZoneName:'short'},
-                        timeFormat: { hour12: true, hour:'numeric', minute: 'numeric'},
-                        showDate: true,
-                        showTime: true
+                    parent: "datetimediv",
+                    fontColor: 'DodgerBlue',
+                    useCurrentDateTime: true,
+                    dateFontSize: '14',
+                    timeFontSize: '20',
+                    relativePosition: 'vertical',
+                    relativeOrder: 'time-date',
+                    locale: 'en-US',
+                    dateFormat: { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', timeZoneName: 'short' },
+                    timeFormat: { hour12: true, hour: 'numeric', minute: 'numeric' },
+                    showDate: true,
+                    showTime: true
                 })
         };
 
@@ -165,13 +165,13 @@ require([
                 var res = event.data.toString();
                 if (res.indexOf("(#") === 0) {
                     render(stateParser.parse(res));
-                //    console.log(res.replace(/\s\s+/g, ' '));
+                    //    console.log(res.replace(/\s\s+/g, ' '));
                 }
             } else {
                 console.log(err);
             }
         }
-       
+
         // Render widgets
         function render(res) {
             widgets.pagination.render()
@@ -194,15 +194,15 @@ require([
 
         $('#PrevBtn').on('click', function (e) {
             let active = widgets.pagination.getActiveIndex()
-            if( active !== 1){
-                widgets.pagination.setActivePage(active-1)
+            if (active !== 1) {
+                widgets.pagination.setActivePage(active - 1)
             }
-            
+
         })
         $('#NextBtn').on('click', function (e) {
             let active = widgets.pagination.getActiveIndex()
-            if(active !== 14){
-                widgets.pagination.setActivePage(active+1)
+            if (active !== 14) {
+                widgets.pagination.setActivePage(active + 1)
             }
         })
 
@@ -211,18 +211,18 @@ require([
         client.addListener('WebSocketConnectionOpened', function (e) {
             //start pvs process
             client.getWebSocket()
-                .startPVSProcess({name: "main.pvs", demoName: demoFolder + "/pvs"}, function (err, event) {
-                client.getWebSocket().sendGuiAction("init(0);", onMessageReceived);
-                d3.select(".demo-splash").style("display", "none");
-                d3.select("#content").style("display", "block");
-                // start the simulation
-                //start_tick();
-            });
+                .startPVSProcess({ name: "main.pvs", demoName: demoFolder + "/pvs" }, function (err, event) {
+                    client.getWebSocket().sendGuiAction("init(0);", onMessageReceived);
+                    d3.select(".demo-splash").style("display", "none");
+                    d3.select("#content").style("display", "block");
+                    // start the simulation
+                    //start_tick();
+                });
         }).addListener("WebSocketConnectionClosed", function (e) {
 
         }).addListener("processExited", function (e) {
             var msg = "Warning!!!\r\nServer process exited. See console for details.";
         });
-         client.connectToServer();
-         render("1");
+        client.connectToServer();
+        render("1");
     });

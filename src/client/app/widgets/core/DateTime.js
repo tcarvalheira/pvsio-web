@@ -42,15 +42,15 @@ define(function (require, exports, module) {
      * @memberof module:DateTime
      * @instance
      */
-     function DateTime(id, coords, opt) {
-         coords = coords || {};
-         opt = this.normaliseOptions(opt);
-         // set widget type & display key
-         this.type = this.type || "DateTime";
-         this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : id;
+    function DateTime(id, coords, opt) {
+        coords = coords || {};
+        opt = this.normaliseOptions(opt);
+        // set widget type & display key
+        this.type = this.type || "DateTime";
+        this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : id;
 
-         // override default style options of WidgetEVO as necessary before creating the DOM element with the constructor of module WidgetEVO
-        
+        // override default style options of WidgetEVO as necessary before creating the DOM element with the constructor of module WidgetEVO
+
 
         /* OPTIONS */
         this.id = id
@@ -72,37 +72,37 @@ define(function (require, exports, module) {
 
         this.currentDate = new Date()
 
-        this.parent =(opt.parent) ? (`#${opt.parent}`) : 'body'
+        this.parent = (opt.parent) ? (`#${opt.parent}`) : 'body'
         this.div = d3.select(this.parent)
-                            .append('div')
-                            .attr('id',this.id)
+            .append('div')
+            .attr('id', this.id)
 
         /* set specific opt and coords for the date and time */
         let dateOpt = Object.assign({}, opt); // copy object without reference
         let timeOpt = Object.assign({}, opt);
-        let dateCoords = Object.assign({},coords)
-        let timeCoords = Object.assign({},coords)
+        let dateCoords = Object.assign({}, coords)
+        let timeCoords = Object.assign({}, coords)
         dateOpt.parent = this.id
         dateOpt.fontSize = this.opt.dateFontSize
         timeOpt.parent = this.id
         timeOpt.fontSize = this.opt.timeFontSize
         /* calculate positions of the two widgets */
-        if(this.opt.relativePosition === 'horizontal'){
+        if (this.opt.relativePosition === 'horizontal') {
             // the elements should be horizontally positioned
             timeCoords.width = this.coords.width / 2
             dateCoords.width = this.coords.width / 2
-            if(this.opt.relativeOrder === 'date-time'){
+            if (this.opt.relativeOrder === 'date-time') {
                 timeCoords.left = this.coords.left + dateCoords.width
-            }else{
+            } else {
                 dateCoords.left = this.coords.left + timeCoords.width
             }
-        }else{
+        } else {
             // the element should be vertically positioned
             timeCoords.height = this.coords.height / 2
             dateCoords.height = this.coords.height / 2
-            if(this.opt.relativeOrder === 'date-time'){
+            if (this.opt.relativeOrder === 'date-time') {
                 timeCoords.top = this.coords.top + dateCoords.height
-            }else{
+            } else {
                 dateCoords.top = this.coords.top + timeCoords.height
             }
         }
@@ -113,55 +113,55 @@ define(function (require, exports, module) {
         this.time = new BasicDisplayEVO('time',
             timeCoords,
             timeOpt)
-        
-        if(this.opt.useCurrentDateTime){
+
+        if (this.opt.useCurrentDateTime) {
             setInterval(() => {
                 this.setDateInternal(this)
                 //this.render()
             }, 1000)
         }
 
-         // invoke WidgetEVO constructor to create the widget
-         WidgetEVO.apply(this, [ id, coords, opt ]);
-         return this;
-     }
-     DateTime.prototype = Object.create(WidgetEVO.prototype);
-     DateTime.prototype.parentClass = WidgetEVO.prototype;
-     DateTime.prototype.constructor = DateTime;
+        // invoke WidgetEVO constructor to create the widget
+        WidgetEVO.apply(this, [id, coords, opt]);
+        return this;
+    }
+    DateTime.prototype = Object.create(WidgetEVO.prototype);
+    DateTime.prototype.parentClass = WidgetEVO.prototype;
+    DateTime.prototype.constructor = DateTime;
 
-     /**
-      * @function <a name="render">render</a>
-      * @description Rendering function for button widgets.
-      * @param state {Object} JSON object with the current value of the state attributes of the modelled system
-      * @param opt {Object} Style options overriding the style attributes used when the widget was created.
-      *                     The override style options are temporary, i.e., they are applied only for the present invocation of the render method.
-      *                     Available options are either html style attributes or the following widget attributes:
-      * @memberof module:DateTime
-      * @instance
-      */
-     DateTime.prototype.render = function (state, opt) {
-         // set style
-         opt = this.normaliseOptions(opt);
+    /**
+     * @function <a name="render">render</a>
+     * @description Rendering function for button widgets.
+     * @param state {Object} JSON object with the current value of the state attributes of the modelled system
+     * @param opt {Object} Style options overriding the style attributes used when the widget was created.
+     *                     The override style options are temporary, i.e., they are applied only for the present invocation of the render method.
+     *                     Available options are either html style attributes or the following widget attributes:
+     * @memberof module:DateTime
+     * @instance
+     */
+    DateTime.prototype.render = function (state, opt) {
+        // set style
+        opt = this.normaliseOptions(opt);
 
-         this.setStyle(opt);
+        this.setStyle(opt);
 
-         // render content
-         if(this.opt.showDate){
+        // render content
+        if (this.opt.showDate) {
             this.date.render(this.getDateString())
-         }else{
+        } else {
             this.date.hide()
-         }
-         
-         if(this.opt.showTime){
-            this.time.render(this.getTimeString())
-         }else{
-            this.time.hide()
-         }
-         
+        }
 
-         this.reveal();
-         return this;
-     }
+        if (this.opt.showTime) {
+            this.time.render(this.getTimeString())
+        } else {
+            this.time.hide()
+        }
+
+
+        this.reveal();
+        return this;
+    }
 
 	/**
     * @function <a name="getDateString">getDateString</a>
@@ -175,47 +175,47 @@ define(function (require, exports, module) {
         return dateStr
     }
 
-    	/**
-        * @function <a name="getTimeString">getTimeString</a>
-        * @description 
-        * @param ... {Object} ... 
-        * @memberof module:DateTime
-        * @instance
-        */
-        DateTime.prototype.getTimeString = function () {
-            let timeStr = this.currentDate.toLocaleTimeString(this.opt.locale, this.opt.timeFormat)
+    /**
+    * @function <a name="getTimeString">getTimeString</a>
+    * @description 
+    * @param ... {Object} ... 
+    * @memberof module:DateTime
+    * @instance
+    */
+    DateTime.prototype.getTimeString = function () {
+        let timeStr = this.currentDate.toLocaleTimeString(this.opt.locale, this.opt.timeFormat)
 
-            return timeStr
+        return timeStr
     }
 
-    	/**
-         * @protected
-        * @function <a name="setDate">setDate</a>
-        * @description 
-        * @param {String} [date] Date string representing desired date and time. Ex. 
-        * @memberof module:DateTime
-        * @instance
-        */
-        DateTime.prototype.setDateInternal = function (obj, date) {
-            if(obj.opt.useCurrentDateTime){
-                obj.currentDate = new Date()
-            }else{
-                obj.currentDate = new Date(date);
-            }
-            return obj.render()
+    /**
+     * @protected
+    * @function <a name="setDate">setDate</a>
+    * @description 
+    * @param {String} [date] Date string representing desired date and time. Ex. 
+    * @memberof module:DateTime
+    * @instance
+    */
+    DateTime.prototype.setDateInternal = function (obj, date) {
+        if (obj.opt.useCurrentDateTime) {
+            obj.currentDate = new Date()
+        } else {
+            obj.currentDate = new Date(date);
+        }
+        return obj.render()
     }
-    	/**
-        * @function <a name="setDate">setDate</a>
-        * @description 
-        * @param ... {Object} ... 
-        * @memberof module:DateTime
-        * @instance
-        */
-        DateTime.prototype.setDate = function (date) {
-            this.setDateInternal(this, date)
+    /**
+    * @function <a name="setDate">setDate</a>
+    * @description 
+    * @param ... {Object} ... 
+    * @memberof module:DateTime
+    * @instance
+    */
+    DateTime.prototype.setDate = function (date) {
+        this.setDateInternal(this, date)
     }
 
-     module.exports = DateTime
-   }
+    module.exports = DateTime
+}
 
 )
