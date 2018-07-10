@@ -172,6 +172,12 @@ require([
                 onSlidBsCarousel: () => {
                     //console.log('Carousel END')
                 },
+                usePreDoneHTML: false,
+                states: { 'NORMAL_OPERATION': 0,
+                            'BASAL_MANAGEMENT': 1,
+                            'BOLUS_MANAGEMENT': 2,
+                            'PUMP_CONFIGURATION': 3,
+                            'EVENT_DATA_MANAGEMENT': 4 }, 
             })
 
         device.battery = new Battery('battery_indicator',
@@ -402,7 +408,7 @@ require([
             d3.select("#power_on_screen").style("display", "none");
             d3.select("#post_screen").style("display", "none");
             d3.select("#prime_screen").style("display", "none");
-            d3.select("#giip").style("display", "none");
+            //d3.select("#giip").style("display", "none");
             d3.select("#basal_subscreens").style("display", "none");
         }
 
@@ -534,8 +540,9 @@ require([
             } else  if (res.mode === "PRIME") {
                 viz("#prime_screen", { fade: true });
             } else if (NORMAL_OPERATION_MODE(res)) {
+                device.carousel.render(res)
                 viz("#giip");
-                if (res.mode === "NORMAL_OPERATION") {
+                /* if (res.mode === "NORMAL_OPERATION") {
                     $('.carousel').carousel(screens.NORMAL_OPERATION_SCREEN);
                 } else if (res.mode === "BASAL_MANAGEMENT") {
                     $('.carousel').carousel(screens.BASAL_MANAGEMENT_SCREEN);
@@ -545,7 +552,7 @@ require([
                     $('.carousel').carousel(screens.PUMP_CONFIGURATION_SCREEN);
                 } else if (res.mode === "EVENT_DATA_MANAGEMENT") {
                     $('.carousel').carousel(screens.EVENT_DATA_MANAGEMENT_SCREEN);
-                }
+                } */
             } else if (BASAL_PROFILE_SUBMODE(res)) {
                 viz("#basal_subscreens");
                 if (res.mode === "EDIT_BASAL_PROFILES") {
@@ -569,7 +576,7 @@ require([
 
         // TODO: carousel widget
         function init_carousel () {
-            device.carousel.render()
+            //device.carousel.render()
             // BASAL_MANAGEMENT
             device.edit_basal_profiles.render();
             device.activate_basal_profiles.render();
