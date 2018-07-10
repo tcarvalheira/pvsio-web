@@ -68,6 +68,14 @@ define(function (require, exports, module) {
      * @param {Object} [opt.buttonNext.coords] The four coordinates (top, left, width, height) of the display, specifying
      *        the left, top corner, and the width and height of the (rectangular) widget area.
      * @param {Object} [opt.buttonNext.opt]
+     * @param {Boolean} [opt.usePreDoneHTML=false] Set if the widget should create the HTML code or reuse user HTML. This HTML should follow some naming conventions
+     * To use PreDoneHTML, there are some naming conventions. There should be:
+     * div Element of the id equals to <widget_id>
+     * ol Element with id <widget_id>_indicators
+     * a Element with id <widget_id>_left_controller
+     * a Element with id <widget_id>_rigth_controller
+     * 
+     * @param {Object} [opt.screens={}] Object with PVS states and corresponding index on carousel
      * @memberof module:Carousel
      * @instance
      */
@@ -110,11 +118,17 @@ define(function (require, exports, module) {
         this.buttonNext = opt.buttonNext || { coords:nextCoords, opt }
 
         /* id of each screen should be id-<screenname> */
-        this.screens = opt.screens || []
+        this.screens = opt.screens || [] // Screens names must coincide with PVS states
+
+        /* variable to use html pre done*/
+        this.usePreDoneHTML = opt.usePreDoneHTML === undefined ? false : opt.usePreDoneHTML
+        this.states = opt.states || {}
+
         this.parent = (opt.parent) ? (`#${opt.parent}`) : 'body'
         this.callback = opt.callback || ((a) => (a))
         this.id = id
-        this.div = d3.select(this.parent)
+        if(!this.usePreDoneHTML){
+            this.div = d3.select(this.parent)
             .append('div')
             .attr('id', `${id}`)
             .attr('class', 'screen carousel slide')
@@ -128,32 +142,78 @@ define(function (require, exports, module) {
             .style('width', `${coords.width}px`)
             .style('height', `${coords.height}px`)
 
+            /*** create html elements */
+            this.createHTML()
+        }else{
+            /* load pre-existing elements based on its id */
+            /*** this will define name convention */
+            this.div = d3.select(`#${id}`)
+            this.indicators = d3.select(`#${this.id}_indicators`)
+            /* ATENTION: here is a selector class based */
+            this.captions = d3.selectAll(`.${this.id}_carousel_caption`)
+            this.wrapper = d3.select(`#${this.id}_wapper`)
+            this.leftControl = d3.select(`#${this.id}_left_control`)
+            this.rightControl = d3.select(`#${this.id}_right_control`)
+        }
+        
+
+        this.hideCarouselElements()
 
         $(`#${id}`).on('slide.bs.carousel', this.onSlideBsCarousel)
         $(`#${id}`).on('slid.bs.carousel', this.onSlidBsCarousel)
 
-        this.createHTML()
+        
 
-        this.next_screen = new ButtonEVO("next_screen", this.buttonNext.coords, {
-                softLabel: "",
-                backgroundColor: "steelblue",
-                opacity: "0.2",
-                borderRadius: "4px",
-                fontsize: 34,
-                parent: `${id}`,
-                callback: this.callback
-            });
-        this.previous_screen = new ButtonEVO("previous_screen", this.buttonPrevious.coords, {
-                softLabel: "",
-                backgroundColor: "steelblue",
-                opacity: "0.2",
-                borderRadius: "4px",
-                fontsize: 34,
-                parent: `${id}`,
-                callback: this.callback
-            });
+        /* calculate left and right buttons coordinates */
+        /* TODO: calcular o tamanho dos botões criados no html para passar para os widgets */
+        /* load left button coords */
+        //let left_button_coords = this.leftControl.node().getBoundingClientRect()
+        //console.log(left_button_coords)
+        /* load rigth button coords */
+        //let rigth_button_coords = this.rightControl.node().getBoundingClientRect()
+        //console.log(rigth_button_coords)
+
+        // console.log(this.div.style('left'))
+        // console.log(this.div)
+        /* let leftOpts = this.leftControl.node().getBoundingClientRect()
+        console.log(this.leftControl.style('left'))
+        let rightOpts = this.rightControl.node().getBoundingClientRect()
+        console.log(this.leftControl.style('left')) */
+
         // invoke WidgetEVO constructor to create the widget
-        WidgetEVO.apply(this, [id, coords, opt]);
+            WidgetEVO.apply(this, [id, coords, opt]);
+        //this.reveal()
+
+        //var element = document.querySelector('#giip_left_control');
+        //console.log(element.getBoundingClientRect());
+        
+        
+        //console.log(this.leftControl)
+
+       /*  this.next_screen = new ButtonEVO("next_screen", this.buttonNext.coords, {
+                softLabel: "",
+                backgroundColor: "steelblue",
+                opacity: "0.2",
+                borderRadius: "4px",
+                fontsize: 34,
+                parent: `${id}`,
+                callback: this.callback
+            });
+        this.previous_screen = new ButtonEVO("previous_screen", {
+            top: this.leftControl.style('top'),
+            left: this.leftControl.style('left'),
+            width: this.leftControl.style('width'),
+            height: this.leftControl.style('heigh')
+        }, {
+                softLabel: "",
+                backgroundColor: "steelblue",
+                opacity: "0.2",
+                borderRadius: "4px",
+                fontsize: 34,
+                parent: `${id}`,
+                callback: this.callback
+            }); */
+        
         return this;
     }
     Carousel.prototype = Object.create(WidgetEVO.prototype);
@@ -172,11 +232,122 @@ define(function (require, exports, module) {
         opt = this.normaliseOptions(opt);
 
         this.setStyle(opt);
-        this.previous_screen.render()
-        this.next_screen.render()
 
-        this.reveal();
+        this.revealCarouselElements()
+
+        this.createButtons() // put on create widget to create just one instance
+        this.previous_screen.render(state,opt)
+        this.next_screen.render(state,opt)
+
+        /*** goto to carousel id based on PVS state */
+        if(state !== undefined){
+            console.log(`I've some state, i'll render based on it`)
+            /* PVS states should be equal to carousel pages */
+            this.goTo(this.states[`${state.mode}`])    
+        }
+        this.reveal()
         return this;
+    }
+
+
+
+
+    	/**
+        * @function <a name="createButtons">createButtons</a>
+        * @description 
+        * @param ... {Object} ... 
+        * @memberof module:Carousel
+        * @instance
+        */
+        Carousel.prototype.createButtons = function () {
+            let l = document.querySelector(`#${this.id}_left_control`).getBoundingClientRect()
+            let leftOpts = this.leftControl.node().getBoundingClientRect()
+
+            let rightOpts = this.rightControl.node().getBoundingClientRect()
+
+            if(this.next_screen === undefined || this.next_screen === null){
+                this.next_screen = new ButtonEVO("next_screen", {
+                    /*** TODO: check why i need to hard code this values */
+                    top: 0, // rightOpts.top - 113, // TODO: why do i need this hardcoded values?!?!
+                    left: 0, //rightOpts.left - 75, // and this ?!?!
+                    width: rightOpts.width,
+                    height: rightOpts.height
+                }, {
+                    softLabel: "",
+                    backgroundColor: "steelblue",
+                    opacity: "0.2",
+                    borderRadius: "4px",
+                    fontsize: 34,
+                    parent:  this.rightControl.node().id, // `${this.id}`, // colocar o botão como pai e não o widget
+                    callback: this.callback,
+                    position:'relative',
+                    zIndex: 10
+                })
+            }
+
+            
+
+            if(this.previous_screen === undefined || this.previous_screen === null){
+                this.previous_screen = new ButtonEVO("previous_screen", {
+                    top: 0, // leftOpts.top,
+                    left: 0, // leftOpts.left,
+                    width: leftOpts.width,
+                    height: leftOpts.height
+                }, {
+                        softLabel: "",
+                        backgroundColor: "steelblue",
+                        opacity: "0.2",
+                        borderRadius: "4px",
+                        fontsize: 34,
+                        parent: this.leftControl.node().id,
+                        callback: this.callback,
+                        position: 'relative',
+                        zIndex: 10
+                    });
+            }
+            
+    }
+
+    	/**
+        * @function <a name="hideCarouselElements">hideCarouselElements</a>
+        * @description 
+        * @param ... {Object} ... 
+        * @memberof module:Carousel
+        * @instance
+        */
+        Carousel.prototype.hideCarouselElements = function () {
+            console.log(`I'll hide corousel elements`)
+            this.div.style('display','none')
+            this.indicators.style('display','none')
+            this.captions.forEach((item) => {
+                item.forEach((i) => {
+                    i.style.display = 'none'
+                })
+            })
+            this.wrapper.style('display','none')
+            this.leftControl.style('display','none')
+            this.rightControl.style('display','none')
+        }   
+
+    	/**
+        * @function <a name="reveal">reveal</a>
+        * @description 
+        * @param ... {Object} ... 
+        * @memberof module:Carousel
+        * @instance
+        */
+        Carousel.prototype.revealCarouselElements = function () {
+            console.log(`I'll show carousel elements`)
+            this.div.style('display','block')
+            this.indicators.style('display','block')
+            this.captions.forEach( (item) => {
+                item.forEach( (i) => {
+                    i.style.display = 'block'
+                })
+            })
+            this.wrapper.style('display','block')
+            this.leftControl.style('display','block')
+            this.rightControl.style('display','block')
     }
 
     /**
@@ -188,34 +359,44 @@ define(function (require, exports, module) {
      * @instance
      */
     Carousel.prototype.createHTML = function () {
-        let indicators = this.div
+        console.log(`I'll create HTML`)
+        this.indicators = this.div
             .append('ol')
+            .attr('id',`${this.id}_indicators`)
             .attr('class', 'carousel-indicators')
             .style('bottom', `-10px;`)
+        this.captions = []
 
-        let wrapper = this.div
+        this.wrapper = this.div
             .append('div')
+            .attr('id',`${this.id}_wrapper`)
             .attr('class', 'carousel-inner')
 
-        let leftControl = this.div
+        this.leftControl = this.div
             .append('a')
+            .attr('id',`${this.id}_left_control`)
             .attr('class', 'left carousel-control')
             .attr('href', `#${this.id}`)
             .style('height', `50px`)
             .style('top', `210px`)
             .style('background-color', 'black')
             .style('border-radius', '4px')
+
+        this.leftControl
             .append('span')
             .attr('class', 'glyphicon glyphicon-chevron-left')
 
-        let rightControl = this.div
+        this.rightControl = this.div
             .append('a')
+            .attr('id',`${this.id}_rigth_control`)
             .attr('class', 'right carousel-control')
             .attr('href', `#${this.id}`)
             .style('height', `50px`)
             .style('top', `210px`)
             .style('background-color', 'black')
             .style('border-radius', '4px')
+            
+        this.rightControl
             .append('span')
             .attr('class', 'glyphicon glyphicon-chevron-right')
         let counter = 0
@@ -223,8 +404,8 @@ define(function (require, exports, module) {
         this.screens.forEach(screen => {
             /* Indicators */
             let active = screen.id === 'home' ? 'active' : ''
-            console.log(active)
-            indicators
+            // console.log(active)
+            this.indicators
                 .append('li')
                 .attr('data-target', `#${this.id}`)
                 .attr('class', `${active}`)
@@ -232,7 +413,7 @@ define(function (require, exports, module) {
                 .style('pointer-events:none;')
 
             /* Wraper for slides */
-            wrapper
+            this.wrapper
                 .append('div')
                 .attr('id', `${this.id}-${screen.id}`)
                 .attr('class', `item ${active} center`)
