@@ -156,63 +156,16 @@ define(function (require, exports, module) {
             this.rightControl = d3.select(`#${this.id}_right_control`)
         }
         
-
+        this.createButtons()
         this.hideCarouselElements()
 
+        /*set   event listeners */
         $(`#${id}`).on('slide.bs.carousel', this.onSlideBsCarousel)
         $(`#${id}`).on('slid.bs.carousel', this.onSlidBsCarousel)
-
-        
-
-        /* calculate left and right buttons coordinates */
-        /* TODO: calcular o tamanho dos botões criados no html para passar para os widgets */
-        /* load left button coords */
-        //let left_button_coords = this.leftControl.node().getBoundingClientRect()
-        //console.log(left_button_coords)
-        /* load rigth button coords */
-        //let rigth_button_coords = this.rightControl.node().getBoundingClientRect()
-        //console.log(rigth_button_coords)
-
-        // console.log(this.div.style('left'))
-        // console.log(this.div)
-        /* let leftOpts = this.leftControl.node().getBoundingClientRect()
-        console.log(this.leftControl.style('left'))
-        let rightOpts = this.rightControl.node().getBoundingClientRect()
-        console.log(this.leftControl.style('left')) */
-
-        // invoke WidgetEVO constructor to create the widget
-            WidgetEVO.apply(this, [id, coords, opt]);
-        //this.reveal()
-
-        //var element = document.querySelector('#giip_left_control');
-        //console.log(element.getBoundingClientRect());
         
         
-        //console.log(this.leftControl)
+        WidgetEVO.apply(this, [id, coords, opt]);
 
-       /*  this.next_screen = new ButtonEVO("next_screen", this.buttonNext.coords, {
-                softLabel: "",
-                backgroundColor: "steelblue",
-                opacity: "0.2",
-                borderRadius: "4px",
-                fontsize: 34,
-                parent: `${id}`,
-                callback: this.callback
-            });
-        this.previous_screen = new ButtonEVO("previous_screen", {
-            top: this.leftControl.style('top'),
-            left: this.leftControl.style('left'),
-            width: this.leftControl.style('width'),
-            height: this.leftControl.style('heigh')
-        }, {
-                softLabel: "",
-                backgroundColor: "steelblue",
-                opacity: "0.2",
-                borderRadius: "4px",
-                fontsize: 34,
-                parent: `${id}`,
-                callback: this.callback
-            }); */
         
         return this;
     }
@@ -229,19 +182,34 @@ define(function (require, exports, module) {
      */
     Carousel.prototype.render = function (state, opt) {
         // set style
+        console.log(state)
         opt = this.normaliseOptions(opt);
 
         this.setStyle(opt);
 
         this.revealCarouselElements()
 
-        this.createButtons() // put on create widget to create just one instance
+        // TODO: check if it is possible to do this without creating the resize function
+        let leftOpts = this.leftControl.node().getBoundingClientRect()
+        this.previous_screen.resize({
+            top:0,
+            left:0,
+            width: leftOpts.width,
+            height: leftOpts.height
+        })
+        let rightOpts = this.rightControl.node().getBoundingClientRect()
+        this.next_screen.resize({
+            top:0,
+            left:0,
+            width: rightOpts.width,
+            height: rightOpts.height
+        })
+
         this.previous_screen.render(state,opt)
         this.next_screen.render(state,opt)
 
         /*** goto to carousel id based on PVS state */
         if(state !== undefined){
-            console.log(`I've some state, i'll render based on it`)
             /* PVS states should be equal to carousel pages */
             this.goTo(this.states[`${state.mode}`])    
         }
@@ -249,50 +217,43 @@ define(function (require, exports, module) {
         return this;
     }
 
-
-
-
     	/**
+         * @private
         * @function <a name="createButtons">createButtons</a>
-        * @description 
-        * @param ... {Object} ... 
+        * @description This method will create the action buttons for the carousel
         * @memberof module:Carousel
         * @instance
         */
         Carousel.prototype.createButtons = function () {
-            let l = document.querySelector(`#${this.id}_left_control`).getBoundingClientRect()
-            let leftOpts = this.leftControl.node().getBoundingClientRect()
-
-            let rightOpts = this.rightControl.node().getBoundingClientRect()
-
             if(this.next_screen === undefined || this.next_screen === null){
                 this.next_screen = new ButtonEVO("next_screen", {
-                    /*** TODO: check why i need to hard code this values */
-                    top: 0, // rightOpts.top - 113, // TODO: why do i need this hardcoded values?!?!
-                    left: 0, //rightOpts.left - 75, // and this ?!?!
-                    width: rightOpts.width,
-                    height: rightOpts.height
+                    /* with position:relative, this will place widgets over original HTML */ 
+                    top: 0, 
+                    left: 0,
+                    /* the widget will be resized on render time */
+                    width: 0,
+                    height:  0
                 }, {
                     softLabel: "",
                     backgroundColor: "steelblue",
                     opacity: "0.2",
                     borderRadius: "4px",
                     fontsize: 34,
-                    parent:  this.rightControl.node().id, // `${this.id}`, // colocar o botão como pai e não o widget
+                    parent:  this.rightControl.node().id,
                     callback: this.callback,
                     position:'relative',
                     zIndex: 10
                 })
             }
 
-            
-
             if(this.previous_screen === undefined || this.previous_screen === null){
                 this.previous_screen = new ButtonEVO("previous_screen", {
-                    top: 0, // leftOpts.top,
-                    left: 0, // leftOpts.left,
-                    width: leftOpts.width,
-                    height: leftOpts.height
+                    /* this top and left set to  0 with position:relative will place widget over original HTML */
+                    top: 0, 
+                    left: 0,
+                    /*the widget will be resized on render time */ 
+                    width: 0,
+                    height: 0
                 }, {
                         softLabel: "",
                         backgroundColor: "steelblue",
@@ -305,7 +266,6 @@ define(function (require, exports, module) {
                         zIndex: 10
                     });
             }
-            
     }
 
     	/**

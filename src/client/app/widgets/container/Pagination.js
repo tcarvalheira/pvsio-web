@@ -73,11 +73,13 @@ define(function (require, exports, module) {
         this.previousButton = opt.previousButton !== undefined ? opt.previousButton : true
         this.nextButton = opt.nextButton !== undefined ? opt.nextButton : true
         this.useIcons = opt.useIcons !== undefined ? opt.useIcons : true
-        this.pages = opt.pages || []
+        this.page_array = opt.page_array || []
+        this.pages = opt.pages || [] // pages array may be just an array of strings name of the pages or an array of objects with name, title and items attributes
         this.activeIndex = opt.activeIndex || 1
         this.alignment = opt.alignment || 'left'
         this.callback = opt.callback || ((id) => id)
         this.div = d3.select(this.parent)
+        this.buttons_relative_position = opt.buttons_relative_position|| 'bottom' // it can be bottom or top
 
 
         this.buttons = []
@@ -195,6 +197,17 @@ define(function (require, exports, module) {
             this.createOuttermostPage(ul, 'Next', false)
         }
         this.position = 0;
+        /* if(this.page_array.length > 0){
+            this.div.append('div')
+                .style('position','absolute')
+                .style('top',`${this.coords.top + this.coords.height + 5}px`)
+                .style('left',`${this.coords.left}px`)
+                .style('background-color','red')
+
+            this.page_array.map(item => {
+                item.render()
+            })
+        } */
     }
 
     /**

@@ -23,6 +23,7 @@ require([
     "widgets/container/Tab",
     "widgets/core/Battery",
     "widgets/core/DateTime",
+    "widgets/core/ButtonEVO",
     "widgets/ButtonActionsQueue",
     "stateParser",
     "PVSioWebClient"
@@ -31,6 +32,7 @@ require([
     Tab,
     Battery,
     DateTime,
+    ButtonEVO,
     ButtonActionsQueue,
     stateParser,
     PVSioWebClient
@@ -76,6 +78,97 @@ require([
             }
         }
 
+/* 
+        // create buttons to put inside each array
+        let edit_basal_profiles = new ButtonEVO("edit_basal_profiles", {
+            width: 472,
+            height: 50,
+            top: 0,
+            left: 0
+        }, {
+            softLabel: "Edit Basal Profiles",
+            backgroundColor: "indigo",
+            opacity: "0.9",
+            borderRadius: "8px",
+            fontsize: 20,
+            parent: "giip-basal_mgm",
+            callback: onMessageReceived
+        });
+        let activate_basal_profiles = new ButtonEVO("activate_basal_profiles", {
+            width: 472,
+            height: 50,
+            top: 70,
+            left: 0
+        }, {
+            softLabel: "Activate Basal Profiles",
+            backgroundColor: "indigo",
+            opacity: "0.85",
+            borderRadius: "8px",
+            fontsize: 20,
+            parent: "giip-basal_mgm",
+            callback: onMessageReceived
+        });
+        let manage_temporary_basal = new ButtonEVO("manage_temporary_basal", {
+            width: 472,
+            height: 50,
+            top: 140,
+            left: 0
+        }, {
+            softLabel: "Manage Temporary Basal",
+            backgroundColor: "indigo",
+            opacity: "0.8",
+            borderRadius: "8px",
+            fontsize: 20,
+            parent: "giip-basal_mgm",
+            callback: onMessageReceived
+        });
+
+        // bolus profile screen
+        let edit_food_database = new ButtonEVO("edit_food_database", {
+            width: 472,
+            height: 50,
+            top: 0,
+            left: 0
+        }, {
+            softLabel: "Edit Food Database",
+            backgroundColor: "seagreen",
+            opacity: "0.9",
+            borderRadius: "8px",
+            fontsize: 20,
+            parent: "giip-bolus_mgm",
+            callback: onMessageReceived
+        });
+        let start_bolus = new ButtonEVO("start_bolus", {
+            width: 472,
+            height: 120,
+            top: 70,
+            left: 0
+        }, {
+            softLabel: "Start Bolus",
+            backgroundColor: "seagreen",
+            opacity: "0.9",
+            borderRadius: "8px",
+            fontsize: 20,
+            parent: "giip-bolus_mgm",
+            callback: onMessageReceived
+        });
+
+        // pump configuration screen
+        let set_time = new ButtonEVO("set_time", {
+            width: 472,
+            height: 50,
+            top: 0,
+            left: 0
+        }, {
+            softLabel: "Set Time",
+            backgroundColor: "slategray",
+            opacity: "0.9",
+            borderRadius: "8px",
+            fontsize: 20,
+            parent: "giip-config",
+            callback: onMessageReceived
+        }); */
+
         var widgets = {
             pagination: new Pagination('pagination',
                 {
@@ -86,6 +179,11 @@ require([
                 },
                 {
                     pages: ["Page1", "Page2", "Page3", "Page4", "Page5", "Page6", "Page7", "Page8", "Page9", "Page10", "Page11", "Page12", "Page13", "Page14"],
+                    /* set an array of arrays of objects */
+                    //page_array: [giit_config, giip_bolus_mgm, giip_basal_mgm],
+                    /* pages: [{name: 'giip-config' , title: 'Configuration', items: [edit_basal_profiles, activate_basal_profiles, manage_temporary_basal]},
+                                {name: 'giip-bolus_mgm', title: 'Bolus management', items: [edit_food_database, start_bolus]},
+                                {name: 'giip-basal_mgm', title: 'Basal Management', items: [set_time]}], */
                     callback: onMessageReceived,
                     parent: 'pagination'
                 }),

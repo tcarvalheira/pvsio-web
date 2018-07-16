@@ -621,7 +621,7 @@ require([
         set_clock();
         var clock = setInterval(set_clock, 1000); */
 
-        var demoFolder = "GIIP";
+        var demoFolder = "GIIP_widget";
 
         //register event listener for websocket connection from the client
         client.addListener('WebSocketConnectionOpened', function (e) {

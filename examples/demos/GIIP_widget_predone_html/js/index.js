@@ -191,7 +191,7 @@ require([
                 interval: false,
                 backgroundColor: 'transparent',
                 /* if i can remove this when predone html is used... */
-                buttonPrevious: {
+                /* buttonPrevious: {
                     coords: { top: '220',
                             left: '0px',
                             width: '50',
@@ -202,7 +202,7 @@ require([
                             left: '100',
                             width: '50',
                             heigh: '30'}
-                },
+                }, */
                 usePreDoneHTML: true,
                 states: { 'NORMAL_OPERATION': 0,
                             'BASAL_MANAGEMENT': 1,
@@ -581,7 +581,7 @@ require([
         set_clock();
         var clock = setInterval(set_clock, 1000);
 
-        var demoFolder = "GIIP";
+        var demoFolder = "GIIP_widget_predone_html";
 
         //register event listener for websocket connection from the client
         client.addListener('WebSocketConnectionOpened', function (e) {

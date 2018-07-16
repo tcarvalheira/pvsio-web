@@ -29,7 +29,7 @@ GIIP: THEORY
     flag_post_success := true, 
     flag_prime_success := true, 
     flag_set_time := false, 
-    volume := 300
+    volume := 200
   #)
 
   %-- leave/enter functions
@@ -193,7 +193,7 @@ GIIP: THEORY
     COND
      mode(st) = LONEALARM
       -> LET st = leave(LONEALARM)(st)
-          IN enter(POWERED_OFF)(st),
+          IN enter(POWERED_OFF)(st), 
      mode(st) = NORMAL_OPERATION
       -> LET st = leave(NORMAL_OPERATION)(st)
           IN enter(CONFIRM_POWER_OFF)(st),
@@ -213,8 +213,8 @@ GIIP: THEORY
   click_previous_screen(st: (per_click_previous_screen)): State =
     COND
      mode(st) = BASAL_MANAGEMENT
-      -> LET st = leave(BASAL_MANAGEMENT)(st)
-          IN enter(NORMAL_OPERATION)(st),
+      -> LET st = leave(BASAL_MANAGEMENT)(st) %-- this will remove 1 unity in battery_level== , st = st WITH [ battery_level := battery_level(st) - 1]
+          IN enter(NORMAL_OPERATION)(st), 
      mode(st) = PUMP_CONFIGURATION
       -> LET st = leave(PUMP_CONFIGURATION)(st)
           IN enter(BOLUS_MANAGEMENT)(st),
