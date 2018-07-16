@@ -170,14 +170,39 @@ define(function (require, exports, module) {
 
     	/**
         * @function <a name="hide">hide</a>
-        * @description 
-        * @param ... {Object} ... 
+        * @description This method hides the wave. The wave will not be reset and when it will be shown it will render from where it stops.
+        * @param {Object} opt Options:
+        * @param {Boolean} [opt.resetWave=false]
+        * @return returns this so that it could be chained
         * @memberof module:Wave
         * @instance
         */
-        Wave.prototype.hide = function () {
+        Wave.prototype.hide = function (opt) {
+            opt = opt || {}
+            let reset = opt.resetWave || false
             this.canvas.style.display = 'none'
             this.titleDiv.style.display = 'none'
+            if(reset === true){
+                this.resetWave()
+            }
+            return this
+    }
+
+    	/**
+        * @function <a name="resetWave">resetWave</a>
+        * @description resetWaveMethod will reset waves to initial position. An example of use is when prototype is shutted down
+        * @return method return it self so that it can be called in a chain
+        * @memberof module:Wave
+        * @instance
+        */
+        Wave.prototype.resetWave = function () {
+            cancelAnimationFrame(this.frame)
+            this.px = 0
+            this.opx = 0
+            this.py = this.h/2
+            this.opy = this.py
+            this.ctx.clearRect(0, 0, this.w, this.h)
+            return this
     }
 
     	/**
