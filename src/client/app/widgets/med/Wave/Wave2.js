@@ -114,16 +114,16 @@ define(function (require, exports, module) {
         }
 
         /* canvas creation to wave render */
-        let canvas = document.createElement('canvas');
-        canvas.id     = `${id}_canvas`;
-        canvas.width  = this.width;
-        canvas.height = this.height;
-        canvas.style.position = opt.position
-        canvas.style.top = `${this.top}px`
-        canvas.style.left = `${this.left}px`
-        canvas.style.zIndex   = 8;
-        this.ctx = canvas.getContext('2d')
-        canvas.style.backgroundColor = this.backgroundColor
+        this.canvas = document.createElement('canvas');
+        this.canvas.id     = `${id}_canvas`;
+        this.canvas.width  = this.width;
+        this.canvas.height = this.height;
+        this.canvas.style.position = opt.position
+        this.canvas.style.top = `${this.top}px`
+        this.canvas.style.left = `${this.left}px`
+        this.canvas.style.zIndex   = 8;
+        this.ctx = this.canvas.getContext('2d')
+        this.canvas.style.backgroundColor = this.backgroundColor
 
         var elemClass = id + " waveWidget" + " noselect ";
         /* set wave points based on wavetype */
@@ -143,7 +143,7 @@ define(function (require, exports, module) {
         this.titleDiv.style.color = this.waveColor
         this.titleDiv.innerHTML = this.title
 
-        this.parentElem.appendChild(canvas)
+        this.parentElem.appendChild(this.canvas)
         this.parentElem.appendChild(this.titleDiv)
         
         
@@ -162,9 +162,23 @@ define(function (require, exports, module) {
     * @param {*} opt 
     */
     Wave.prototype.render = function (level, opt) {
+            this.canvas.style.display = 'block'
+            this.titleDiv.style.display = 'block'
             this.frame = requestAnimationFrame(this.animationLoop.bind(this))
             return this
     };
+
+    	/**
+        * @function <a name="hide">hide</a>
+        * @description 
+        * @param ... {Object} ... 
+        * @memberof module:Wave
+        * @instance
+        */
+        Wave.prototype.hide = function () {
+            this.canvas.style.display = 'none'
+            this.titleDiv.style.display = 'none'
+    }
 
     	/**
         * @protected
