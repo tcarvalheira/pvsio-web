@@ -63,6 +63,7 @@ define(function(require, exports, module){
      * @param {Boolean} [opt.loop=false] set if alarm should play in loop or not
      * @param {Iumber}  [opt.loop_frequency=1000] Loop freency for the alarm. The alarm will sound each loop_frequency ms.
      * @param {Float}   [opt.volume=50] set alarm volume
+     * @param {String} [opt.pvsState='isAlarmOn'] string with the name of pvs state that will carry if alarm is on or off
      * @memberof module: Alarms
      * @instance
      */
@@ -77,6 +78,8 @@ define(function(require, exports, module){
         loop_frequency = parseInt(opt.loop_frequency) || 1000
         opt.volume = parseInt(opt.volume) || 0.5
 
+        
+        this.isAlarmOn = opt.pvsState || 'isAlarmOn'
         this.parent = (opt.parent) ? (`#${opt.parent}`) : 'alarm'
 
         this.div = d3.select(this.parent)
@@ -117,7 +120,7 @@ define(function(require, exports, module){
      * @memberof module:Alarm
      * @instance
      */
-    Alarm.prototype.hide = () =>{
+    Alarm.prototype.hide = function () {
         alarmDiv.style("visibility", "hidden")
         return this
     }
@@ -128,7 +131,7 @@ define(function(require, exports, module){
       * @memberof module:Alarm
       * @instance
       */
-     Alarm.prototype.reveal = () =>{
+     Alarm.prototype.reveal = function () {
         alarmDiv.style("visibility", "visible")
         return this
     }
@@ -140,7 +143,7 @@ define(function(require, exports, module){
      * @memberof module:Alarm
      * @instance 
      */
-    Alarm.prototype.play = () => {
+    Alarm.prototype.play = function () {
         if(loop){
             setInterval(() => {
                 if(!alarm.mute){
@@ -160,7 +163,7 @@ define(function(require, exports, module){
      * @memberof module:Alarm
      * @instance
      */
-    Alarm.prototype.isPaused = () => {
+    Alarm.prototype.isPaused = function () {
         return alarm.paused
     }
 
@@ -170,7 +173,7 @@ define(function(require, exports, module){
      * @memberof module:Alarm
      * @instance
      */
-    Alarm.prototype.pause = () => {
+    Alarm.prototype.pause = function () {
         alarm.pause()
         return this
     }
@@ -182,7 +185,7 @@ define(function(require, exports, module){
      * @memberof module:Alarm
      * @instance
      */
-    Alarm.prototype.setVolume = (volume) => {
+    Alarm.prototype.setVolume = function (volume) {
         volume = parseInt(volume) || 0.5
         alarm.volume = volume
         return this
@@ -195,7 +198,7 @@ define(function(require, exports, module){
      * @memberof module:Alarm
      * @instance
      */
-    Alarm.prototype.volumeUp = (value) => {
+    Alarm.prototype.volumeUp = function (value) {
         value = parseFloat(value) || 0.1
         if(alarm.volume + value <= 1){
             alarm.volume += value
@@ -210,7 +213,7 @@ define(function(require, exports, module){
      * @memberof module:Alarm
      * @instance
      */
-    Alarm.prototype.volumeDown = (value) => {
+    Alarm.prototype.volumeDown = function (value) {
         value = parseFloat(value) || 0.1
         if(alarm.volume - value >= 0){
             alarm.volume -= value
@@ -224,7 +227,7 @@ define(function(require, exports, module){
      * @memberof module:Alarm
      * @instance
      */
-    Alarm.prototype.mute = () => {
+    Alarm.prototype.mute = function () {
         audio.mute = true
         return this
     }
@@ -237,7 +240,7 @@ define(function(require, exports, module){
      * @return Boolean
      * @instance
      */
-    Alarm.prototype.isMuted = () => {
+    Alarm.prototype.isMuted = function () {
         return audio.mute || false
     }
 
@@ -261,7 +264,7 @@ define(function(require, exports, module){
      * @memberof module:Alarm
      * @instance
      */
-    Alarm.prototype.unmute = () => {
+    Alarm.prototype.unmute = function () {
         audio.mute = false
         return this
     }
@@ -269,10 +272,21 @@ define(function(require, exports, module){
     /**
      * @function render
      * @description Render method for the Alarm widget
-     * @memberof module:Alarm
-     * @instance
+     * @param {Object} state PVS state
+     * @param {Object} opt Options paramters
+     * @param {String} [opt.pvsState='isAlarmOn'] String with the name of pvs state
      */
-    Alarm.prototype.render = () => {
+    Alarm.prototype.render = function (state, opt) {
+        let isAlarmOn = opt.pvsState || 'isAlarmOn'
+        if(state[isAlarmOn] === 'TRUE'){
+            if(this.isMuted()){
+                this.unmute()
+            }else{
+                this.play()
+            }
+        }else{
+            this.mute()
+        }
         return Alarm.prototype.reveal()
     }
 
