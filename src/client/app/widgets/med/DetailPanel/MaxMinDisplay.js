@@ -58,11 +58,11 @@ define(function (require, exports, module) {
      * @param {('Integer'|'Float'|'String')} [opt.type='Float'] set widget type. 
      * @param {Integer} [decimalPlaces=1] Set the number of decimal places
      * @param {('none' | 'parenthesis' | 'bracked' | 'curly')} [bracket='none'] options are  default is none
-     * @param {String} [opt.pvsMinValue='minValue']
-     * @param {String} [opt.pvsMaxValue='maxValue']
-     * @param {String} [opt.pvsValue='value']
-     * @param {String} [opt.pvsTitle='title]
-     * @param {String} [opt.pvsSubtitle='subtitle']
+     * @param {String} [opt.pvsMinValue='minValue'] - name of PVS state variable that holds the widget min value
+     * @param {String} [opt.pvsMaxValue='maxValue'] - name of PVS state variable that holds the widget max value
+     * @param {String} [opt.pvsValue='value'] - name of PVS state variable that holds the widget value
+     * @param {String} [opt.pvsTitle='title] - name of PVS state variable that holds the widget title
+     * @param {String} [opt.pvsSubtitle='subtitle'] - name of PVS state variable that holds the widget subtitle
      * @memberof module:MaxMinDisplay
      * @instance
      */
@@ -77,8 +77,9 @@ define(function (require, exports, module) {
         this.pvsMinValue = opt.pvsMinValue || this.pvsMinValue || 'minValue'
         this.pvsMaxValue = opt.pvsMaxValue || this.pvsMaxValue || 'maxValue'
         this.pvsTitle = opt.pvsTitle || this.pvsTitle || 'title'
-        this.pvsSubTitle = opt.pvsSubTitle || this.pvsSubtitle || 'subtitle'
+        this.pvsSubTitle = opt.pvsSubtitle || this.pvsSubTitle || 'subtitle'
         this.parent = (opt.parent) ? (`#${opt.parent}`) : 'body'
+        
         this.div = d3.select(this.parent)
             .append('div')
                 .attr('id', `${id}_div`)
@@ -92,8 +93,9 @@ define(function (require, exports, module) {
         
          // invoke WidgetEVO constructor to create the widget
         WidgetEVO.apply(this, [ id, coords, opt ]);
-        let top = 0
-        if(this.title !== ''){
+        let top = -15
+        // if title is setted or will come from pvs state
+        if(this.title !== '' || opt.pvsTitle !== undefined){
             let coordsTitle = Object.assign({},coords)
             coordsTitle.top = top
             coordsTitle.left = 0
@@ -109,9 +111,8 @@ define(function (require, exports, module) {
             top = top+10
         }
 
-        if(this.subtitle !== ''){
+        if(this.subtitle !== '' || opt.pvsSubtitle !== undefined){
             let coordsSubTitle = Object.assign({},coords)
-            //coordsSubTitle.top = top
             coordsSubTitle.top = top
             coordsSubTitle.left = 0
             let optSubTitle = Object.assign({},opt)
@@ -125,8 +126,22 @@ define(function (require, exports, module) {
             top = top+10
         }
 
-
-        if(this.valueMin != ''){
+        if(this.valueMax !== '' || opt.pvsMinValue !== undefined){
+            let coordsMax = Object.assign({},coords)
+            //coordsMax.top = top
+            coordsMax.top = top
+            coordsMax.left = 0
+            let optMax = Object.assign({},opt)
+            optMax.parent = this.div.node().id
+            optMax.position = 'relative'
+            optMax.fontSize = '8'
+            optMax.opacity = '0.6'
+            optMax.backgroundColor = 'rgba(0, 0, 0, 0)'
+            this.tMaxDisplay = new BasicDisplay(`${id}_tmaxdisplay`, coordsMax, optMax)
+            top = top + 10
+        }
+        
+        if(this.valueMin != '' || opt.pvsMinValue !== undefined){
             let coordsMin = Object.assign({},coords)
             //coordsMin.top = top
             coordsMin.top = top
@@ -139,28 +154,10 @@ define(function (require, exports, module) {
             optMin.align = 'right'
             optMin.backgroundColor = 'rgba(0, 0, 0, 0)'
             this.tMinDisplay = new BasicDisplay(`${id}_tmindisplay`, coordsMin, optMin)
-            top = top +10
         }
-        
-        if(this.valueMax !== ''){
-            let coordsMax = Object.assign({},coords)
-            //coordsMax.top = top
-            coordsMax.top = top
-            coordsMax.left = 0
-            let optMax = Object.assign({},opt)
-            optMax.parent = this.div.node().id
-            optMax.position = 'relative'
-            optMax.fontSize = '8'
-            optMax.opacity = '0.6'
-            optMax.backgroundColor = 'rgba(0, 0, 0, 0)'
-            this.tMaxDisplay = new BasicDisplay(`${id}_tmaxdisplay`, coordsMax, optMax)
-        }
-        
 
         let coordsTemp = coords
         let optTemp = opt
-        //coordsTemp.top = coords.top
-        //coordsTemp.left = coords.left + 30
         coordsTemp.top = 0
         coordsTemp.left = 30
         optTemp.parent = this.div.node().id
@@ -196,8 +193,7 @@ define(function (require, exports, module) {
       */
      MaxMinDisplay.prototype.render = function (state, opt) {
          // set style
-         opt = this.normaliseOptions(opt);
-
+        opt = this.normaliseOptions(opt);
         this.pvsValue = opt.pvsValue || this.pvsValue || 'value'
         this.pvsMinValue = opt.pvsMinValue || this.pvsMinValue || 'minValue'
         this.pvsMaxValue = opt.pvsMaxValue || this.pvsMaxValue || 'maxValue'
@@ -229,14 +225,15 @@ define(function (require, exports, module) {
         let closeBrackets = ''
         switch(this.type){
             case 'Float':
-                min = this.valueMin.toFixed(this.decimalPlaces)
-                max = this.valueMax.toFixed(this.decimalPlaces)
-                val = this.value.toFixed(this.decimalPlaces)
+                min = this.floatFormatDecimalPlaces(this.valueMin)
+                max = this.floatFormatDecimalPlaces(this.valueMax)
+                val = this.floatFormatDecimalPlaces(this.value)
             break
             default:
-                min = this.valueMin
-                max = this.valueMax
-                val = this.value
+                min = this.valueMin.toString().replace(/"/g, "")
+                max = this.valueMax.toString().replace(/"/g, "")
+                // then it is a string and pvs returns string with double quotes, need to remove them
+                val = this.value.toString().replace(/"/g, "")
             break
         }
 
@@ -257,6 +254,14 @@ define(function (require, exports, module) {
             default:
                 openBrackets = ''
                 closeBrackets = ''
+        }
+
+        // these ifs will remove double quotes "" when pvs state variable is a string.
+        if(this.title !== undefined && this.title !== null){
+            this.title = this.title.toString().replace(/"/g,"")
+        }
+        if(this.subtitle !== undefined && this.subtitle !== null){
+            this.subtitle = this.subtitle.toString().replace(/"/g, "")
         }
 
         if(this.tMinDisplay !== undefined){
@@ -290,6 +295,26 @@ define(function (require, exports, module) {
      }
 
      	/**
+          * @protected
+         * @function <a name="floatFormatDecimalPlaces">floatFormatDecimalPlaces</a>
+         * @description this method will format float with the decimalNumber defined as widget parameter values that can be passed as float or as string 
+         * @param {Float | String} value - the value to be formatted
+         * @memberof module:MaxMinDisplay
+         * @instance
+         */
+         MaxMinDisplay.prototype.floatFormatDecimalPlaces = function (value) {
+            let val = 0
+            if(typeof value === 'number'){
+                val = value.toFixed(this.decimalPlaces)
+            }else if(parseFloat(value) !== NaN){
+                val = parseFloat(value).toFixed(this.decimalPlaces)
+            }else{
+                val = value
+            }
+            return val
+     }
+
+     	/**
          * @function <a name="updateValues">updateValues</a>
          * @description These function will set the values on the widget and re-render the widget
          * @param values {Object} JSON object with a maximum of three values. none of these values is mandatory. If it is not set than the values 
@@ -312,14 +337,14 @@ define(function (require, exports, module) {
          * @function <a name="setProperties">setParameters</a>
          * @description This method will set the given properties of the widget. None of them are mandatory as they have default value
          * @param {Object} newOpts object with one or more of the next properties
-         * @param {String} [newOpts.title=]
-         * @param {String} [newOpts.subtitle=]
-         * @param {String} [newOpts.value=]
-         * @param {String} [newOpts.valueMax=]
-         * @param {String} [newOpts.valueMin=]
-         * @param {String} [newOpts.type=]
-         * @param {String} [newOpts.decimalPlaces=]
-         * @param {String} [newOpts.bracket=]
+         * @param {String} [newOpts.title]
+         * @param {String} [newOpts.subtitle]
+         * @param {String} [newOpts.value]
+         * @param {String} [newOpts.valueMax]
+         * @param {String} [newOpts.valueMin]
+         * @param {String} [newOpts.type]
+         * @param {String} [newOpts.decimalPlaces]
+         * @param {String} [newOpts.bracket]
          * @memberof module:MaxMinDisplay
          * @instance
          */
