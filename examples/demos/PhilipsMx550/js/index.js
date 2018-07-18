@@ -109,13 +109,13 @@ require([
         url = url.replace("http://", "ws://");
         var ncDevice = new NCDevice({id: deviceID, type: deviceType}, { url: url });
 
-        ncDevice.addListener("update", parseNCUpdate);
+        /* ncDevice.addListener("update", parseNCUpdate);
         ncDevice.addListener("control", parseNCControl);
         ncDevice.addListener("error", errorMessage);
         ncDevice.addListener("notify", notifyMessage);
         ncDevice.addListener("connected", onConnect);
         ncDevice.addListener("disconnected", onDisconnect);
-
+ */
 
         var d3 = require("d3/d3");
         var serverLogs = [], maxLogSize = 40;
@@ -123,7 +123,7 @@ require([
         var client = PVSioWebClient.getInstance();
 
         // FIXME: create a library with APIs to create SAPERE control panels
-        var content = d3.select("#content").append("div").style("width", "600px").style("padding", "20px").style("display", "none");
+       /*  var content = d3.select("#content").append("div").style("width", "600px").style("padding", "20px").style("display", "none");
         content.append("div").attr("style", "margin-bottom: 10px;").append("input").attr("type", "button")
             .attr("id", "btnShowPanel").attr("value", "Show Advanced Controls");
         var controlPanel = content.append("div").attr("id", "controlPanel").style("display", "none");
@@ -152,7 +152,7 @@ require([
                 document.getElementById("controlPanel").style.display = "none";
                 document.getElementById("btnShowPanel").value = "Show Advanced Controls";
             }
-        });
+        }); */
 
 
         // append a div that will contain the canvas elements
@@ -162,19 +162,8 @@ require([
 
         // append displays
         var mx550 = {};
-        /* mx550.spo2_display = new PatientMonitorDisplay("spo2_display",
-            {top: 56, left: 150, height: 34, width: 160},
-            {parent: "prototype", label: "%SpO2"});
-        mx550.rra_display = new PatientMonitorDisplay("rra_display",
-            {top: 102, left: 150, height: 34, width: 160},
-            {parent: "prototype", label: "RRa", fontColor: "aqua"});
-        mx550.btn_on = new Button("btn_on", {
-            top: 112, left: 364
-        }, { callback: onMessageReceived }); */
-
 
         // ALARMS
-
         mx550.pulseAlarm = new Alarm(
             'pulse-alarm',
             {top: 0, left: 0, width: 0, height: 0},
@@ -183,18 +172,15 @@ require([
                 volume: '0.2',
                 loop: true,
                 loop_frequency: 1000,
-                muted: false
+                muted: false,
+                pvsState: 'isAlarmOn'
             }
         ),
 
-        mx550.btnAlarmOff = new ButtonEVO("btn-alarm-off", {
-            top: 140, left: 885, height: 24, width: 24
+        mx550.btnAlarmOff = new ButtonEVO("btn_alarm_off", {
+            top: 250, left: 990, height: 20, width: 20
           }, {
-            // softLabel: "Ok",
-            // fontColor: "black",
-            // backgroundColor: "blue",
-            // fontsize: 16,
-            callback: function (err, data) {
+            /* callback: function (err, data) {
                 mx550.pulseAlarm.toggle()
                 if(alarmsOn){
                     mx550.alarmsoff_display.reveal()
@@ -206,12 +192,20 @@ require([
                     alarmsOn = true
                 }
                 
-            }
+            } */
+            callback: onMessageReceived
+          });
+
+          mx550.btnOnOff = new ButtonEVO("btn_on_off", {
+            top: 935, left: 316, height: 46, width: 46
+          }, {
+              //backgroundColor: 'red',
+            callback: onMessageReceived
           });
 
         // WAVES
         mx550.ecgII_wave = new Wave('ecgii-wave',
-            {top: 120, left: 5, height: 70, width: 730},
+            {top: 230, left: 115, height: 70, width: 730},
             { 
                 waveType: 'ecg',
                 title: 'II',
@@ -222,7 +216,7 @@ require([
                 scanBarWidth:20
              })
         mx550.ecgV_wave = new Wave('ecgv-wave',
-             {top: 180, left: 5, height: 70, width: 730},
+             {top: 290, left: 115, height: 70, width: 730},
              { 
                  waveType: 'ecg',
                  title: 'V',
@@ -233,7 +227,7 @@ require([
                  scanBarWidth:20
               })
         mx550.spo2_wave = new Wave('spo2-wave',
-              {top: 230, left: 5, height: 70, width: 730},
+              {top: 340, left: 115, height: 70, width: 730},
               { 
                   waveType: 'pleth',
                   title: 'Pleth',
@@ -245,7 +239,7 @@ require([
                })
         
         mx550.abp_wave = new Wave('ecgv-wave',
-             {top: 290, left: 5, height: 70, width: 730},
+             {top: 400, left: 115, height: 70, width: 730},
              { 
                  waveType: 'abp',
                  title: 'ABP',
@@ -257,7 +251,7 @@ require([
               })
         
         mx550.pap_wave = new Wave('ecgv-wave',
-              {top: 330, left: 5, height: 70, width: 730},
+              {top: 440, left: 115, height: 70, width: 730},
               { 
                   waveType: 'pap',
                   title: 'PAP',
@@ -269,7 +263,7 @@ require([
                })
 
         mx550.cvp_wave = new Wave('ecgv-wave',
-               {top: 390, left: 5, height: 60, width: 730},
+               {top: 500, left: 115, height: 60, width: 730},
                { 
                    waveType: 'cvp',
                    title: 'CVP',
@@ -281,7 +275,7 @@ require([
                 })
 
         mx550.icp_wave = new Wave('ecgv-wave',
-                {top: 450, left: 5, height: 70, width: 730},
+                {top: 560, left: 115, height: 70, width: 730},
                 { 
                     waveType: 'icp',
                     title: 'ICP',
@@ -296,7 +290,7 @@ require([
                
         mx550.co2_wave = new Wave(
             'co2-wave',
-            { top: 520, left: 5, height:50, width: 730 },
+            { top: 630, left: 115, height:50, width: 730 },
             { 
                 waveType: 'co2', 
                 parent: 'prototype',
@@ -312,7 +306,7 @@ require([
 
         // DISPLAYs
         mx550.date_display = new BasicDisplayEVO('date-display', 
-            {top: 93, left: 560, width: 200, height: 17},
+            {top: 203, left: 670, width: 200, height: 17},
             {
                 fontColor: "#FFFFFF",
                 backgroundColor: 'none',
@@ -324,7 +318,7 @@ require([
             }
         )
         mx550.alarmsoff_display = new BasicDisplayEVO('alarmsoff-display', 
-            {top: 113, left: 820, width: 200, height: 17},
+            {top: 223, left: 930, width: 200, height: 17},
             {
                 fontColor: "#FF0000",
                 backgroundColor: '#FFFFFF',
@@ -336,7 +330,7 @@ require([
             }
         )
         mx550.alarmsoff_img = new BasicDisplayEVO('alarmsoff-img', 
-            {top: 112, left: 800, width: 20, height: 17},
+            {top: 222, left: 910, width: 20, height: 17},
             {
                 fontColor: "#FF0000",
                 backgroundColor: '#FFFFFF',
@@ -350,7 +344,7 @@ require([
 
         mx550.hr_display = new MaxMinDisplay(
             'heartrate-display',
-            {top: 135, left: 750, width: 100, height: 50},
+            {top: 245, left: 860, width: 100, height: 50},
             {
                 parent: 'prototype',
                 fontColor: '#00FF00',
@@ -366,7 +360,7 @@ require([
             }
         )
         mx550.pulse_display = new BasicDisplayEVO('pulse-display', 
-            {top: 135, left: 920, width: 50, height: 50},
+            {top: 245, left: 1030, width: 50, height: 50},
             {
                 fontColor: "#0FF0FF",
                 backgroundColor: 'none',
@@ -378,7 +372,7 @@ require([
 
         mx550.spo2_display = new MaxMinDisplay(
             'sop2-display',
-            {top: 246, left: 750, width: 100, height: 50},
+            {top: 356, left: 860, width: 100, height: 50},
             {
                 parent: 'prototype',
                 fontColor: '#0FF0FF',
@@ -395,7 +389,7 @@ require([
         )
         
         mx550.perf_display = new BasicDisplayEVO('perf-display', 
-            {top: 250, left: 920, width: 70, height: 50},
+            {top: 360, left: 1030, width: 70, height: 50},
             {
                 fontColor: "#0FF0FF",
                 backgroundColor: 'none',
@@ -407,7 +401,7 @@ require([
         
         mx550.tCore_display = new MaxMinDisplay(
             'tcore-display',
-            {top: 570, left: 750, width: 100, height: 60},
+            {top: 680, left: 860, width: 100, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#00FF00',
@@ -425,7 +419,7 @@ require([
 
         mx550.tSkin_display = new MaxMinDisplay(
             'tskin-display',
-            {top: 570, left: 900, width: 100, height: 60},
+            {top: 680, left: 1010, width: 100, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#F98BFB',
@@ -443,7 +437,7 @@ require([
 
         mx550.nbp_display = new MaxMinDisplay(
             'nbp-display',
-            {top: 570, left: 5, width: 100, height: 60},
+            {top: 680, left: 115, width: 100, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#F47F7E',
@@ -461,7 +455,7 @@ require([
 
         mx550.abp_display = new MaxMinDisplay(
             'abp-display',
-            {top: 300, left: 750, width: 200, height: 60},
+            {top: 410, left: 860, width: 200, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#E33632',
@@ -480,7 +474,7 @@ require([
 
         mx550.pap_display = new MaxMinDisplay(
             'pap-display',
-            {top: 350, left: 750, width: 200, height: 60},
+            {top: 460, left: 860, width: 200, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#FAE15C',
@@ -499,7 +493,7 @@ require([
 
         mx550.cvp_display = new MaxMinDisplay(
             'cvp-display',
-            {top: 400, left: 750, width: 200, height: 60},
+            {top: 510, left: 860, width: 200, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#41DAF9',
@@ -519,7 +513,7 @@ require([
 
         mx550.icp_display = new MaxMinDisplay(
             'icp-display',
-            {top: 450, left: 750, width: 200, height: 60},
+            {top: 560, left: 860, width: 200, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#E827F4',
@@ -538,7 +532,7 @@ require([
         )
         mx550.cpp_display = new MaxMinDisplay(
             'cpp-display',
-            {top: 450, left: 900, width: 100, height: 60},
+            {top: 560, left: 1010, width: 100, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#E827F4',
@@ -556,7 +550,7 @@ require([
 
         mx550.etco2_display = new MaxMinDisplay(
             'etco2-display',
-            {top: 520, left: 750, width: 100, height: 50},
+            {top: 630, left: 860, width: 100, height: 50},
             {
                 parent: 'prototype',
                 fontColor: '#999a9b',
@@ -574,7 +568,7 @@ require([
 
         mx550.awRR_display = new MaxMinDisplay(
             'awrr-display',
-            {top: 520, left: 900, width: 100, height: 50},
+            {top: 630, left: 1010, width: 100, height: 50},
             {
                 parent: 'prototype',
                 fontColor: '#999a9b',
@@ -592,7 +586,7 @@ require([
 
         mx550.spo2_graphics = new ImageRender(
             'spo2_graphics',
-            {top: 280, left: 750, width: 20, height: 20},
+            {top: 390, left: 860, width: 20, height: 20},
             {
                 parent: 'prototype',
             }
@@ -600,7 +594,7 @@ require([
 
         mx550.spo2_rec = new ImageRender(
             'spo2_rectangle',
-            {top: 240, left: 885, width: 10, height: 70},
+            {top: 350, left: 995, width: 10, height: 70},
             {
                 parent: 'prototype',
             }
@@ -608,7 +602,7 @@ require([
 
         mx550.alarmVol = new ImageRender(
             'wifi',
-            {top: 95, left: 980, width: 50, height:15},
+            {top: 205, left: 1090, width: 30, height:15},
             {
                 parent: 'prototype'
             }
@@ -618,7 +612,7 @@ require([
         // PLUGS
         mx550.spo2_plug = new Plug(
             'spo2_plug',
-            { top: 155, left: 1150, width: 40, height:50, top_plug: 250, left_plug: 1150 },
+            { top: 155, left: 1350, width: 40, height:50, top_plug: 250, left_plug: 1350 },
             { 
                 parent: 'plug-rack-widgets', 
                 image_unplugged: 'img/spo2_unplugged.png',
@@ -629,7 +623,7 @@ require([
         )
         mx550.ecg_plug = new Plug(
             'ecg_plug',
-            { top: 155, left: 1095, width: 50, height:50, top_plug: 250, left_plug: 1050 },
+            { top: 155, left: 1295, width: 50, height:50, top_plug: 250, left_plug: 1250 },
             { 
                 parent: 'plug-rack-widgets', 
                 image_unplugged: 'img/ecg_unplugged.png',
@@ -638,6 +632,19 @@ require([
                 isPlugged: false
              }
         )
+
+        // LEDs
+        mx550.onoff_led = new LED("onoff_led", {
+            top: 950,
+            left: 380,
+            width: 17,
+            height: 17
+        },{
+            parent: "prototype",
+            color: "orange",
+            callback: onMessageReceived,
+            backgroundColor: "transparent" // does this button light up?
+        })
 
         // utility function
         function evaluate(str) {
@@ -649,59 +656,127 @@ require([
             return (v <= 0) ? "--" : ((v < 10) ? v.toFixed(1).toString() : v.toFixed(0).toString());
         }
 
+        // led and onOff button
+        function render_onoff(res){
+            // onOff button is allways rendered
+            mx550.btnOnOff.render(res)
+            // led will display different color based on state
+            if(res.isOn === 'TRUE'){
+                mx550.onoff_led.render(res, {color: "#b0ff77"}) /* bright green */
+            }else{
+                mx550.onoff_led.render(res, {color: 'grey'})
+            }
+        }
+
         // alarm
         function render_alarms(res){
-            mx550.pulseAlarm.render()
-            mx550.pulseAlarm.play()
-            mx550.btnAlarmOff.render();
-            mx550.alarmsoff_display.render('ALARMS OFF')
-            mx550.alarmsoff_img.renderGlyphicon('glyphicon-bell',{'blinking':false});
-            /* toggle the images on and off */
-            if(alarmsOn){
+            if(res.isOn === 'TRUE'){
+                mx550.pulseAlarm.render(res,{pvsState: 'isAlarmOn'})
+                //mx550.pulseAlarm.play()
+                mx550.btnAlarmOff.render();
+                mx550.alarmsoff_display.render('ALARMS OFF')
+                mx550.alarmsoff_img.renderGlyphicon('glyphicon-bell',{'blinking':false});
+                /* toggle the images on and off */
+                //if(alarmsOn){
+                if(res.isAlarmOn === 'TRUE'){
+                    mx550.alarmsoff_display.hide()
+                    mx550.alarmsoff_img.hide()
+                }else{
+                    mx550.pulseAlarm.mute()
+                }
+            }else{
+                //mx550.pulseAlarm.mute()
+                //mx550.pulseAlarm.hide()
+                mx550.btnAlarmOff.hide()
                 mx550.alarmsoff_display.hide()
                 mx550.alarmsoff_img.hide()
             }
+            
+        }
+        function hide_alarms(res){
+            mx550.pulseAlarm.hide()
+            mx550.btnAlarmOff.hide()
+            mx550.alarmsoff_display.hide()
+            mx550.alarmsoff_img.hide()
         }
 
         // waves
         function render_waves(res){
-            mx550.ecgII_wave.render()
-            mx550.ecgV_wave.render()
-            mx550.spo2_wave.render()
-            mx550.co2_wave.render()
-            mx550.abp_wave.render()
-            mx550.pap_wave.render()
-            mx550.cvp_wave.render()
-            mx550.icp_wave.render()
+            if(res.isOn === 'TRUE'){
+                mx550.ecgII_wave.render(res)
+                mx550.ecgV_wave.render(res)
+                mx550.spo2_wave.render(res)
+                mx550.co2_wave.render(res)
+                mx550.abp_wave.render(res)
+                mx550.pap_wave.render(res)
+                mx550.cvp_wave.render(res)
+                mx550.icp_wave.render(res)
+            }else{
+                mx550.ecgII_wave.hide({resetWave:true})
+                mx550.ecgV_wave.hide({resetWave:true})
+                mx550.spo2_wave.hide({resetWave:true})
+                mx550.co2_wave.hide({resetWave:true})
+                mx550.abp_wave.hide({resetWave:true})
+                mx550.pap_wave.hide({resetWave:true})
+                mx550.cvp_wave.hide({resetWave:true})
+                mx550.icp_wave.hide({resetWave:true})
+            }
+            
         }
 
-        function render_plugs(){
-            mx550.spo2_plug.render()
-            mx550.ecg_plug.render()
+        function render_plugs(res){
+            mx550.spo2_plug.render(res)
+            mx550.ecg_plug.render(res)
         }
 
         function render_displays(res){
-            mx550.hr_display.render()
-            mx550.pulse_display.render('75')
-            mx550.spo2_display.render()
-            mx550.perf_display.render('2.1')
-            mx550.etco2_display.render()
-            mx550.awRR_display.render()
-            mx550.tCore_display.render()
-            mx550.tSkin_display.render()
-            mx550.nbp_display.render()
-            mx550.abp_display.render()
-            mx550.pap_display.render()
-            mx550.cvp_display.render()
-            mx550.icp_display.render()
-            mx550.cpp_display.render()
-            mx550.spo2_graphics.render()
-            mx550.spo2_rec.render()
-            mx550.alarmVol.render()
-            let today = new Date()
-            mx550.date_display.render(today.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric', hour: "2-digit", minute: "2-digit"  }))
-            /* this is here just to simulate animation of the imagerender widget */
-            setInterval(function() {
+            if(res.isOn === 'TRUE'){
+                mx550.hr_display.render(res)
+                mx550.pulse_display.render('75')
+                mx550.spo2_display.render(res, {'pvsValue':'spo2', 'pvsMinValue': 'spo2_min', 'pvsMaxValue':'spo2_max', 'pvsTitle':'spo2_label'})
+                mx550.perf_display.render('2.1')
+                mx550.etco2_display.render(res)
+                mx550.awRR_display.render(res)
+                mx550.tCore_display.render(res)
+                mx550.tSkin_display.render(res)
+                mx550.nbp_display.render(res)
+                mx550.abp_display.render(res)
+                mx550.pap_display.render(res)
+                mx550.cvp_display.render(res)
+                mx550.icp_display.render(res)
+                mx550.cpp_display.render(res)
+                mx550.spo2_graphics.render(res)
+                mx550.spo2_rec.render(res)
+                mx550.alarmVol.render(res)
+                //mx550.onoff_led.render(res)
+                let today = new Date()
+                mx550.date_display.render(today.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric', hour: "2-digit", minute: "2-digit"  }))
+
+            }else{
+                mx550.hr_display.hide()
+                mx550.pulse_display.hide()
+                mx550.spo2_display.hide()
+                mx550.perf_display.hide()
+                mx550.etco2_display.hide()
+                mx550.awRR_display.hide()
+                mx550.tCore_display.hide()
+                mx550.tSkin_display.hide()
+                mx550.nbp_display.hide()
+                mx550.abp_display.hide()
+                mx550.pap_display.hide()
+                mx550.cvp_display.hide()
+                mx550.icp_display.hide()
+                mx550.cpp_display.hide()
+                mx550.spo2_graphics.hide()
+                mx550.spo2_rec.hide()
+                mx550.alarmVol.hide()
+                //mx550.onoff_led.render(res)
+                let today = new Date()
+                mx550.date_display.hide(today.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric', hour: "2-digit", minute: "2-digit"  }))
+
+            }
+                        /* this is here just to simulate animation of the imagerender widget */
+            /* setInterval(function() {
                 // method to be executed;
               
                     switch(contador % 9){
@@ -753,7 +828,7 @@ require([
                     }
 
                     contador += 1
-                }, 1000);
+                }, 1000); */
         }
 
         /**
@@ -761,7 +836,6 @@ require([
          if the first parameter is truthy, then an error occured in the process of evaluating the gui action sent
          */
         function onMessageReceived(err, event) {
-            //console.log(event)
             function prettyprintState(str) {
                 var state = stateParser.parse(str);
                 state.spo2_label = state.spo2_label.replace(/"/g, "");
@@ -797,17 +871,19 @@ require([
 
                 // rendering
                 var res = event.data.toString();
+                console.log(`STATE: ${res}`)
                 if (res.indexOf("(#") === 0) {
                     res = stateParser.parse(event.data.toString());
                     if (res) {
+                        render_onoff(res)
                         render_waves(res)
                         render_displays(res)
                         render_alarms(res)
-                        render_plugs()
-                        //mx550.btn_on.render(res);
+                        render_plugs(res)
                     }
                 }
             } else {
+                console.log(`O PVS está a dar erro!!!`)
                 console.log(err);
             }
         }
@@ -815,6 +891,7 @@ require([
 
         //--- tick function -------------------
         start_tick = function () {
+            console.log(`Start Tick`)
             if (!tick) {
                 tick = setInterval(function () {
                     client.getWebSocket()
@@ -824,6 +901,7 @@ require([
         };
 
         stop_tick = function () {
+            console.log(`Stop Tick`)
             if (tick) {
                 clearInterval(tick);
                 tick = null;
@@ -860,12 +938,13 @@ require([
             }
         });
 
-
+        // set demo prototype folder. PVS specification will load from here
+        var demoFolder = "PhilipsMx550";
         //register event listener for websocket connection from the client
         client.addListener('WebSocketConnectionOpened', function (e) {
             console.log("web socket connected");
             //start pvs process
-            client.getWebSocket().startPVSProcess({name: "main.pvs", demoName: "Radical7/pvs"}, function (err, event) {
+            client.getWebSocket().startPVSProcess({name: "main.pvs", demoName: demoFolder + "/pvs"}, function (err, event) {
                 client.getWebSocket().sendGuiAction("init(0);", onMessageReceived);
                 d3.select(".demo-splash").style("display", "none");
                 d3.select(".content").style("display", "block");

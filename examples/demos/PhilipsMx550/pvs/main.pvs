@@ -17,11 +17,12 @@ main: THEORY
     rra_label: string,
     rra_alarm: Alarm,
     rra_fail: bool,
-    isOn: bool
+    isOn: bool,
+    isAlarmOn: bool
   #]
 
   init(x: real): state = (#
-    id := "Radical7",
+    id := "PhilipxMX550",
     spo2 := 99,
     spo2_max := 0,
     spo2_min := 88,
@@ -34,14 +35,15 @@ main: THEORY
     rra_label := "RRa",
     rra_alarm := off,
     rra_fail := false,
-    isOn := true
+    isOn := false,
+    isAlarmOn := true
   #)
 
   init(x: real, id: string): state = (#
     id := id,
-    spo2 := 99,
-    spo2_max := 0,
-    spo2_min := 88,
+    spo2 := 98,
+    spo2_max := 100,
+    spo2_min := 96,
     spo2_label := "SpO2",
     spo2_alarm := off,
     spo2_fail := false,
@@ -51,54 +53,25 @@ main: THEORY
     rra_label := "RRa",
     rra_alarm := off,
     rra_fail := false,
-    isOn := true
+    
+    isOn := false,
+    isAlarmOn := true
   #)
 
-
-  per_on(st: state): bool = true
-  on(st: (per_on)): state = st WITH [ isOn := NOT isOn(st) ]
-  click_btn_on(st: state): state =
+per_on(st: state): bool = true
+on(st: (per_on)): state = st WITH [ isOn := NOT isOn(st) ]
+click_btn_on_off(st: state): state =
     COND
       per_on(st) -> on(st),
       ELSE -> st
     ENDCOND
 
-  click_btn_mute(st: state): state =
+per_click_btn_alarm_off(st: state): bool = true
+alarmOn(st: (per_click_btn_alarm_off)): state = st WITH [ isAlarmOn := NOT isAlarmOn(st)]
+click_btn_alarm_off(st: state): state =
     COND
-      isOn(st) AND spo2_alarm(st) = alarm -> st WITH [ spo2_alarm := mute ],
+      per_click_btn_alarm_off(st) -> alarmOn(st),
       ELSE -> st
     ENDCOND
-
-  check_spo2(st: state): state =
-    IF spo2_fail(st) = FALSE THEN
-        IF ((spo2_max(st) > 0) AND (spo2(st) >= spo2_max(st))) OR
-    	((spo2_min(st) > 0) AND (spo2(st) <= spo2_min(st)))
-	    THEN st WITH [ spo2_alarm := alarm ]
-	    ELSE st WITH [ spo2_alarm := off ] ENDIF
-    ELSE st WITH [ spo2_alarm := alarm ] ENDIF
-
-  check_rra(st: state): state =
-    IF rra_fail(st) = FALSE THEN
-        IF ((rra_max(st) > 0) AND (rra(st) >= rra_max(st))) OR
-    	((rra_min(st) > 0) AND (rra(st) <= rra_min(st)))
-	    THEN st WITH [ rra_alarm := alarm ]
-	    ELSE st WITH [ rra_alarm := off ] ENDIF
-    ELSE st WITH [ rra_alarm := alarm ] ENDIF
-
-  check_vitals(st: state): state =
-    LET st = check_spo2(st)
-     IN check_rra(st)
-
-  tick(st: state): state =
-    COND
-      isOn(st) -> check_vitals(st),
-      ELSE -> st
-    ENDCOND
-  
-  spo2_sensor_data(x: real)(st: state): state =
-    st WITH [ spo2 := x, spo2_fail := FALSE ]
-
-  rra_sensor_data(x: real)(st: state): state =
-    st WITH [ rra := x, rra_fail := FALSE ]
 
  END main
