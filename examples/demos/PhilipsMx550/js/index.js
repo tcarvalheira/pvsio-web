@@ -344,7 +344,7 @@ require([
 
         mx550.hr_display = new MaxMinDisplay(
             'heartrate-display',
-            {top: 245, left: 860, width: 100, height: 50},
+            {top: 240, left: 860, width: 100, height: 50},
             {
                 parent: 'prototype',
                 fontColor: '#00FF00',
@@ -352,11 +352,15 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'HR',
+                /* title: 'HR',
                 type: 'Integer',
                 valueMin: '50',
                 valueMax: '120',
-                value: '75',
+                value: '76' */
+                pvsValue:'hr', 
+                pvsMinValue: 'hr_min', 
+                pvsMaxValue:'hr_max', 
+                pvsTitle:'hr_label'
             }
         )
         mx550.pulse_display = new BasicDisplayEVO('pulse-display', 
@@ -380,11 +384,15 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'SpO2',
+                /* title: 'SpO2',
                 type: 'Integer',
                 valueMin: '96',
                 valueMax: '100',
-                value: '95',
+                value: '95', */
+                pvsValue:'spo2', 
+                pvsMinValue: 'spo2_min', 
+                pvsMaxValue:'spo2_max', 
+                pvsTitle:'spo2_label'
             }
         )
         
@@ -409,11 +417,16 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'Tcore',
-                type: 'Float',
-                valueMin: '36.0',
-                valueMax: '39.0',
-                value: '37.0',
+                //title: 'Tcore',
+                // type: 'Float', // I need to change it because i don't know how to pass float on PVS state
+                type: 'String',
+                //valueMin: '36.0',
+                //valueMax: '39.0',
+                //value: '37.0',
+                pvsValue: 'tcore',
+                pvsMinValue: 'tcore_min',
+                pvsMaxValue: 'tcore_max',
+                pvsTitle: 'tcore_label'
             }
         )
 
@@ -427,11 +440,15 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'Tskin',
-                type: 'Float',
-                valueMin: '36.0',
-                valueMax: '39.0',
-                value: '37.0',
+                // title: 'Tskin',
+                type: 'String',
+                //valueMin: '36.0',
+                //valueMax: '39.0',
+                //value: '37.0',
+                pvsValue: 'tskin',
+                pvsTitle: 'tskin_label',
+                pvsMinValue: 'tskin_min',
+                pvsMaxValue: 'tskin_max'
             }
         )
 
@@ -445,11 +462,15 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'NBP',
+                /* title: 'NBP', */
                 type: 'String',
-                valueMin: '90',
-                valueMax: '160',
-                value: '123/79 (89)',
+                //valueMin: '90',
+                //valueMax: '160',
+                //value: '123/79 (89)'
+                pvsValue: 'nbp',
+                pvsTitle: 'nbp_label',
+                pvsMinValue: 'nbp_min',
+                pvsMaxValue: 'nbp_max'
             }
         )
 
@@ -463,12 +484,17 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'ABP',
+                /* title: 'ABP',
                 subtitle: 'Sys.',
                 type: 'String',
                 valueMin: '90',
                 valueMax: '160',
-                value: '120/70 (91)',
+                value: '120/70 (91)', */
+                pvsValue:'abp', 
+                pvsMinValue: 'abp_min', 
+                pvsMaxValue:'abp_max', 
+                pvsTitle:'abp_label', 
+                pvsSubtitle:'abp_sublabel'
             }
         )
 
@@ -482,12 +508,17 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'PAP',
+                /* title: 'PAP',
                 subtitle: 'Dia.',
                 type: 'String',
                 valueMin: '0',
                 valueMax: '16',
-                value: '28/15 (21)',
+                value: '28/15 (21)', */
+                pvsValue:'pap', 
+                pvsMinValue: 'pap_min', 
+                pvsMaxValue:'pap_max', 
+                pvsTitle:'pap_label', 
+                pvsSubtitle:'pap_sublabel'
             }
         )
 
@@ -501,13 +532,17 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'CVP',
-                subtitle: 'Mean',
+                /* title: 'CVP',
+                subtitle: 'Mean', */
                 type: 'Integer',
                 bracket: 'parenthesis',
-                valueMin: '0',
+                /* valueMin: '0',
                 valueMax: '10',
-                value: '9',
+                value: '9', */
+                pvsValue:'cvp', 
+                pvsMaxValue:'cvp_max', 
+                pvsTitle:'cvp_label',
+                pvsSubtitle: 'cvp_sublabel'
             }
         )
 
@@ -521,13 +556,17 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'ICP',
-                subtitle: 'Mean',
+                /* title: 'ICP',
+                subtitle: 'Mean', */
                 type: 'Integer',
                 bracket: 'parenthesis',
-                valueMin: '0',
+                /* valueMin: '0',
                 valueMax: '10',
-                value: '9',
+                value: '9', */
+                pvsValue:'icp', 
+                pvsMaxValue:'icp_max', 
+                pvsTitle:'icp_label',
+                pvsSubtitle: 'icp_sublabel'
             }
         )
         mx550.cpp_display = new MaxMinDisplay(
@@ -540,11 +579,15 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'ICP',
+                /* title: 'ICP', */
                 type: 'Integer',
-                valueMin: '50',
+                /* valueMin: '50',
                 valueMax: '130',
-                value: '82',
+                value: '82', */
+                pvsValue:'cpp', 
+                pvsMinValue: 'cpp_min', 
+                pvsMaxValue:'cpp_max', 
+                pvsTitle:'cpp_label',
             }
         )
 
@@ -558,11 +601,15 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'etCO2',
+                /* title: 'etCO2', */
                 type: 'Integer',
-                valueMin: '30',
+                /* valueMin: '30',
                 valueMax: '50',
-                value: '28',
+                value: '28', */
+                pvsValue: 'etco2',
+                pvsTitle: 'etco2_label',
+                pvsMaxValue: 'etco2_max',
+                pvsMinValue: 'etco2_min'
             }
         )
 
@@ -576,11 +623,15 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                title: 'awRR',
+                /* title: 'awRR', */
                 type: 'Integer',
-                valueMin: '8',
+                /* valueMin: '8',
                 valueMax: '30',
-                value: '17',
+                value: '17', */
+                pvsValue: 'awrr',
+                pvsTitle: 'awrr_label',
+                pvsMinValue: 'awrr_min',
+                pvsMaxValue: 'awrr_max'
             }
         )
 
@@ -732,9 +783,9 @@ require([
         function render_displays(res){
             if(res.isOn === 'TRUE'){
                 mx550.hr_display.render(res)
-                mx550.pulse_display.render('75')
-                mx550.spo2_display.render(res, {'pvsValue':'spo2', 'pvsMinValue': 'spo2_min', 'pvsMaxValue':'spo2_max', 'pvsTitle':'spo2_label'})
-                mx550.perf_display.render('2.1')
+                mx550.pulse_display.render(res.pulse)
+                mx550.spo2_display.render(res)
+                mx550.perf_display.render(res.perf.toString().replace(/"/g, ""))
                 mx550.etco2_display.render(res)
                 mx550.awRR_display.render(res)
                 mx550.tCore_display.render(res)

@@ -5,12 +5,7 @@ main: THEORY
 
   state: TYPE = [#
     id: string,
-    spo2: real, % sensor data - blood oxigenation level (percentage)
-    spo2_max: nonneg_real,
-    spo2_min: nonneg_real,
-    spo2_label: string,
-    spo2_alarm: Alarm,
-    spo2_fail: bool,
+    
     rra: real, % sensor data - acoustic respiratory rate (breaths per minute, bpm)
     rra_max: nonneg_real,
     rra_min: nonneg_real,
@@ -18,17 +13,80 @@ main: THEORY
     rra_alarm: Alarm,
     rra_fail: bool,
     isOn: bool,
-    isAlarmOn: bool
+    isAlarmOn: bool,
+    
+    spo2: real, % sensor data - blood oxigenation level (percentage)
+    spo2_max: nonneg_real,
+    spo2_min: nonneg_real,
+    spo2_label: string,
+    spo2_alarm: Alarm,
+    spo2_fail: bool,
+
+    abp: string,
+    abp_max: real,
+    abp_min: real,
+    abp_label: string,
+    abp_sublabel: string,
+    
+    pap: string,
+    pap_max: real, 
+    pap_min: real, 
+    pap_label: string,
+    pap_sublabel: string,
+
+    hr: real,
+    hr_max: real,
+    hr_min: real,
+    hr_label: string,
+
+    cvp: real,
+    cvp_label: string,
+    cvp_sublabel: string,
+    cvp_max: real,
+    
+    icp: real,
+    icp_label: string,
+    icp_sublabel: string,
+    icp_max: real,
+
+    cpp: real, 
+    cpp_label: string,
+    cpp_max: real,
+    cpp_min: real,
+
+    etco2: real,
+    etco2_label: string,
+    etco2_max: real,
+    etco2_min: real,
+
+    awrr: real,
+    awrr_label: string,
+    awrr_min: real,
+    awrr_max: real,
+
+    nbp: string, 
+    nbp_label: string,
+    nbp_min: real,
+    nbp_max: real,
+
+    tskin: string,
+    tskin_label: string,
+    tskin_min: string,
+    tskin_max: string,
+
+    tcore: string,
+    tcore_label: string,
+    tcore_min: string,
+    tcore_max: string,
+
+    perf: string, 
+    pulse: real
+
   #]
 
   init(x: real): state = (#
     id := "PhilipxMX550",
-    spo2 := 99,
-    spo2_max := 0,
-    spo2_min := 88,
-    spo2_label := "SpO2",
-    spo2_alarm := off,
-    spo2_fail := false,
+    
     rra := 18,
     rra_max := 30,
     rra_min := 6,
@@ -36,17 +94,80 @@ main: THEORY
     rra_alarm := off,
     rra_fail := false,
     isOn := false,
-    isAlarmOn := true
+    isAlarmOn := true,
+    
+    spo2 := 99,
+    spo2_max := 88,
+    spo2_min := 0,
+    spo2_label := "SpO2",
+    spo2_alarm := off,
+    spo2_fail := false,
+
+    abp := "123/72 (92)",
+    abp_max := 162,
+    abp_min:= 67,
+    abp_label := "ABP",
+    abp_sublabel := "Sys",
+    
+    pap:= "27/16 (22)",
+    pap_max:= 17, 
+    pap_min:= 1, 
+    pap_label:= "PAP",
+    pap_sublabel:= "Diag.",
+
+    hr:= 74,
+    hr_max:= 121,
+    hr_min:= 51,
+    hr_label:= "HR",
+
+    cvp:= 8,
+    cvp_label:= "CVP",
+    cvp_sublabel:= "Mean",
+    cvp_max:= 11,
+
+    icp:= 8,
+    icp_label:= "ICP",
+    icp_sublabel:= "Mean",
+    icp_max:= 11,
+
+    cpp:= 81, 
+    cpp_label:= "ICP",
+    cpp_max:= 131,
+    cpp_min:= 51,
+
+    etco2:= 29,
+    etco2_label:= "etCO2",
+    etco2_max:= 51,
+    etco2_min:= 31,
+
+    awrr:= 18,
+    awrr_label:= "awRR",
+    awrr_min:= 9,
+    awrr_max:= 31,
+
+    nbp := "124/80 (88)",
+    nbp_label := "NBP",
+    nbp_min := 90,
+    nbp_max := 160,
+
+    tskin:= "37.4",
+    tskin_label:= "tSkin",
+    tskin_min:= "36.2",
+    tskin_max:= "39.3",
+
+    tcore:= "37.2",
+    tcore_label:= "tCore",
+    tcore_min:= "36.1",
+    tcore_max:= "39.5",
+
+    perf:= "2.3",
+    pulse:= 77
   #)
 
   init(x: real, id: string): state = (#
     id := id,
     spo2 := 98,
-    spo2_max := 100,
-    spo2_min := 96,
-    spo2_label := "SpO2",
-    spo2_alarm := off,
-    spo2_fail := false,
+    
     rra := 18,
     rra_max := 30,
     rra_min := 6,
@@ -55,7 +176,73 @@ main: THEORY
     rra_fail := false,
     
     isOn := false,
-    isAlarmOn := true
+    isAlarmOn := true,
+    
+    spo2_max := 88,
+    spo2_min := 0,
+    spo2_label := "SpO2",
+    spo2_alarm := off,
+    spo2_fail := false,
+
+    abp := "123/72 (92)",
+    abp_max := 162,
+    abp_min := 67,
+    abp_label := "ABP",
+    abp_sublabel := "Sys",
+    
+    pap:= "27/16 (22)",
+    pap_max:= 17, 
+    pap_min:= 1, 
+    pap_label:= "PAP",
+    pap_sublabel:= "Diag.",
+
+    hr:= 74,
+    hr_max:= 121,
+    hr_min:= 51,
+    hr_label:= "HR",
+
+    cvp:=8,
+    cvp_label:= "CVP",
+    cvp_sublabel:= "Mean",
+    cvp_max:= 11,
+
+    icp := 8,
+    icp_label := "ICP",
+    icp_sublabel := "Mean",
+    icp_max := 11,
+
+    cpp:= 81, 
+    cpp_label:= "ICP",
+    cpp_max:= 131,
+    cpp_min:= 51,
+
+    etco2:= 29,
+    etco2_label:= "etCO2",
+    etco2_max:= 51,
+    etco2_min:= 31,
+
+    awrr:= 18,
+    awrr_label:= "awRR",
+    awrr_min:= 9,
+    awrr_max:= 31,
+
+    nbp := "124/80 (88)",
+    nbp_label := "NBP",
+    nbp_min := 90,
+    nbp_max := 160,
+
+    tskin:= "37.4",
+    tskin_label:= "tSkin",
+    tskin_min:= "36.3",
+    tskin_max:= "39.3",
+
+    tcore:= "37.2",
+    tcore_label:= "tCore",
+    tcore_min:= "36.1",
+    tcore_max:= "39.5",
+
+    perf:= "2.3",
+    pulse:= 77
   #)
 
 per_on(st: state): bool = true
