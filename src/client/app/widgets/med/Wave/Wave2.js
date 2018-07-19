@@ -55,6 +55,12 @@ define(function (require, exports, module) {
      * @param {uInt} [opt.fillColor=waveColor] (uInt). Default is wavecolor
      * @param {Integer} [opt.wavesPerScreen] set the number of waves that should be rendered in each line of the screen at 60bps
      * @param {Integer} [opt.scanBarWidth=50]  set scanBarWidth, Default is 50
+     
+     * @param {Object} [opt.pvsDefinition] - defines the pvs state variables that holds waves definition
+     * @param {uInt} [opt.pvsDefinition.waveColor] ex. waveColor: 'red'
+     * @param {Integer} [opt.pvsDefinition.heartRate]
+     * @param {uInt} [opt.pvsDefinition.backgroundColor]
+     * @param {uInt} [opt.pvsDefinition.fillColor]
      * @memberof module:Wave
      * @instance
      */
@@ -71,6 +77,9 @@ define(function (require, exports, module) {
         this.top = coords.top || 0;
         this.left = coords.left || 0;
         this.aspectRatio = 1125/155
+    
+
+
         /** check if width is set. If not, calculate based on height and aspect ratio. Set default if cannot calculate it.*/
         if(coords.width === undefined){
             this.width = this.aspectRatio * parseInt(coords.height) || 1125
@@ -128,6 +137,7 @@ define(function (require, exports, module) {
         var elemClass = id + " waveWidget" + " noselect ";
         /* set wave points based on wavetype */
         this.setUpWave()
+        this.setParameters(null, opt)
 
         /* add a horizontal line to complete the wave length based on heartrate*/
         this.addArrayElems();
@@ -158,14 +168,26 @@ define(function (require, exports, module) {
    /**
     * @function render
     * @description this method will render the widget
-    * @param {*} level 
-    * @param {*} opt 
+    * @param {Object} state 
+    * @param {Object} opt Optional parameter passed to the render function. These can be either style, funcional parameter or pvs definition parameters
+    * @param {Object} [opt.pvsDefinition] - defines the pvs state variables that holds waves definition
+    * @param {uInt} [opt.pvsDefinition.waveColor] ex. waveColor: 'red'
+    * @param {Integer} [opt.pvsDefinition.heartRate]
+    * @param {uInt} [opt.pvsDefinition.backgroundColor]
+    * @param {uInt} [opt.pvsDefinition.fillColor]
     */
-    Wave.prototype.render = function (level, opt) {
-            this.canvas.style.display = 'block'
-            this.titleDiv.style.display = 'block'
-            this.frame = requestAnimationFrame(this.animationLoop.bind(this))
-            return this
+    Wave.prototype.render = function (state, opt) {
+
+        this.setParameters(state, opt)
+            
+        this.canvas.style.display = 'block'
+        this.titleDiv.style.display = 'block'
+
+        
+        /* TODO: define the others variables from the state and define a state. */
+
+        this.frame = requestAnimationFrame(this.animationLoop.bind(this))
+        return this
     };
 
     	/**
@@ -302,7 +324,6 @@ define(function (require, exports, module) {
             /*TODO: Define this wave better */
             const pleth = [150,145,140,135,130,125,120,115,110,105,100,95,90,85,80,75,70,65,60,58,56,55,56,58,60,65,70,75,80,85,90,95,98,100,102,104,105,107,109,110,115,120,125,125,123,123,121,121,120,120,121,123,123,125,130,135,140,145, 147, 149,150, 150, 150]
             /*TODO: Define more wave types */
-            //const abp = [150,150,150,150, 140, 130,120, 110, 90, 88,86,84,82, 80, 79,78,77,76,75,75,75,76,76,77,78,79,80,82,84,86,88,90, 95,100,105,110,115,115, 115, 115, 112,110,110,115,120, 125, 130,131,132, 133,134, 135,136, 137,138,139, 140, 141,142,143,144, 145,146, 147,148, 149,150]
             const abp = [95,95,95,95,90,85,80,75,65,64,63,62,61,60,59,59,58,58,57,57,57,58,58,58,59,59,60,61,62,63,64,65,67,70,72,75,77,77,77,77,76,75,75,77,80,82,85,85,86,86,87,87,88,88,89,89,90,90,91,91,92,92,93,93,94,94,95]
             const pap = [133,133,133,133,126,119,112,105,91,89,88,86,85,84,83,82,81,81,80,80,80,81,81,81,82,83,84,85,86,88,89,91,94,98,101,105,108,108,108,108,106,105,105,108,112,115,119,119,120,121,121,122,123,123,124,125,126,126,127,128,128,129,130,130,131,132,133]
             const cvp = [150,148, 148,146, 146,144, 144,142, 142,140,140, 140, 140,140,139,139,138,138,130, 129, 128, 127, 126, 125,125,125,125,124,123,122,119,118,117,116,115,114,113,112,111,110, 110, 110, 110, 110, 112, 115, 117,120, 122,125, 127,130, 132,135, 137, 140, 143, 145, 148, 150]
@@ -336,7 +357,10 @@ define(function (require, exports, module) {
                     this.wave = this.ecg
                 break
             }
+            // this way the modifiedWave is a copy of wave, i can change it while keep wave untouched
             this.modifiedWave = this.wave.slice()
+            // add necessary values to make wave shorter or longer
+            this.addArrayElems()
             this.ctx.strokeStyle = this.waveColor
             this.ctx.lineWidth = 2.0
             return this
@@ -424,7 +448,8 @@ define(function (require, exports, module) {
         * @instance
         * @returns {Wave} this wave instance to be used in a chain
         */
-        Wave.prototype.setParameters = function (newOpt) {
+        Wave.prototype.setParameters = function (state, newOpt) {
+            newOpt = newOpt || {}
             this.title = newOpt.title || this.title
             this.heartRate = newOpt.heartRate || this.heartRate
             this.waveColor = newOpt.waveColor || this.waveColor
@@ -436,6 +461,40 @@ define(function (require, exports, module) {
             this.wavesPerScreen = newOpt.wavesPerScreen || this.wavesPerScreen
             this.filled = newOpt.filled || this.filled
             this.fillColor = newOpt.fillColor || this.fillColor
+
+            if(newOpt!== undefined && newOpt !== null && newOpt.pvsDefinition !== undefined && newOpt.pvsDefinition !== null){
+                this.pvsWaveColor = newOpt.pvsDefinition.waveColor || this.pvsWaveColor
+                this.pvsHeartRate = newOpt.pvsDefinition.heartRate || this.pvsHeartRate
+                this.pvsBackgroundColor = newOpt.pvsDefinition.backgroundColor || this.pvsBackgroundColor
+                this.pvsFillColor = newOpt.pvsDefinition.fillColor || this.pvsFillColor
+            }
+            if(state !== null && state !== undefined){
+
+                if(this.pvsWaveColor !== undefined && this.pvsWaveColor !== null){
+                    let wavecolortmp = state[this.pvsWaveColor] || ''
+                    this.waveColor = `#${wavecolortmp.replace(/"/g, "")}` || this.waveColor
+                }
+                if(this.pvsHeartRate !== undefined && this.pvsHeartRate !== null){
+                    this.heartRate = state[this.pvsHeartRate] || this.heartRate
+                }
+                if(this.pvsBackgroundColor !== undefined && this.pvsBackgroundColor !== null){
+                    let backcolortmp = state[this.pvsBackgroundColor] || ''
+                    this.backgroundColor = `#${backcolortmp.replace(/"/g,"")}` || this.backgroundColor
+                }
+                if(this.pvsFillColor !== undefined && this.pvsFillColor !== null){
+                    let fillcolortmp = state[this.pvsFillColor]
+                    this.fillColor = `#${fillcolortmp.replace(/"/g, "")}` || this.fillColor
+                }
+            }
+
+            // these variables must re reset to new colors
+            if(this.canvas !== undefined && this.canvas !== null){
+                this.canvas.style.backgroundColor = this.backgroundColor
+            }
+            if(this.titleDiv !== undefined && this.titleDiv !== null){
+                this.titleDiv.style.color = this.waveColor 
+            }
+            this.addArrayElems();
             this.setUpWave()
                 .reRender()
             return this
