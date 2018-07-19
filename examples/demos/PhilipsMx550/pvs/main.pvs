@@ -21,18 +21,24 @@ main: THEORY
     spo2_label: string,
     spo2_alarm: Alarm,
     spo2_fail: bool,
+    spo2_wave_color: string,
+    spo2_wave_back_color: string,
 
     abp: string,
     abp_max: real,
     abp_min: real,
     abp_label: string,
     abp_sublabel: string,
+    abp_wave_color: string,
+    abp_wave_back_color: string,
     
     pap: string,
     pap_max: real, 
     pap_min: real, 
     pap_label: string,
     pap_sublabel: string,
+    pap_wave_color: string,
+    pap_wave_back_color: string,
 
     hr: real,
     hr_max: real,
@@ -43,11 +49,15 @@ main: THEORY
     cvp_label: string,
     cvp_sublabel: string,
     cvp_max: real,
+    cvp_wave_color: string,
+    cvp_wave_back_color: string,
     
     icp: real,
     icp_label: string,
     icp_sublabel: string,
     icp_max: real,
+    icp_wave_color: string,
+    icp_wave_back_color: string,
 
     cpp: real, 
     cpp_label: string,
@@ -58,6 +68,10 @@ main: THEORY
     etco2_label: string,
     etco2_max: real,
     etco2_min: real,
+
+    co2_wave_color: string,
+    co2_background_color: string,
+    co2_fill_color: string,
 
     awrr: real,
     awrr_label: string,
@@ -80,7 +94,10 @@ main: THEORY
     tcore_max: string,
 
     perf: string, 
-    pulse: real
+    pulse: real,
+
+    ecg_color: string,
+    ecg_back_color: string
 
   #]
 
@@ -102,18 +119,24 @@ main: THEORY
     spo2_label := "SpO2",
     spo2_alarm := off,
     spo2_fail := false,
+    spo2_wave_color:= "0FF0FF",
+    spo2_wave_back_color:= "000000",
 
     abp := "123/72 (92)",
     abp_max := 162,
     abp_min:= 67,
     abp_label := "ABP",
     abp_sublabel := "Sys",
+    abp_wave_color:= "E33632",
+    abp_wave_back_color:= "000000",
     
     pap:= "27/16 (22)",
     pap_max:= 17, 
     pap_min:= 1, 
     pap_label:= "PAP",
     pap_sublabel:= "Diag.",
+    pap_wave_color:= "FAE15C",
+    pap_wave_back_color:= "000000",
 
     hr:= 74,
     hr_max:= 121,
@@ -124,11 +147,16 @@ main: THEORY
     cvp_label:= "CVP",
     cvp_sublabel:= "Mean",
     cvp_max:= 11,
+    cvp_wave_color:= "41DAF9",
+    cvp_wave_back_color:= "000000",
 
     icp:= 8,
     icp_label:= "ICP",
     icp_sublabel:= "Mean",
     icp_max:= 11,
+    icp_wave_color:= "E827F4",
+    icp_wave_back_color:= "000000",
+
 
     cpp:= 81, 
     cpp_label:= "ICP",
@@ -139,6 +167,11 @@ main: THEORY
     etco2_label:= "etCO2",
     etco2_max:= 51,
     etco2_min:= 31,
+
+    co2_wave_color := "FFFFFF",
+    co2_background_color := "000000",
+    co2_fill_color := "999a9b",
+
 
     awrr:= 18,
     awrr_label:= "awRR",
@@ -161,88 +194,11 @@ main: THEORY
     tcore_max:= "39.5",
 
     perf:= "2.3",
-    pulse:= 77
-  #)
+    pulse:= 50,
 
-  init(x: real, id: string): state = (#
-    id := id,
-    spo2 := 98,
-    
-    rra := 18,
-    rra_max := 30,
-    rra_min := 6,
-    rra_label := "RRa",
-    rra_alarm := off,
-    rra_fail := false,
-    
-    isOn := false,
-    isAlarmOn := true,
-    
-    spo2_max := 88,
-    spo2_min := 0,
-    spo2_label := "SpO2",
-    spo2_alarm := off,
-    spo2_fail := false,
+    ecg_color:= "00FF00",
+    ecg_back_color:= "000000"
 
-    abp := "123/72 (92)",
-    abp_max := 162,
-    abp_min := 67,
-    abp_label := "ABP",
-    abp_sublabel := "Sys",
-    
-    pap:= "27/16 (22)",
-    pap_max:= 17, 
-    pap_min:= 1, 
-    pap_label:= "PAP",
-    pap_sublabel:= "Diag.",
-
-    hr:= 74,
-    hr_max:= 121,
-    hr_min:= 51,
-    hr_label:= "HR",
-
-    cvp:=8,
-    cvp_label:= "CVP",
-    cvp_sublabel:= "Mean",
-    cvp_max:= 11,
-
-    icp := 8,
-    icp_label := "ICP",
-    icp_sublabel := "Mean",
-    icp_max := 11,
-
-    cpp:= 81, 
-    cpp_label:= "ICP",
-    cpp_max:= 131,
-    cpp_min:= 51,
-
-    etco2:= 29,
-    etco2_label:= "etCO2",
-    etco2_max:= 51,
-    etco2_min:= 31,
-
-    awrr:= 18,
-    awrr_label:= "awRR",
-    awrr_min:= 9,
-    awrr_max:= 31,
-
-    nbp := "124/80 (88)",
-    nbp_label := "NBP",
-    nbp_min := 90,
-    nbp_max := 160,
-
-    tskin:= "37.4",
-    tskin_label:= "tSkin",
-    tskin_min:= "36.3",
-    tskin_max:= "39.3",
-
-    tcore:= "37.2",
-    tcore_label:= "tCore",
-    tcore_min:= "36.1",
-    tcore_max:= "39.5",
-
-    perf:= "2.3",
-    pulse:= 77
   #)
 
 per_on(st: state): bool = true

@@ -210,10 +210,15 @@ require([
                 waveType: 'ecg',
                 title: 'II',
                 parent: 'prototype', 
-                heartRate: 75,
+                heartRate: 90,
                 waveColor: "#00FF00",
                 background: "#000000",
-                scanBarWidth:20
+                scanBarWidth:20,
+                pvsDefinition: {
+                    waveColor: 'ecg_color',
+                    backgroundColor: 'ecg_back_color',
+                    heartRate: 'pulse'
+                }
              })
         mx550.ecgV_wave = new Wave('ecgv-wave',
              {top: 290, left: 115, height: 70, width: 730},
@@ -221,10 +226,15 @@ require([
                  waveType: 'ecg',
                  title: 'V',
                  parent: 'prototype', 
-                 heartRate: 75,
+                 heartRate: 120,
                  waveColor: "#00FF00",
                  background: "#000000",
-                 scanBarWidth:20
+                 scanBarWidth:20,
+                 pvsDefinition: {
+                     waveColor: 'ecg_color',
+                     backgroundColor: 'ecg_back_color',
+                     heartRate: 'pulse'
+                 }
               })
         mx550.spo2_wave = new Wave('spo2-wave',
               {top: 340, left: 115, height: 70, width: 730},
@@ -235,10 +245,15 @@ require([
                   heartRate: 75,
                   waveColor: "#0FF0FF",
                   background: "#000000",
-                  scanBarWidth:20
+                  scanBarWidth:20,
+                  pvsDefinition: {
+                      waveColor: 'spo2_wave_color',
+                      backgroundColor: 'spo2_wave_back_color',
+                      heartRate: 'pulse'
+                  }
                })
         
-        mx550.abp_wave = new Wave('ecgv-wave',
+        mx550.abp_wave = new Wave('abp-wave',
              {top: 400, left: 115, height: 70, width: 730},
              { 
                  waveType: 'abp',
@@ -247,10 +262,15 @@ require([
                  heartRate: 75,
                  waveColor: "#E33632",
                  background: "#000000",
-                 scanBarWidth:20
+                 scanBarWidth:20,
+                 pvsDefinition: {
+                    waveColor: 'abp_wave_color',
+                    backgroundColor: 'abp_wave_back_color',
+                    heartRate: 'pulse'
+                }
               })
         
-        mx550.pap_wave = new Wave('ecgv-wave',
+        mx550.pap_wave = new Wave('pap-wave',
               {top: 440, left: 115, height: 70, width: 730},
               { 
                   waveType: 'pap',
@@ -259,10 +279,15 @@ require([
                   heartRate: 75,
                   waveColor: "#FAE15C",
                   background: "#000000",
-                  scanBarWidth:20
+                  scanBarWidth:20,
+                  pvsDefinition: {
+                    waveColor: 'pap_wave_color',
+                    backgroundColor: 'pap_wave_back_color',
+                    heartRate: 'pulse'
+                }
                })
 
-        mx550.cvp_wave = new Wave('ecgv-wave',
+        mx550.cvp_wave = new Wave('cvp-wave',
                {top: 500, left: 115, height: 60, width: 730},
                { 
                    waveType: 'cvp',
@@ -271,10 +296,15 @@ require([
                    heartRate: 75,
                    waveColor: "#41DAF9",
                    background: "#000000",
-                   scanBarWidth:20
+                   scanBarWidth:20,
+                   pvsDefinition: {
+                        waveColor: 'cvp_wave_color',
+                        backgroundColor: 'cvp_wave_back_color',
+                        heartRate: 'pulse'
+                    }
                 })
 
-        mx550.icp_wave = new Wave('ecgv-wave',
+        mx550.icp_wave = new Wave('icp-wave',
                 {top: 560, left: 115, height: 70, width: 730},
                 { 
                     waveType: 'icp',
@@ -283,7 +313,12 @@ require([
                     heartRate: 75,
                     waveColor: "#E827F4",
                     background: "#000000",
-                    scanBarWidth:20
+                    scanBarWidth:20,
+                    pvsDefinition: {
+                        waveColor: 'icp_wave_color',
+                        backgroundColor: 'icp_wave_back_color',
+                        heartRate: 'pulse'
+                    }
                  })
 
 
@@ -299,7 +334,13 @@ require([
                 background: '#000000',
                 filled: 'down',
                 fillColor: '#999a9b',
-                scanBarWidth:20
+                scanBarWidth:20,
+                pvsDefinition: {
+                    waveColor: 'co2_wave_color',
+                    backgroundColor: 'co2_wave_back_color',
+                    heartRate: 'pulse',
+                    fillColor: 'co2_fill_color'
+                }
             }
         )
 
