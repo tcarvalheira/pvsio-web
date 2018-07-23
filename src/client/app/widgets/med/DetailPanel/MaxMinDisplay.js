@@ -39,6 +39,7 @@ define(function (require, exports, module) {
     var WidgetEVO = require("widgets/core/WidgetEVO");
     const BasicDisplay = require('widgets/core/BasicDisplayEVO')
     const d3 = require("d3/d3");
+    const PVSioStateParser = require("util/PVSioStateParser");
     /**
      * @function <a name="MaxMinDisplay">MaxMinDisplay</a>
      * @description Constructor. Create a MaxMinDisplay, extending WidgetEVO
@@ -207,9 +208,13 @@ define(function (require, exports, module) {
             this.value = state
         }else{  
             // if it is an object, check for min value, max value, and value with options is possible to define new state names to this variables
-            this.value = state[this.pvsValue] || this.value || 0
+            this.value = state[this.pvsValue] || this.value || 0;
+            // if state is a real pvs will return a irreducible fraction. To make it decimal use PVSioStateParser
+            this.value = PVSioStateParser.evaluate(this.value);
             this.valueMin = state[this.pvsMinValue] || this.valueMin || 0 
+            this.valueMin = PVSioStateParser.evaluate(this.valueMin)
             this.valueMax = state[this.pvsMaxValue] || this.valueMax || 0
+            this.valueMax = PVSioStateParser.evaluate(this.valueMax)
         }
 
         this.title = state[this.pvsTitle] || this.title  || ''

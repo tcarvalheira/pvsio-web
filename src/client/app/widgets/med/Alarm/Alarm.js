@@ -44,6 +44,7 @@ define(function(require, exports, module){
     "use strict"
     let d3 = require("d3/d3")
     let Widget = require("widgets/Widget")
+    let PVSioStateParser = require("util/PVSioStateParser")
     let StateParser = require("util/PVSioStateParser")
     let property = require("util/property")
 
@@ -77,7 +78,7 @@ define(function(require, exports, module){
         this.muted = opt.muted || false
         this.loop = opt.loop
         this.loop_frequency = parseInt(opt.loop_frequency) || 1000
-        opt.volume = parseInt(opt.volume) || 0.5
+        opt.volume = parseFloat(opt.volume) || 0.5
 
         /* pvs state variables */
         this.isAlarmOn = opt.pvsDefinition.isOn || 'isAlarmOn'
@@ -197,7 +198,7 @@ define(function(require, exports, module){
      * @instance
      */
     Alarm.prototype.setVolume = function (volume) {
-        volume = parseInt(volume) || 0.5
+        volume = parseFloat(volume) || 0.5
         this.alarm.volume = volume
         return this
     }
@@ -311,7 +312,8 @@ define(function(require, exports, module){
 
         if(state[this.volumePvs] !== undefined && state[this.volumePvs] !== null){
             let vol = state[this.volumePvs] || ''
-            vol = vol.toString().replace(/"/g, "")
+            // vol = vol.toString().replace(/"/g, "")
+            vol = PVSioStateParser.evaluate(vol)
             if(vol!==''){
                 this.setVolume(vol)
             }
