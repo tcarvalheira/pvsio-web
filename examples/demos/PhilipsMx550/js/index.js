@@ -109,51 +109,10 @@ require([
         url = url.replace("http://", "ws://");
         var ncDevice = new NCDevice({id: deviceID, type: deviceType}, { url: url });
 
-        /* ncDevice.addListener("update", parseNCUpdate);
-        ncDevice.addListener("control", parseNCControl);
-        ncDevice.addListener("error", errorMessage);
-        ncDevice.addListener("notify", notifyMessage);
-        ncDevice.addListener("connected", onConnect);
-        ncDevice.addListener("disconnected", onDisconnect);
- */
-
         var d3 = require("d3/d3");
         var serverLogs = [], maxLogSize = 40;
 
         var client = PVSioWebClient.getInstance();
-
-        // FIXME: create a library with APIs to create SAPERE control panels
-       /*  var content = d3.select("#content").append("div").style("width", "600px").style("padding", "20px").style("display", "none");
-        content.append("div").attr("style", "margin-bottom: 10px;").append("input").attr("type", "button")
-            .attr("id", "btnShowPanel").attr("value", "Show Advanced Controls");
-        var controlPanel = content.append("div").attr("id", "controlPanel").style("display", "none");
-        // sapere
-        var sapereControl = controlPanel.append("div").attr("class", "sapere");
-        sapereControl.append("div").attr("class", "sapere_control_panel")
-            .append("input").attr("type", "button").attr("class", "btnAddDevice")
-            .attr("value", "Add New Radical7");
-        sapereControl.append("div").attr("id", "sapere_response_log").attr("class", "console_log");
-        sapereControl.append("input").attr("type", "text").attr("name", "address")
-            .attr("placeholder", "Please type a message")
-            .attr("id", "updateMessage");
-        sapereControl.append("input").attr("type", "button").attr("class", "btnUpdateDevice")
-            .attr("value", "Send");
-        // pvsio
-        controlPanel.append("div").attr("class", "pvsio")
-            .text("Device State").append("div").attr("class", "dbg").attr("id", "dbg")
-            .style("position", "absolute").style("top", "20px")
-            .attr("style", "height: 100%; width: 100%; height: 600px;");
-
-        d3.select("#btnShowPanel").on("click", function toggleDebug() {
-            if (document.getElementById("controlPanel").style.display === "none") {
-                document.getElementById("controlPanel").style.display = "block";
-                document.getElementById("btnShowPanel").value = "Hide Advanced Controls";
-            } else {
-                document.getElementById("controlPanel").style.display = "none";
-                document.getElementById("btnShowPanel").value = "Show Advanced Controls";
-            }
-        }); */
-
 
         // append a div that will contain the canvas elements
         var tick = null;
@@ -184,19 +143,7 @@ require([
         mx550.btnAlarmOff = new ButtonEVO("btn_alarm_off", {
             top: 250, left: 990, height: 20, width: 20
           }, {
-            /* callback: function (err, data) {
-                mx550.pulseAlarm.toggle()
-                if(alarmsOn){
-                    mx550.alarmsoff_display.reveal()
-                    mx550.alarmsoff_img.reveal()
-                    alarmsOn = false
-                }else{
-                    mx550.alarmsoff_display.hide()
-                    mx550.alarmsoff_img.hide()
-                    alarmsOn = true
-                }
-                
-            } */
+            //visibleWhen: "isOn = TRUE", //TODO: i can use this attribute insted of checking if it is on or off on javascript
             callback: onMessageReceived
           });
 
@@ -214,7 +161,7 @@ require([
                 waveType: 'ecg',
                 title: 'II',
                 parent: 'prototype', 
-                heartRate: 90,
+                /* heartRate: 90, */
                 waveColor: "#00FF00",
                 background: "#000000",
                 scanBarWidth:20,
@@ -230,7 +177,7 @@ require([
                  waveType: 'ecg',
                  title: 'V',
                  parent: 'prototype', 
-                 heartRate: 120,
+                 /* heartRate: 90, */
                  waveColor: "#00FF00",
                  background: "#000000",
                  scanBarWidth:20,
@@ -646,11 +593,7 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: 'true',
-                /* title: 'etCO2', */
                 type: 'Integer',
-                /* valueMin: '30',
-                valueMax: '50',
-                value: '28', */
                 pvsValue: 'etco2',
                 pvsTitle: 'etco2_label',
                 pvsMaxValue: 'etco2_max',

@@ -82,20 +82,20 @@ main: THEORY
     nbp_min: real,
     nbp_max: real,
 
-    tskin: string,
+    tskin: real,
     tskin_label: string,
-    tskin_min: string,
-    tskin_max: string,
+    tskin_min: real,
+    tskin_max: real,
 
-    tcore: string,
+    tcore: real,
     tcore_label: string,
-    tcore_min: string,
-    tcore_max: string,
+    tcore_min: real,
+    tcore_max: real,
 
-    perf: string, 
+    perf: real, 
     pulse: real,
     breath_rate: real,
-    alarm_vol: string,
+    alarm_vol: real,
 
     ecg_color: string,
     ecg_back_color: string
@@ -132,7 +132,7 @@ main: THEORY
     abp_wave_back_color:= "000000",
     
     pap:= "27/16 (22)",
-    pap_max:= 17, 
+    pap_max:= 17.5, 
     pap_min:= 1, 
     pap_label:= "PAP",
     pap_sublabel:= "Diag.",
@@ -183,20 +183,20 @@ main: THEORY
     nbp_min := 90,
     nbp_max := 160,
 
-    tskin:= "37.4",
+    tskin:= 37.4,
     tskin_label:= "tSkin",
-    tskin_min:= "36.2",
-    tskin_max:= "39.3",
+    tskin_min:= 36.2,
+    tskin_max:= 39.3,
 
-    tcore:= "37.2",
+    tcore:= 37.2,
     tcore_label:= "tCore",
-    tcore_min:= "36.1",
-    tcore_max:= "39.5",
+    tcore_min:= 36.1,
+    tcore_max:= 39.5,
 
-    perf:= "2.3",
-    pulse:= 90,
+    perf:= 2.3,
+    pulse:= 56,
     breath_rate := 50,
-    alarm_vol := "0.2",
+    alarm_vol := 0.2,
 
     ecg_color:= "00FF00",
     ecg_back_color:= "000000"
