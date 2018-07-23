@@ -171,9 +171,13 @@ require([
                 parent: 'prototype',
                 volume: '0.2',
                 loop: true,
-                loop_frequency: 1000,
+                loop_frequency: 500,
                 muted: false,
-                pvsState: 'isAlarmOn'
+                pvsDefinition:{
+                    isOn: 'isAlarmOn',
+                    heartRate: 'pulse',
+                    volume: 'alarm_vol'
+                } 
             }
         ),
 
@@ -205,7 +209,7 @@ require([
 
         // WAVES
         mx550.ecgII_wave = new Wave('ecgii-wave',
-            {top: 230, left: 115, height: 70, width: 730},
+            {top: 210, left: 115, height: 70, width: 730},
             { 
                 waveType: 'ecg',
                 title: 'II',
@@ -221,7 +225,7 @@ require([
                 }
              })
         mx550.ecgV_wave = new Wave('ecgv-wave',
-             {top: 290, left: 115, height: 70, width: 730},
+             {top: 270, left: 115, height: 70, width: 730},
              { 
                  waveType: 'ecg',
                  title: 'V',
@@ -237,7 +241,7 @@ require([
                  }
               })
         mx550.spo2_wave = new Wave('spo2-wave',
-              {top: 340, left: 115, height: 70, width: 730},
+              {top: 320, left: 115, height: 70, width: 730},
               { 
                   waveType: 'pleth',
                   title: 'Pleth',
@@ -254,7 +258,7 @@ require([
                })
         
         mx550.abp_wave = new Wave('abp-wave',
-             {top: 400, left: 115, height: 70, width: 730},
+             {top: 380, left: 115, height: 70, width: 730},
              { 
                  waveType: 'abp',
                  title: 'ABP',
@@ -266,12 +270,12 @@ require([
                  pvsDefinition: {
                     waveColor: 'abp_wave_color',
                     backgroundColor: 'abp_wave_back_color',
-                    heartRate: 'pulse'
+                    heartRate: 'breath_rate'
                 }
               })
         
         mx550.pap_wave = new Wave('pap-wave',
-              {top: 440, left: 115, height: 70, width: 730},
+              {top: 420, left: 115, height: 70, width: 730},
               { 
                   waveType: 'pap',
                   title: 'PAP',
@@ -283,12 +287,12 @@ require([
                   pvsDefinition: {
                     waveColor: 'pap_wave_color',
                     backgroundColor: 'pap_wave_back_color',
-                    heartRate: 'pulse'
+                    heartRate: 'breath_rate'
                 }
                })
 
         mx550.cvp_wave = new Wave('cvp-wave',
-               {top: 500, left: 115, height: 60, width: 730},
+               {top: 480, left: 115, height: 60, width: 730},
                { 
                    waveType: 'cvp',
                    title: 'CVP',
@@ -300,12 +304,12 @@ require([
                    pvsDefinition: {
                         waveColor: 'cvp_wave_color',
                         backgroundColor: 'cvp_wave_back_color',
-                        heartRate: 'pulse'
+                        heartRate: 'breath_rate'
                     }
                 })
 
         mx550.icp_wave = new Wave('icp-wave',
-                {top: 560, left: 115, height: 70, width: 730},
+                {top: 540, left: 115, height: 70, width: 730},
                 { 
                     waveType: 'icp',
                     title: 'ICP',
@@ -317,7 +321,7 @@ require([
                     pvsDefinition: {
                         waveColor: 'icp_wave_color',
                         backgroundColor: 'icp_wave_back_color',
-                        heartRate: 'pulse'
+                        heartRate: 'breath_rate'
                     }
                  })
 
@@ -325,7 +329,7 @@ require([
                
         mx550.co2_wave = new Wave(
             'co2-wave',
-            { top: 630, left: 115, height:50, width: 730 },
+            { top: 610, left: 115, height:50, width: 730 },
             { 
                 waveType: 'co2', 
                 parent: 'prototype',
@@ -338,7 +342,7 @@ require([
                 pvsDefinition: {
                     waveColor: 'co2_wave_color',
                     backgroundColor: 'co2_wave_back_color',
-                    heartRate: 'pulse',
+                    heartRate: 'breath_rate',
                     fillColor: 'co2_fill_color'
                 }
             }
@@ -385,7 +389,7 @@ require([
 
         mx550.hr_display = new MaxMinDisplay(
             'heartrate-display',
-            {top: 240, left: 860, width: 100, height: 50},
+            {top: 220, left: 860, width: 100, height: 50},
             {
                 parent: 'prototype',
                 fontColor: '#00FF00',
@@ -398,7 +402,7 @@ require([
                 valueMin: '50',
                 valueMax: '120',
                 value: '76' */
-                pvsValue:'hr', 
+                pvsValue:'pulse', 
                 pvsMinValue: 'hr_min', 
                 pvsMaxValue:'hr_max', 
                 pvsTitle:'hr_label'
@@ -417,7 +421,7 @@ require([
 
         mx550.spo2_display = new MaxMinDisplay(
             'sop2-display',
-            {top: 356, left: 860, width: 100, height: 50},
+            {top: 336, left: 860, width: 100, height: 50},
             {
                 parent: 'prototype',
                 fontColor: '#0FF0FF',
@@ -450,7 +454,7 @@ require([
         
         mx550.tCore_display = new MaxMinDisplay(
             'tcore-display',
-            {top: 680, left: 860, width: 100, height: 60},
+            {top: 660, left: 860, width: 100, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#00FF00',
@@ -473,7 +477,7 @@ require([
 
         mx550.tSkin_display = new MaxMinDisplay(
             'tskin-display',
-            {top: 680, left: 1010, width: 100, height: 60},
+            {top: 660, left: 1010, width: 100, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#F98BFB',
@@ -495,7 +499,7 @@ require([
 
         mx550.nbp_display = new MaxMinDisplay(
             'nbp-display',
-            {top: 680, left: 115, width: 100, height: 60},
+            {top: 660, left: 115, width: 100, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#F47F7E',
@@ -517,7 +521,7 @@ require([
 
         mx550.abp_display = new MaxMinDisplay(
             'abp-display',
-            {top: 410, left: 860, width: 200, height: 60},
+            {top: 390, left: 860, width: 200, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#E33632',
@@ -541,7 +545,7 @@ require([
 
         mx550.pap_display = new MaxMinDisplay(
             'pap-display',
-            {top: 460, left: 860, width: 200, height: 60},
+            {top: 440, left: 860, width: 200, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#FAE15C',
@@ -565,7 +569,7 @@ require([
 
         mx550.cvp_display = new MaxMinDisplay(
             'cvp-display',
-            {top: 510, left: 860, width: 200, height: 60},
+            {top: 490, left: 860, width: 200, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#41DAF9',
@@ -589,7 +593,7 @@ require([
 
         mx550.icp_display = new MaxMinDisplay(
             'icp-display',
-            {top: 560, left: 860, width: 200, height: 60},
+            {top: 540, left: 860, width: 200, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#E827F4',
@@ -612,7 +616,7 @@ require([
         )
         mx550.cpp_display = new MaxMinDisplay(
             'cpp-display',
-            {top: 560, left: 1010, width: 100, height: 60},
+            {top: 540, left: 1010, width: 100, height: 60},
             {
                 parent: 'prototype',
                 fontColor: '#E827F4',
@@ -634,7 +638,7 @@ require([
 
         mx550.etco2_display = new MaxMinDisplay(
             'etco2-display',
-            {top: 630, left: 860, width: 100, height: 50},
+            {top: 610, left: 860, width: 100, height: 50},
             {
                 parent: 'prototype',
                 fontColor: '#999a9b',
@@ -656,7 +660,7 @@ require([
 
         mx550.awRR_display = new MaxMinDisplay(
             'awrr-display',
-            {top: 630, left: 1010, width: 100, height: 50},
+            {top: 610, left: 1010, width: 100, height: 50},
             {
                 parent: 'prototype',
                 fontColor: '#999a9b',
@@ -678,7 +682,7 @@ require([
 
         mx550.spo2_graphics = new ImageRender(
             'spo2_graphics',
-            {top: 390, left: 860, width: 20, height: 20},
+            {top: 370, left: 860, width: 20, height: 20},
             {
                 parent: 'prototype',
             }
@@ -686,7 +690,7 @@ require([
 
         mx550.spo2_rec = new ImageRender(
             'spo2_rectangle',
-            {top: 350, left: 995, width: 10, height: 70},
+            {top: 330, left: 995, width: 10, height: 70},
             {
                 parent: 'prototype',
             }
@@ -727,7 +731,7 @@ require([
 
         // LEDs
         mx550.onoff_led = new LED("onoff_led", {
-            top: 950,
+            top: 930,
             left: 380,
             width: 17,
             height: 17
@@ -763,8 +767,8 @@ require([
         // alarm
         function render_alarms(res){
             if(res.isOn === 'TRUE'){
-                mx550.pulseAlarm.render(res,{pvsState: 'isAlarmOn'})
-                //mx550.pulseAlarm.play()
+                mx550.pulseAlarm.render(res)
+                // mx550.pulseAlarm.play()
                 mx550.btnAlarmOff.render();
                 mx550.alarmsoff_display.render('ALARMS OFF')
                 mx550.alarmsoff_img.renderGlyphicon('glyphicon-bell',{'blinking':false});
@@ -774,10 +778,12 @@ require([
                     mx550.alarmsoff_display.hide()
                     mx550.alarmsoff_img.hide()
                 }else{
-                    mx550.pulseAlarm.mute()
+                    //mx550.pulseAlarm.mute()
+                    mx550.pulseAlarm.stop()
                 }
             }else{
-                //mx550.pulseAlarm.mute()
+                mx550.pulseAlarm.stop()
+                mx550.pulseAlarm.hide()
                 //mx550.pulseAlarm.hide()
                 mx550.btnAlarmOff.hide()
                 mx550.alarmsoff_display.hide()
@@ -963,10 +969,11 @@ require([
 
                 // rendering
                 var res = event.data.toString();
-                console.log(`STATE: ${res}`)
+                // console.log(`STATE: ${res}`)
                 if (res.indexOf("(#") === 0) {
                     res = stateParser.parse(event.data.toString());
                     if (res) {
+                        console.log(`Vou renderizar`)
                         render_onoff(res)
                         render_waves(res)
                         render_displays(res)
@@ -975,7 +982,6 @@ require([
                     }
                 }
             } else {
-                console.log(`O PVS está a dar erro!!!`)
                 console.log(err);
             }
         }

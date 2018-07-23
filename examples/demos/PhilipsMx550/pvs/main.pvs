@@ -40,7 +40,6 @@ main: THEORY
     pap_wave_color: string,
     pap_wave_back_color: string,
 
-    hr: real,
     hr_max: real,
     hr_min: real,
     hr_label: string,
@@ -95,6 +94,8 @@ main: THEORY
 
     perf: string, 
     pulse: real,
+    breath_rate: real,
+    alarm_vol: string,
 
     ecg_color: string,
     ecg_back_color: string
@@ -138,7 +139,6 @@ main: THEORY
     pap_wave_color:= "FAE15C",
     pap_wave_back_color:= "000000",
 
-    hr:= 74,
     hr_max:= 121,
     hr_min:= 51,
     hr_label:= "HR",
@@ -194,7 +194,9 @@ main: THEORY
     tcore_max:= "39.5",
 
     perf:= "2.3",
-    pulse:= 50,
+    pulse:= 90,
+    breath_rate := 50,
+    alarm_vol := "0.2",
 
     ecg_color:= "00FF00",
     ecg_back_color:= "000000"
