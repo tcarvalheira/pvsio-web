@@ -46,10 +46,6 @@ define(function(require, exports, module){
     let Widget = require("widgets/Widget")
     let StateParser = require("util/PVSioStateParser")
     let property = require("util/property")
-    let alarm
-    let alarmDiv
-    let loop_frequency
-    let loop
 
     /**
      * @function constructor
@@ -63,48 +59,56 @@ define(function(require, exports, module){
      * @param {Boolean} [opt.loop=false] set if alarm should play in loop or not
      * @param {Iumber}  [opt.loop_frequency=1000] Loop freency for the alarm. The alarm will sound each loop_frequency ms.
      * @param {Float}   [opt.volume=50] set alarm volume
-     * @param {String} [opt.pvsState='isAlarmOn'] string with the name of pvs state that will carry if alarm is on or off
+     * @param {Object} [opt.pvsDefinition] pvsDefinition variables
+     * @param {String} [opt.pvsDefinition.isOn='isAlarmOn'] string with the name of pvs state that will carry if alarm is on or off
+     * @param {String} [opt.pvsDefinition.heartRate='heartRate'] string with the pvs state name of heartrate
+     * @param {String} [opt.pvsDefinition.volume='volume']
      * @memberof module: Alarms
      * @instance
      */
     function Alarm(id, coords, opt) {
         opt = opt || {}
+        opt.pvsDefinition = opt.pvsDefinition || {} // make sure pvsDefinition is not null or undefined
         coords = coords || {}
         opt.parent = opt.parent || "alarm"
         opt.audio = opt.audio || `../../client/app/widgets/med/Alarm/alarms/alarm.mp3`
+        this.audioSrc = opt.audio
         opt.loop = opt.loop || false
         this.muted = opt.muted || false
-        loop = opt.loop
-        loop_frequency = parseInt(opt.loop_frequency) || 1000
+        this.loop = opt.loop
+        this.loop_frequency = parseInt(opt.loop_frequency) || 1000
         opt.volume = parseInt(opt.volume) || 0.5
 
-        
-        this.isAlarmOn = opt.pvsState || 'isAlarmOn'
+        /* pvs state variables */
+        this.isAlarmOn = opt.pvsDefinition.isOn || 'isAlarmOn'
+        this.heartRatePvs = opt.pvsDefinition.heartRate || 'heartRate'
+        this.volumePvs = opt.pvsDefinition.volume || 'volume'
+
+
         this.parent = (opt.parent) ? (`#${opt.parent}`) : 'alarm'
 
         this.div = d3.select(this.parent)
+                        .append('div')
+                        .attr("id", `${id}_audio_div` )
                         .style("position", "absolute")
                         .style("top", `${this.top}px`)
                         .style("left", `${this.left}px`)
-        alarmDiv = this.div
+
+        this.alarmDiv = this.div
         this.body = d3.select("body")
         this.div.append("audio")
-                .attr("id", "audio")
+                .attr("id", `${id}_audio`)
                 .attr("name", "alarm")
                 .attr("src", opt.audio)
-                .text("Your browser dows not support <code>audio</code> element.")
         
-
         /** get element by id so that it can be played and muted */
-        /* TODO: maybe there is a problem with ids if i set more than one widget */
-        alarm = document.getElementById("audio")
-        alarm.volume=opt.volume
+        this.alarm = document.getElementById(`${id}_audio`)
+        this.alarm.volume=opt.volume
 
         /* check muted attribute and mute alarm if setted to true */
         if(this.muted === true){
             this.mute()
         }
-        
 
         Widget.call(this, id, coords, opt)
         return this
@@ -121,7 +125,7 @@ define(function(require, exports, module){
      * @instance
      */
     Alarm.prototype.hide = function () {
-        alarmDiv.style("visibility", "hidden")
+        this.alarmDiv.style("visibility", "hidden")
         return this
     }
 
@@ -132,7 +136,10 @@ define(function(require, exports, module){
       * @instance
       */
      Alarm.prototype.reveal = function () {
-        alarmDiv.style("visibility", "visible")
+        if(this.alarmDiv !== undefined){
+            this.alarmDiv.style("visibility", "visible")
+
+        }
         return this
     }
 
@@ -144,14 +151,18 @@ define(function(require, exports, module){
      * @instance 
      */
     Alarm.prototype.play = function () {
-        if(loop){
-            setInterval(() => {
-                if(!alarm.mute){
-                    alarm.play()                
+        this.stop()
+        this.alarm.src = this.audioSrc
+        if(this.loop){
+            // use this.intervalLoop reference to stop loop if needed
+            this.intervalLoop = setInterval(() => {
+                if(!this.alarm.mute){
+                    this.alarm.currentTime = 0; 
+                    this.alarm.play()           
                 }
-            },loop_frequency);    
+            },this.loop_frequency);    
         }else{
-            alarm.play()
+            this.alarm.play()
         }
         return this
     }
@@ -164,7 +175,7 @@ define(function(require, exports, module){
      * @instance
      */
     Alarm.prototype.isPaused = function () {
-        return alarm.paused
+        return this.alarm.paused
     }
 
     /**
@@ -174,7 +185,7 @@ define(function(require, exports, module){
      * @instance
      */
     Alarm.prototype.pause = function () {
-        alarm.pause()
+        this.alarm.pause()
         return this
     }
 
@@ -187,7 +198,7 @@ define(function(require, exports, module){
      */
     Alarm.prototype.setVolume = function (volume) {
         volume = parseInt(volume) || 0.5
-        alarm.volume = volume
+        this.alarm.volume = volume
         return this
     }
 
@@ -200,8 +211,8 @@ define(function(require, exports, module){
      */
     Alarm.prototype.volumeUp = function (value) {
         value = parseFloat(value) || 0.1
-        if(alarm.volume + value <= 1){
-            alarm.volume += value
+        if(this.alarm.volume + value <= 1){
+            this.alarm.volume += value
         }
         return this
     }
@@ -215,8 +226,8 @@ define(function(require, exports, module){
      */
     Alarm.prototype.volumeDown = function (value) {
         value = parseFloat(value) || 0.1
-        if(alarm.volume - value >= 0){
-            alarm.volume -= value
+        if(this.alarm.volume - value >= 0){
+            this.alarm.volume -= value
         }
         return
     }
@@ -228,7 +239,7 @@ define(function(require, exports, module){
      * @instance
      */
     Alarm.prototype.mute = function () {
-        audio.mute = true
+        this.alarm.mute = true
         return this
     }
 
@@ -241,7 +252,7 @@ define(function(require, exports, module){
      * @instance
      */
     Alarm.prototype.isMuted = function () {
-        return audio.mute || false
+        return this.alarm.mute || false
     }
 
     	/**
@@ -265,8 +276,20 @@ define(function(require, exports, module){
      * @instance
      */
     Alarm.prototype.unmute = function () {
-        audio.mute = false
+        this.alarm.mute = false
         return this
+    }
+    
+    	/**
+        * @function <a name="stop">stop</a>
+        * @description This method will stop alarm loop.
+        * @returns self to chained calls
+        * @memberof module:Alarm
+        * @instance
+        */
+        Alarm.prototype.stop = function () {
+            clearInterval(this.intervalLoop)
+            return this
     }
 
     /**
@@ -274,19 +297,50 @@ define(function(require, exports, module){
      * @description Render method for the Alarm widget
      * @param {Object} state PVS state
      * @param {Object} opt Options paramters
-     * @param {String} [opt.pvsState='isAlarmOn'] String with the name of pvs state
+     * @param {Object} [opt.pvsDefinition] Optional object with definition of pvs variables
+     * @param {String} [opt.pvsDefinition.isOn='isAlarmOn'] String with the name of pvs state
+     * @param {String} [opt.pvsDefinition.heartRate='heartRate'] String with the name of pvs state that sets the heart rate
+     * @param {String} [opt.pvsDefinition.volume='volume']
      */
     Alarm.prototype.render = function (state, opt) {
-        let isAlarmOn = opt.pvsState || 'isAlarmOn'
-        if(state[isAlarmOn] === 'TRUE'){
+        opt = opt || {}
+        opt.pvsDefinition = opt.pvsDefinition ||{}
+        this.isAlarmOn = opt.pvsDefinition.isOn || this.isAlarmOn
+        this.heartRatePvs = opt.pvsDefinition.heartRate || this.heartRatePvs
+        this.volumePvs = opt.pvsDefinition.volume || this.volumePvs
+
+        if(state[this.volumePvs] !== undefined && state[this.volumePvs] !== null){
+            let vol = state[this.volumePvs] || ''
+            vol = vol.toString().replace(/"/g, "")
+            if(vol!==''){
+                this.setVolume(vol)
+            }
+        }
+
+        let heartrate = 0
+        // if it is a number assume that is the heart rate. calculate the loop frequency
+        if(typeof state === 'number'){
+            heartrate = state
+        }else{ // is an object, check for heartrate variable
+            heartrate = state[this.heartRatePvs]
+        }
+
+        if(parseInt(heartrate) !== NaN && heartrate !== 0){
+            this.loop_frequency = Math.floor(60 / heartrate * 1000)
+        }
+
+        this.stop()
+        if(state[this.isAlarmOn] === 'TRUE'){
             if(this.isMuted()){
                 this.unmute()
+                this.play()
             }else{
                 this.play()
             }
         }else{
             this.mute()
         }
+        
         return Alarm.prototype.reveal()
     }
 
