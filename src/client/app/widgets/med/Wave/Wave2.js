@@ -270,9 +270,10 @@ define(function (require, exports, module) {
                     this.px = this.opx = -this.speed;
                 }                
                 this.py = this.modifiedWave[this.waveIndex]/ (200 / this.h)
-                if(this.waveIndex >= this.modifiedWave.length - 1){
+                if(this.waveIndex >= this.modifiedWave.length - 2){
                     this.waveIndex = 0
                 }else{
+                    this.waveIndex++;
                     this.waveIndex++;
                 }
             }
