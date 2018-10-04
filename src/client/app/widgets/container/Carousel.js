@@ -151,7 +151,7 @@ define(function (require, exports, module) {
             this.indicators = d3.select(`#${this.id}_indicators`)
             /* ATENTION: here is a selector class based */
             this.captions = d3.selectAll(`.${this.id}_carousel_caption`)
-            this.wrapper = d3.select(`#${this.id}_wapper`)
+            this.wrapper = d3.select(`#${this.id}_wrapper`)
             this.leftControl = d3.select(`#${this.id}_left_control`)
             this.rightControl = d3.select(`#${this.id}_right_control`)
         }
@@ -270,8 +270,7 @@ define(function (require, exports, module) {
 
     	/**
         * @function <a name="hideCarouselElements">hideCarouselElements</a>
-        * @description 
-        * @param ... {Object} ... 
+        * @description Hide all elements inside carousel.
         * @memberof module:Carousel
         * @instance
         */
@@ -291,8 +290,7 @@ define(function (require, exports, module) {
 
     	/**
         * @function <a name="reveal">reveal</a>
-        * @description 
-        * @param ... {Object} ... 
+        * @description Reveal all elements of carousel
         * @memberof module:Carousel
         * @instance
         */
