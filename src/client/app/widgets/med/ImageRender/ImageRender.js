@@ -43,6 +43,8 @@ define(function (require, exports, module) {
      * @param {String} [opt.svg='alarmoff.svg'] svg file
      * @param {String} [opt.position='absolute'] set the position style
      * @param {Number} [opt.opacity] value between 0 and 1
+     * @param {String} [opt.backColor] Sets image background color
+     * @param {String} [opt.color] sets image foreground color
      * @memberof module:ImageRender
      * @instance
      */
