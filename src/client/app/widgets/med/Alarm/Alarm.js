@@ -49,7 +49,7 @@ define(function(require, exports, module){
     let property = require("util/property")
 
     /**
-     * @function constructor
+     * @function <a name="Alarm">Alarm</a>
      * @description Constructor for Alarm widget
      * @param id {String} widget instance id
      * @param {Object} coords coordinates of widget: top, left, with, height 
@@ -64,7 +64,7 @@ define(function(require, exports, module){
      * @param {String} [opt.pvsDefinition.isOn='isAlarmOn'] string with the name of pvs state that will carry if alarm is on or off
      * @param {String} [opt.pvsDefinition.heartRate='heartRate'] string with the pvs state name of heartrate
      * @param {String} [opt.pvsDefinition.volume='volume']
-     * @memberof module: Alarms
+     * @memberof module:Alarm
      * @instance
      */
     function Alarm(id, coords, opt) {
