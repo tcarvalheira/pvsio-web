@@ -48,10 +48,10 @@ define(function (require, exports, module) {
      *        Default is { top: 0, left: 0, width: 32, height: 20, top_plug: 0, left_plug: 200 }.
      * @param {Object} opt Style options defining the visual appearance of the widget.
      *                     Options can be given either as standard html style attributes or using the following widget attributes:
-     * @param {String} image_plugged path for the pugged image
-     * @param {String} image_unplugged path for the unplugged image
-     * @param {String} image_socket path for the socket image
-     * @param {Boolean} isPlugged set if the plug should be plugged in ou unplugged from the socket. Default is false
+     * @param {String} opt.image_plugged path for the pugged image
+     * @param {String} opt.image_unplugged path for the unplugged image
+     * @param {String} opt.image_socket path for the socket image
+     * @param {Boolean} [opt.isPlugged=false] set if the plug should be plugged in ou unplugged from the socket. Default is false
      * @memberof module:Plug
      * @instance
      */
