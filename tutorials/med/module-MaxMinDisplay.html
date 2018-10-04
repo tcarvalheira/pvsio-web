@@ -177,7 +177,231 @@
     
 
     
-    <h4 class="name" id="%3Caname=%22MaxMinDisplay%22%3EMaxMinDisplay%3C/a%3E"><span class="type-signature"></span><a name="MaxMinDisplay">MaxMinDisplay</a><span class="signature">(id, coords, opt, decimalPlaces<span class="signature-attributes">opt</span>, bracket<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="%3Caname=%22floatFormatDecimalPlaces%22%3EfloatFormatDecimalPlaces%3C/a%3E"><span class="type-signature">(protected) </span><a name="floatFormatDecimalPlaces">floatFormatDecimalPlaces</a><span class="signature">(value)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this method will format float with the decimalNumber defined as widget parameter values that can be passed as float or as string
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Float</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the value to be formatted</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="%3Caname=%22hide%22%3Ehide%3C/a%3E"><span class="type-signature"></span><a name="hide">hide</a><span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Method that will hide display when called
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    returns self component to be able to call it in a chained mode
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="%3Caname=%22MaxMinDisplay%22%3EMaxMinDisplay%3C/a%3E"><span class="type-signature"></span><a name="MaxMinDisplay">MaxMinDisplay</a><span class="signature">(id, coords, opt)</span><span class="type-signature"></span></h4>
     
 
     
@@ -209,11 +433,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -238,19 +458,7 @@
             </td>
 
             
-                <td class="attributes">
-                
 
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
             
 
             <td class="description last">The ID of the touchscreen button.</td>
@@ -273,19 +481,7 @@
             </td>
 
             
-                <td class="attributes">
-                
 
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
             
 
             <td class="description last">The four coordinates (top, left, width, height) of the display, specifying
@@ -310,19 +506,7 @@
             </td>
 
             
-                <td class="attributes">
-                
 
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
             
 
             <td class="description last">JSON object Style options defining the visual appearance of the widget.
@@ -693,13 +877,6 @@
         </tr>
 
     
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
 
         <tr>
             
@@ -784,6 +961,208 @@
             
 
             <td class="description last">options are  default is none</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pvsMinValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'minValue'
+                
+                </td>
+            
+
+            <td class="description last">name of PVS state variable that holds the widget min value</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pvsMaxValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'maxValue'
+                
+                </td>
+            
+
+            <td class="description last">name of PVS state variable that holds the widget max value</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pvsValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'value'
+                
+                </td>
+            
+
+            <td class="description last">name of PVS state variable that holds the widget value</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pvsTitle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'title
+                
+                </td>
+            
+
+            <td class="description last">name of PVS state variable that holds the widget title</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pvsSubtitle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'subtitle'
+                
+                </td>
+            
+
+            <td class="description last">name of PVS state variable that holds the widget subtitle</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -938,7 +1317,326 @@
 
             <td class="description last">Style options overriding the style attributes used when the widget was created.
                     The override style options are temporary, i.e., they are applied only for the present invocation of the render method.
-                    Available options are either html style attributes or the following widget attributes:</td>
+                    Available options are either html style attributes or the following widget attributes:
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pvsMinValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'minValue'
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pvsMaxValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'maxValue'
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pvsValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'value'
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">'Integer'</span>
+|
+
+<span class="param-type">'Float'</span>
+|
+
+<span class="param-type">'String'</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'Float'
+                
+                </td>
+            
+
+            <td class="description last">set widget type.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>decimalPlaces</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    1
+                
+                </td>
+            
+
+            <td class="description last">Set the number of decimal places</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bracket</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">'none'</span>
+|
+
+<span class="param-type">'parenthesis'</span>
+|
+
+<span class="param-type">'bracked'</span>
+|
+
+<span class="param-type">'curly'</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'none'
+                
+                </td>
+            
+
+            <td class="description last">options are  default is none
+* @param {String} [opt.pvsTitle='title]</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pvsSubtitle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'subtitle'
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1096,7 +1794,7 @@
 
         <tr>
             
-                <td class="name"><code>title=</code></td>
+                <td class="name"><code>title</code></td>
             
 
             <td class="type">
@@ -1129,7 +1827,7 @@
 
         <tr>
             
-                <td class="name"><code>subtitle=</code></td>
+                <td class="name"><code>subtitle</code></td>
             
 
             <td class="type">
@@ -1162,7 +1860,7 @@
 
         <tr>
             
-                <td class="name"><code>value=</code></td>
+                <td class="name"><code>value</code></td>
             
 
             <td class="type">
@@ -1195,7 +1893,7 @@
 
         <tr>
             
-                <td class="name"><code>valueMax=</code></td>
+                <td class="name"><code>valueMax</code></td>
             
 
             <td class="type">
@@ -1228,7 +1926,7 @@
 
         <tr>
             
-                <td class="name"><code>valueMin=</code></td>
+                <td class="name"><code>valueMin</code></td>
             
 
             <td class="type">
@@ -1261,7 +1959,7 @@
 
         <tr>
             
-                <td class="name"><code>type=</code></td>
+                <td class="name"><code>type</code></td>
             
 
             <td class="type">
@@ -1294,7 +1992,7 @@
 
         <tr>
             
-                <td class="name"><code>decimalPlaces=</code></td>
+                <td class="name"><code>decimalPlaces</code></td>
             
 
             <td class="type">
@@ -1327,7 +2025,7 @@
 
         <tr>
             
-                <td class="name"><code>bracket=</code></td>
+                <td class="name"><code>bracket</code></td>
             
 
             <td class="type">
@@ -1704,7 +2402,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jun 14 2018 17:26:42 GMT+0100 (WEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Sep 25 2018 17:29:31 GMT+0100 (WEST)
 </footer>
 
 <script> prettyPrint(); </script>
