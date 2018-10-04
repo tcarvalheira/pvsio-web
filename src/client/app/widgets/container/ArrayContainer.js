@@ -75,7 +75,7 @@ define(function (require, exports, module) {
 
      	/**
          * @function <a name="pushChild">pushChild</a>
-         * @description 
+         * @description Push child page to container
          * @param child {Object} PVSioweb widget to render inside the container 
          * @memberof module:Array
          * @instance
