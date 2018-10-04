@@ -57,8 +57,8 @@ define(function (require, exports, module) {
      * @param {String} [opt.valueMax] sets the maximal value
      * @param {String} [opt.valueMin] sets the minimal value 
      * @param {('Integer'|'Float'|'String')} [opt.type='Float'] set widget type. 
-     * @param {Integer} [decimalPlaces=1] Set the number of decimal places
-     * @param {('none' | 'parenthesis' | 'bracked' | 'curly')} [bracket='none'] options are  default is none
+     * @param {Integer} [opt.decimalPlaces=1] Set the number of decimal places
+     * @param {('none' | 'parenthesis' | 'bracked' | 'curly')} [opt.bracket='none'] options are  default is none
      * @param {String} [opt.pvsMinValue='minValue'] - name of PVS state variable that holds the widget min value
      * @param {String} [opt.pvsMaxValue='maxValue'] - name of PVS state variable that holds the widget max value
      * @param {String} [opt.pvsValue='value'] - name of PVS state variable that holds the widget value
