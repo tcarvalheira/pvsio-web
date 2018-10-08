@@ -61,6 +61,7 @@ define(function (require, exports, module) {
      * @param {Integer} [opt.pvsDefinition.heartRate]
      * @param {uInt} [opt.pvsDefinition.backgroundColor]
      * @param {uInt} [opt.pvsDefinition.fillColor]
+     * @param {String} [opt.visibleWhen] - set visibility condition for wave, based on PVS state
      * @memberof module:Wave
      * @instance
      */
@@ -77,6 +78,7 @@ define(function (require, exports, module) {
         this.top = coords.top || 0;
         this.left = coords.left || 0;
         this.aspectRatio = 1125/155
+        this.visibleWhen = this.visibleWhen || opt.visibleWhen || true
     
 
 
@@ -187,6 +189,12 @@ define(function (require, exports, module) {
         /* TODO: define the others variables from the state and define a state. */
 
         this.frame = requestAnimationFrame(this.animationLoop.bind(this))
+
+        if(this.evalViz(state)){
+            this.reveal()
+        }else{
+            this.hide()
+        }
         return this
     };
 
