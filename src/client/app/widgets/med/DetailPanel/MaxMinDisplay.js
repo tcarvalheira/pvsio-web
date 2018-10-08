@@ -64,6 +64,7 @@ define(function (require, exports, module) {
      * @param {String} [opt.pvsValue='value'] - name of PVS state variable that holds the widget value
      * @param {String} [opt.pvsTitle='title] - name of PVS state variable that holds the widget title
      * @param {String} [opt.pvsSubtitle='subtitle'] - name of PVS state variable that holds the widget subtitle
+     * @param {String} [opt.visibleWhen] set condition for widget visibility
      * @memberof module:MaxMinDisplay
      * @instance
      */
@@ -283,20 +284,14 @@ define(function (require, exports, module) {
         }
         
         this.tempDisplay.render(`${openBrackets}${val}${closeBrackets}`, {align: 'left'})
-        this.reveal();
-        return this;
-     }
 
-     	/**
-         * @function <a name="hide">hide</a>
-         * @description  Method that will hide display when called
-         * @memberof module:MaxMinDisplay
-         * @return returns self component to be able to call it in a chained mode
-         * @instance
-         */
-         MaxMinDisplay.prototype.hide = function () {
-            this.div.style('display' , 'none')
-            return this
+        
+        if(this.evalViz(state)){
+            this.reveal()
+        }else{
+            this.hide()
+        }
+        return this;
      }
 
      	/**
@@ -350,6 +345,7 @@ define(function (require, exports, module) {
          * @param {String} [newOpts.type]
          * @param {String} [newOpts.decimalPlaces]
          * @param {String} [newOpts.bracket]
+         * @param {String} [newOpts.visibleWhen]
          * @memberof module:MaxMinDisplay
          * @instance
          */
@@ -376,6 +372,7 @@ define(function (require, exports, module) {
                    this.valueMax = newOpts.valueMax || this.valueMax || ''
                 break
             }
+            this.visibleWhen = newOpts.visibleWhen || this.visibleWhen || 'true';
 
             return this
      }
