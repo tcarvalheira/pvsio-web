@@ -124,6 +124,9 @@ define(function (require, exports, module) {
              this.base.text(this.evaluate(this.displayKey, state));
          }
          this.reveal();
+         if(!this.evalViz(state)){
+             this.hide()
+         }
          return this;
      };
 
@@ -151,7 +154,6 @@ define(function (require, exports, module) {
          if (icon) {
              this.base.classed(`${this.blinking === true ? 'blink' : ''} glyphicon ${icon}`, true).style("font-family", "");
          }
-         this.reveal();
          return this;
      };
 
