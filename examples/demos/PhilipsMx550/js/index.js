@@ -161,7 +161,7 @@ require([
                 waveType: 'ecg',
                 title: 'II',
                 parent: 'prototype', 
-                /* heartRate: 90, */
+                visibleWhen: "isOn = TRUE",
                 waveColor: "#00FF00",
                 background: "#000000",
                 scanBarWidth:20,
@@ -177,7 +177,7 @@ require([
                  waveType: 'ecg',
                  title: 'V',
                  parent: 'prototype', 
-                 /* heartRate: 90, */
+                 visibleWhen: "isOn = TRUE",
                  waveColor: "#00FF00",
                  background: "#000000",
                  scanBarWidth:20,
@@ -193,7 +193,7 @@ require([
                   waveType: 'pleth',
                   title: 'Pleth',
                   parent: 'prototype', 
-                  heartRate: 75,
+                  visibleWhen: "isOn = TRUE",
                   waveColor: "#0FF0FF",
                   background: "#000000",
                   scanBarWidth:20,
@@ -210,7 +210,7 @@ require([
                  waveType: 'abp',
                  title: 'ABP',
                  parent: 'prototype', 
-                 heartRate: 75,
+                 visibleWhen: "isOn = TRUE",
                  waveColor: "#E33632",
                  background: "#000000",
                  scanBarWidth:20,
@@ -227,7 +227,7 @@ require([
                   waveType: 'pap',
                   title: 'PAP',
                   parent: 'prototype', 
-                  heartRate: 75,
+                  visibleWhen: "isOn = TRUE",
                   waveColor: "#FAE15C",
                   background: "#000000",
                   scanBarWidth:20,
@@ -244,7 +244,7 @@ require([
                    waveType: 'cvp',
                    title: 'CVP',
                    parent: 'prototype', 
-                   heartRate: 75,
+                   visibleWhen: "isOn = TRUE",
                    waveColor: "#41DAF9",
                    background: "#000000",
                    scanBarWidth:20,
@@ -261,7 +261,7 @@ require([
                     waveType: 'icp',
                     title: 'ICP',
                     parent: 'prototype', 
-                    heartRate: 75,
+                    visibleWhen: "isOn = TRUE",
                     waveColor: "#E827F4",
                     background: "#000000",
                     scanBarWidth:20,
@@ -280,7 +280,7 @@ require([
             { 
                 waveType: 'co2', 
                 parent: 'prototype',
-                heartRate: 75 ,
+                visibleWhen: "isOn = TRUE",
                 waveColor: '#FFFFFF',
                 background: '#000000',
                 filled: 'down',
@@ -302,11 +302,12 @@ require([
             {
                 fontColor: "#FFFFFF",
                 backgroundColor: 'none',
-                visibleWhen: "true",
+                visibleWhen: "isOn = TRUE",
                 align: 'left',
                 fontSize: 8,
                 fontFamily: 'Arial, Helvetica, sans-serif',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                displayKey: 'date'
             }
         )
         mx550.alarmsoff_display = new BasicDisplayEVO('alarmsoff-display', 
@@ -314,19 +315,21 @@ require([
             {
                 fontColor: "#FF0000",
                 backgroundColor: '#FFFFFF',
-                visibleWhen: "true",
+                /*TODO: arranjar forma de fcriar um novo parametro que seja algo como isOnANDisAlarmOff como tratar isto no PVS? */
+                visibleWhen: "isAlarmOn = FALSE",
                 align: 'left',
                 fontSize: 14,
                 fontFamily: 'Arial, Helvetica, sans-serif',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                displayKey: 'alarmsOffMsg'
             }
         )
         mx550.alarmsoff_img = new BasicDisplayEVO('alarmsoff-img', 
             {top: 222, left: 910, width: 20, height: 17},
             {
                 fontColor: "#FF0000",
-                backgroundColor: '#FFFFFF',
-                visibleWhen: "true",
+                backgroundColor: '#FF00FF',
+                visibleWhen: "isAlarmOn = FALSE",
                 align: 'left',
                 fontSize: 12,
                 fontFamily: 'Arial, Helvetica, sans-serif',
@@ -343,7 +346,7 @@ require([
                 fontSize: 24,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 /* title: 'HR',
                 type: 'Integer',
                 valueMin: '50',
@@ -360,9 +363,10 @@ require([
             {
                 fontColor: "#0FF0FF",
                 backgroundColor: 'none',
-                visibleWhen: "true",
+                visibleWhen: "isOn = TRUE",
                 fontSize: 24,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                displayKey: 'pulse'
             }
         )
 
@@ -375,7 +379,7 @@ require([
                 fontSize: 24,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 /* title: 'SpO2',
                 type: 'Integer',
                 valueMin: '96',
@@ -393,12 +397,323 @@ require([
             {
                 fontColor: "#0FF0FF",
                 backgroundColor: 'none',
-                visibleWhen: "true",
+                visibleWhen: "isOn = TRUE",
                 fontSize: 26,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                displayKey: 'perf'
             }
         )
+
+
+        mx550.STI = new BasicDisplayEVO('sti',
+        {top: 287, left: 854, width: 50, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'sti'
+        }
+        )
+
+        mx550.STII = new BasicDisplayEVO('stii',
+        {top: 297, left: 854, width: 50, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stii'
+        }
+        )
+        mx550.STIII = new BasicDisplayEVO('stiii',
+        {top: 307, left: 854, width: 50, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stiii'
+        }
+        )
+        mx550.STAVR = new BasicDisplayEVO('stavr',
+        {top: 317, left: 854, width: 50, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'staVR'
+        }
+        )
+        mx550.STAVL = new BasicDisplayEVO('stavl',
+        {top: 327, left: 854, width: 50, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'staVL'
+        }
+        )
+        mx550.STAVF = new BasicDisplayEVO('stavf',
+        {top: 337, left: 854, width: 50, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'staVF'
+        }
+        )
+        /* STI values */
+
+        mx550.STI_val = new BasicDisplayEVO('sti_val',
+        {top: 287, left: 890, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'sti_v'
+        }
+        )
+
+        mx550.STII_val = new BasicDisplayEVO('stii_val',
+        {top: 297, left: 890, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stii_v'
+        }
+        )
+        mx550.STIII_val = new BasicDisplayEVO('stiii_val',
+        {top: 307, left: 890, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stiii_v'
+        }
+        )
+        mx550.STAVR_val = new BasicDisplayEVO('stavr_val',
+        {top: 317, left: 890, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'staVR_v'
+        }
+        )
+        mx550.STAVL_val = new BasicDisplayEVO('stavl_val',
+        {top: 327, left: 890, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'staVL_v'
+        }
+        )
+        mx550.STAVF_val = new BasicDisplayEVO('stavf_val',
+        {top: 337, left: 890, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'staVF_v'
+        }
+        )
         
+        mx550.STV1 = new BasicDisplayEVO('stv1',
+        {top: 287, left: 920, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv1'
+        }
+        )
+        mx550.STV1_val = new BasicDisplayEVO('stv1_val',
+        {top: 287, left: 955, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv1_v'
+        }
+        )
+        mx550.STV2 = new BasicDisplayEVO('stv2',
+        {top: 297, left: 920, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv2'
+        }
+        )
+        mx550.STV2_val = new BasicDisplayEVO('stv2_val',
+        {top: 297, left: 955, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv2_v'
+        }
+        )
+        mx550.STV3 = new BasicDisplayEVO('stv3',
+        {top: 307, left: 920, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv3'
+        }
+        )
+        mx550.STV3_val = new BasicDisplayEVO('stv3_val',
+        {top: 307, left: 955, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv3_v'
+        }
+        )
+        mx550.STV4 = new BasicDisplayEVO('stv4',
+        {top: 317, left: 920, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv4'
+        }
+        )
+        mx550.STV4_val = new BasicDisplayEVO('stv4_val',
+        {top: 317, left: 955, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv4_v'
+        }
+        )
+        mx550.STV5 = new BasicDisplayEVO('stv5',
+        {top: 327, left: 920, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv5'
+        }
+        )
+        mx550.STV5_val = new BasicDisplayEVO('stv5_val',
+        {top: 327, left: 955, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv5_v'
+        }
+        )
+        mx550.STV6 = new BasicDisplayEVO('stv6',
+        {top: 337, left: 920, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv6'
+        }
+        )
+        mx550.STV6_val = new BasicDisplayEVO('stv6_val',
+        {top: 337, left: 955, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'stv6_v'
+        }
+        )
+
+
+        mx550.noPatientMessage = new BasicDisplayEVO('stv6_val',
+        {top: 800, left: 100, width: 20, height: 20},
+        {
+            fontColor: "#00FF00",
+            backgroundColor: "$FF0000",
+            visibleWhen: "noPatient = TRUE",
+            fontSize: 16,
+            textAlign: "left",
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            displayKey: 'noPatientMsg'
+        }
+        )
+
+
         mx550.tCore_display = new MaxMinDisplay(
             'tcore-display',
             {top: 660, left: 860, width: 100, height: 60},
@@ -408,7 +723,7 @@ require([
                 fontSize: 35,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 //title: 'Tcore',
                 // type: 'Float', // I need to change it because i don't know how to pass float on PVS state
                 type: 'String',
@@ -431,7 +746,7 @@ require([
                 fontSize: 35,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 // title: 'Tskin',
                 type: 'String',
                 //valueMin: '36.0',
@@ -453,7 +768,7 @@ require([
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 /* title: 'NBP', */
                 type: 'String',
                 //valueMin: '90',
@@ -475,7 +790,7 @@ require([
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 /* title: 'ABP',
                 subtitle: 'Sys.',
                 type: 'String',
@@ -499,7 +814,7 @@ require([
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 /* title: 'PAP',
                 subtitle: 'Dia.',
                 type: 'String',
@@ -523,7 +838,7 @@ require([
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 /* title: 'CVP',
                 subtitle: 'Mean', */
                 type: 'Integer',
@@ -547,7 +862,7 @@ require([
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 /* title: 'ICP',
                 subtitle: 'Mean', */
                 type: 'Integer',
@@ -570,7 +885,7 @@ require([
                 fontSize: 30,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 /* title: 'ICP', */
                 type: 'Integer',
                 /* valueMin: '50',
@@ -592,7 +907,7 @@ require([
                 fontSize: 24,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 type: 'Integer',
                 pvsValue: 'etco2',
                 pvsTitle: 'etco2_label',
@@ -610,7 +925,7 @@ require([
                 fontSize: 24,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
-                visibleWhen: 'true',
+                visibleWhen: "isOn = TRUE",
                 /* title: 'awRR', */
                 type: 'Integer',
                 /* valueMin: '8',
@@ -709,30 +1024,15 @@ require([
 
         // alarm
         function render_alarms(res){
-            if(res.isOn === 'TRUE'){
-                mx550.pulseAlarm.render(res)
-                // mx550.pulseAlarm.play()
-                mx550.btnAlarmOff.render();
-                mx550.alarmsoff_display.render('ALARMS OFF')
-                mx550.alarmsoff_img.renderGlyphicon('glyphicon-bell',{'blinking':false});
-                /* toggle the images on and off */
-                //if(alarmsOn){
-                if(res.isAlarmOn === 'TRUE'){
-                    mx550.alarmsoff_display.hide()
-                    mx550.alarmsoff_img.hide()
-                }else{
-                    //mx550.pulseAlarm.mute()
-                    mx550.pulseAlarm.stop()
-                }
-            }else{
-                mx550.pulseAlarm.stop()
-                mx550.pulseAlarm.hide()
-                //mx550.pulseAlarm.hide()
-                mx550.btnAlarmOff.hide()
-                mx550.alarmsoff_display.hide()
+            mx550.pulseAlarm.render(res)
+            mx550.btnAlarmOff.render(res);
+            mx550.alarmsoff_display.render(res)
+            mx550.alarmsoff_img.renderGlyphicon('glyphicon-bell',{'blinking':false});
+            if(!mx550.alarmsoff_img.evalViz(res)){
                 mx550.alarmsoff_img.hide()
+            }else{
+                mx550.alarmsoff_img.reveal()
             }
-            
         }
         function hide_alarms(res){
             mx550.pulseAlarm.hide()
@@ -743,26 +1043,14 @@ require([
 
         // waves
         function render_waves(res){
-            if(res.isOn === 'TRUE'){
-                mx550.ecgII_wave.render(res)
-                mx550.ecgV_wave.render(res)
-                mx550.spo2_wave.render(res)
-                mx550.co2_wave.render(res)
-                mx550.abp_wave.render(res)
-                mx550.pap_wave.render(res)
-                mx550.cvp_wave.render(res)
-                mx550.icp_wave.render(res)
-            }else{
-                mx550.ecgII_wave.hide({resetWave:true})
-                mx550.ecgV_wave.hide({resetWave:true})
-                mx550.spo2_wave.hide({resetWave:true})
-                mx550.co2_wave.hide({resetWave:true})
-                mx550.abp_wave.hide({resetWave:true})
-                mx550.pap_wave.hide({resetWave:true})
-                mx550.cvp_wave.hide({resetWave:true})
-                mx550.icp_wave.hide({resetWave:true})
-            }
-            
+            mx550.ecgII_wave.render(res)
+            mx550.ecgV_wave.render(res)
+            mx550.spo2_wave.render(res)
+            mx550.co2_wave.render(res)
+            mx550.abp_wave.render(res)
+            mx550.pap_wave.render(res)
+            mx550.cvp_wave.render(res)
+            mx550.icp_wave.render(res)
         }
 
         function render_plugs(res){
@@ -771,105 +1059,51 @@ require([
         }
 
         function render_displays(res){
-            if(res.isOn === 'TRUE'){
-                mx550.hr_display.render(res)
-                mx550.pulse_display.render(res.pulse)
-                mx550.spo2_display.render(res)
-                mx550.perf_display.render(res.perf.toString().replace(/"/g, ""))
-                mx550.etco2_display.render(res)
-                mx550.awRR_display.render(res)
-                mx550.tCore_display.render(res)
-                mx550.tSkin_display.render(res)
-                mx550.nbp_display.render(res)
-                mx550.abp_display.render(res)
-                mx550.pap_display.render(res)
-                mx550.cvp_display.render(res)
-                mx550.icp_display.render(res)
-                mx550.cpp_display.render(res)
-                mx550.spo2_graphics.render(res)
-                mx550.spo2_rec.render(res)
-                mx550.alarmVol.render(res)
+            mx550.hr_display.render(res)
+            mx550.pulse_display.render(res)
+            mx550.spo2_display.render(res)
+            mx550.perf_display.render(res)
+            mx550.etco2_display.render(res)
+            mx550.awRR_display.render(res)
+            mx550.tCore_display.render(res)
+            mx550.tSkin_display.render(res)
+            mx550.nbp_display.render(res)
+            mx550.abp_display.render(res)
+            mx550.pap_display.render(res)
+            mx550.cvp_display.render(res)
+            mx550.icp_display.render(res)
+            mx550.cpp_display.render(res)
+            mx550.spo2_graphics.render(res)
+            mx550.spo2_rec.render(res)
+            mx550.alarmVol.render(res)
                 //mx550.onoff_led.render(res)
-                let today = new Date()
-                mx550.date_display.render(today.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric', hour: "2-digit", minute: "2-digit"  }))
+            let today = new Date()
+            mx550.date_display.render(res)
 
-            }else{
-                mx550.hr_display.hide()
-                mx550.pulse_display.hide()
-                mx550.spo2_display.hide()
-                mx550.perf_display.hide()
-                mx550.etco2_display.hide()
-                mx550.awRR_display.hide()
-                mx550.tCore_display.hide()
-                mx550.tSkin_display.hide()
-                mx550.nbp_display.hide()
-                mx550.abp_display.hide()
-                mx550.pap_display.hide()
-                mx550.cvp_display.hide()
-                mx550.icp_display.hide()
-                mx550.cpp_display.hide()
-                mx550.spo2_graphics.hide()
-                mx550.spo2_rec.hide()
-                mx550.alarmVol.hide()
-                //mx550.onoff_led.render(res)
-                let today = new Date()
-                mx550.date_display.hide(today.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric', hour: "2-digit", minute: "2-digit"  }))
-
-            }
-                        /* this is here just to simulate animation of the imagerender widget */
-            /* setInterval(function() {
-                // method to be executed;
-              
-                    switch(contador % 9){
-                        case 0: 
-                                mx550.spo2_graphics.setImage(triangle0)
-                                mx550.spo2_rec.setImage(rectangle0)
-                                mx550.alarmVol.setImage(alarmVol0)
-                        break
-                        case 1: 
-                                mx550.spo2_graphics.setImage(triangle1)
-                                mx550.spo2_rec.setImage(rectangle0)
-                                mx550.alarmVol.setImage(alarmVol1)
-                                break
-                        case 2: 
-                                mx550.spo2_graphics.setImage(triangle2)
-                                mx550.spo2_rec.setImage(rectangle1)
-                                mx550.alarmVol.setImage(alarmVol2)
-                                break
-                        case 3: 
-                                mx550.spo2_graphics.setImage(triangle3)
-                                mx550.spo2_rec.setImage(rectangle1)
-                                mx550.alarmVol.setImage(alarmVol3)
-                        break
-                        case 4: 
-                                mx550.spo2_graphics.setImage(triangle4)
-                                mx550.spo2_rec.setImage(rectangle2)
-                                mx550.alarmVol.setImage(alarmVol4)
-                                break
-                        case 5: 
-                                mx550.spo2_graphics.setImage(triangle5)
-                                mx550.spo2_rec.setImage(rectangle2)
-                                mx550.alarmVol.setImage(alarmVol4)
-                                break
-                        case 6: 
-                                mx550.spo2_graphics.setImage(triangle6)
-                                mx550.spo2_rec.setImage(rectangle1)
-                                mx550.alarmVol.setImage(alarmVol3)
-                                break
-                        case 7: 
-                                mx550.spo2_graphics.setImage(triangle7)
-                                mx550.spo2_rec.setImage(rectangle1)
-                                mx550.alarmVol.setImage(alarmVol2)
-                                break
-                        case 8: 
-                                mx550.spo2_graphics.setImage(triangle8)
-                                mx550.spo2_rec.setImage(rectangle0)
-                                mx550.alarmVol.setImage(alarmVol1)
-                                break
-                    }
-
-                    contador += 1
-                }, 1000); */
+            mx550.STI.render(res,{align:'left'})
+            mx550.STII.render(res,{align:'left'})
+            mx550.STIII.render(res,{align:'left'})
+            mx550.STAVR.render(res,{align:'left'})
+            mx550.STAVL.render(res,{align:'left'})
+            mx550.STAVF.render(res,{align:'left'})
+            mx550.STI_val.render(res,{align:'right'})
+            mx550.STII_val.render(res,{align:'right'})
+            mx550.STIII_val.render(res,{align:'right'})
+            mx550.STAVR_val.render(res,{align:'right'})
+            mx550.STAVL_val.render(res,{align:'right'})
+            mx550.STAVF_val.render(res,{align:'right'})
+            mx550.STV1.render(res)
+            mx550.STV1_val.render(res,{align: 'right'})
+            mx550.STV2.render(res)
+            mx550.STV2_val.render(res,{align: 'right'})
+            mx550.STV3.render(res)
+            mx550.STV3_val.render(res,{align: 'right'})
+            mx550.STV4.render(res)
+            mx550.STV4_val.render(res,{align: 'right'})
+            mx550.STV5.render(res)
+            mx550.STV5_val.render(res,{align: 'right'})
+            mx550.STV6.render(res)
+            mx550.STV6_val.render(res,{align: 'right'})
         }
 
         /**
@@ -916,7 +1150,7 @@ require([
                 if (res.indexOf("(#") === 0) {
                     res = stateParser.parse(event.data.toString());
                     if (res) {
-                        console.log(`Vou renderizar`)
+                        // console.log(`Vou renderizar`)
                         render_onoff(res)
                         render_waves(res)
                         render_displays(res)
@@ -950,14 +1184,14 @@ require([
         };
 
 
-        d3.select(".btn_on").on("click", function () {
+       /* d3.select(".btn_on").on("click", function () {
             stop_tick();
             client.getWebSocket()
                 .sendGuiAction("click_btn_on(" + client.getWebSocket().lastState() + ");", onMessageReceived);
             start_tick();
-        });
+        });*/ 
 
-        d3.select("#submit_spo2_sensor_data").on("click", function () {
+        /* d3.select("#submit_spo2_sensor_data").on("click", function () {
             var data = d3.select("#spo2_sensor_data").node().value;
             if (data) {
                 data = (isNaN(parseFloat(data))) ? -1 : parseFloat(data);
@@ -966,9 +1200,9 @@ require([
                     .sendGuiAction("spo2_sensor_data(" + data + ")(" + client.getWebSocket().lastState() + ");", onMessageReceived);
                 start_tick();
             }
-        });
+        });*/ 
 
-        d3.select("#submit_rra_sensor_data").on("click", function () {
+       /* d3.select("#submit_rra_sensor_data").on("click", function () {
             var data = d3.select("#rra_sensor_data").node().value;
             if (data) {
                 data = (isNaN(parseFloat(data))) ? -1 : parseFloat(data);
@@ -977,7 +1211,7 @@ require([
                     .sendGuiAction("rra_sensor_data(" + data + ")(" + client.getWebSocket().lastState() + ");", onMessageReceived);
                 start_tick();
             }
-        });
+        });*/ 
 
         // set demo prototype folder. PVS specification will load from here
         var demoFolder = "PhilipsMx550";

@@ -98,7 +98,39 @@ main: THEORY
     alarm_vol: real,
 
     ecg_color: string,
-    ecg_back_color: string
+    ecg_back_color: string,
+
+    sti: string,
+    stii: string,
+    stiii: string,
+    staVR: string,
+    staVL: string,
+    staVF: string,
+    sti_v: string,
+    stii_v: string,
+    stiii_v: string,
+    staVR_v: string,
+    staVL_v: string,
+    staVF_v: string,
+
+    stv1: string,
+    stv1_v: string,
+    stv2: string,
+    stv2_v: string,
+    stv3: string,
+    stv3_v: string,
+    stv4: string,
+    stv4_v: string,
+    stv5: string,
+    stv5_v: string,
+    stv6: string,
+    stv6_v: string,
+
+    date: string,
+    alarmsOffMsg: string,
+
+    noPatientMsg: string,
+    noPatient: bool
 
   #]
 
@@ -199,7 +231,40 @@ main: THEORY
     alarm_vol := 0.2,
 
     ecg_color:= "00FF00",
-    ecg_back_color:= "000000"
+    ecg_back_color:= "000000",
+
+
+    sti:= "ST-I",
+    stii:= "ST-II",
+    stiii:= "ST-III",
+    staVR:= "ST-aVR",
+    staVL:= "ST-aVL",
+    staVF:= "ST-aVF",
+    sti_v:= "-0.1",
+    stii_v:= "-0.1",
+    stiii_v:= "0.0",
+    staVR_v:= "0.1",
+    staVL_v:= "0.0",
+    staVF_v:= "0.0",
+
+    stv1:= "ST-V1",
+    stv1_v:= "-0.1",
+    stv2:= "ST-V2",
+    stv2_v:= "0.0",
+    stv3:= "ST-V3",
+    stv3_v:= "-0.1",
+    stv4:= "ST-V4",
+    stv4_v:= "-0.1",
+    stv5:= "ST-V5",
+    stv5_v:= "-0.1",
+    stv6:= "ST-V6",
+    stv6_v:= "-0.1",
+    
+    date:= "4 Oct 2018 17:11",
+    alarmsOffMsg:= "ALARMS OFF!!",
+
+    noPatientMsg:= "No patient admited in MMS; continuing with patient from monitor",
+    noPatient:= true
 
   #)
 
