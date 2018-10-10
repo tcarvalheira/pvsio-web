@@ -93,9 +93,11 @@ main: THEORY
     tcore_max: real,
 
     perf: real, 
+    perfLabel : string,
     pulse: real,
     breath_rate: real,
     alarm_vol: real,
+    alarmVolGraphics: string,
 
     ecg_color: string,
     ecg_back_color: string,
@@ -128,10 +130,37 @@ main: THEORY
 
     date: string,
     alarmsOffMsg: string,
+    time: string,
 
     noPatientMsg: string,
-    noPatient: bool
+    noPatient: bool,
+    patientName: string,
+    bed: string,
+    profile: string,
+    view: string,
+    alarmOffCross: string,
 
+    nbpTitle: string,
+    nbpSubtitle: string,
+    nbp1hour: string,
+    nbp1: string,
+    nbp2hour: string,
+    nbp2: string,
+    nbp3hour: string,
+    nbp3: string,
+    nbp4hour: string,
+    nbp4: string,
+    nbp5hour: string,
+    nbp5: string,
+    nbp6hour: string,
+    nbp6: string,
+
+    nbpMode: string,
+    nbpGraphics: string,
+    nbpTime: string,
+
+    spo2Graphics: string,
+    spo2Rectangle: string
   #]
 
   init(x: real): state = (#
@@ -143,8 +172,8 @@ main: THEORY
     rra_label := "RRa",
     rra_alarm := off,
     rra_fail := false,
-    isOn := false,
-    isAlarmOn := true,
+    isOn := true,
+    isAlarmOn := false,
     
     spo2 := 99,
     spo2_max := 88,
@@ -191,7 +220,7 @@ main: THEORY
 
 
     cpp:= 81, 
-    cpp_label:= "ICP",
+    cpp_label:= "CPP",
     cpp_max:= 131,
     cpp_min:= 51,
 
@@ -226,9 +255,11 @@ main: THEORY
     tcore_max:= 39.5,
 
     perf:= 2.3,
+    perfLabel:= "Perf.",
     pulse:= 56,
     breath_rate := 50,
     alarm_vol := 0.2,
+    alarmVolGraphics := "img/alarmVol2.svg",
 
     ecg_color:= "00FF00",
     ecg_back_color:= "000000",
@@ -260,11 +291,41 @@ main: THEORY
     stv6:= "ST-V6",
     stv6_v:= "-0.1",
     
-    date:= "4 Oct 2018 17:11",
+    date:= "4 Oct 2018",
     alarmsOffMsg:= "ALARMS OFF!!",
 
+    time := "17:11",
+
     noPatientMsg:= "No patient admited in MMS; continuing with patient from monitor",
-    noPatient:= true
+    noPatient:= true,
+
+    patientName := "Doe John",
+    bed := "Bed33",
+    profile := "Profile Adult ICU",
+    view := "8 Waves",
+    alarmOffCross :=  "X",
+    nbpTitle := "NBP",
+    nbpSubtitle := "mmHg",
+    nbp1hour := "10:01",
+    nbp1 := "123/80(89)",
+    nbp2hour := "10:05",
+    nbp2 := "123/80(88)",
+    nbp3hour := "10:06",
+    nbp3 := "120/80(88)",
+    nbp4hour := "10:10",
+    nbp4 := "123/80(88)",
+    nbp5hour := "10:15",
+    nbp5 := "125/80(87)",
+    nbp6hour := "10:18",
+    nbp6 := "123/80(89)",
+
+    nbpMode := "Auto 5 min",
+    nbpGraphics := "img/nbp_image2.svg",
+    nbpTime := "00:10",
+
+    spo2Graphics := "img/triangle_5.svg",
+
+    spo2Rectangle := "img/rectangle1.svg"
 
   #)
 

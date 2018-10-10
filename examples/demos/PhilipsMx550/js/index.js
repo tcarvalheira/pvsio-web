@@ -1,7 +1,7 @@
 /**
  *
- * @author Paolo Masci, Patrick Oladimeji
- * @date 27/03/15 20:30:33 PM
+ * @author Tiago Carvalheira
+ * @date 23/05/18 20:30:33 PM
  */
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
 require.config({
@@ -29,6 +29,7 @@ require([
         "widgets/core/ButtonEVO",
         "widgets/med/ImageRender/ImageRender",
         "widgets/med/Plug/Plug",
+        "widgets/core/DateTime",
         "stateParser",
         "PVSioWebClient",
         "NCDevice"],
@@ -42,6 +43,7 @@ require([
               ButtonEVO,
               ImageRender,
               Plug,
+              DateTime,
               stateParser,
               PVSioWebClient,
               NCDevice) {
@@ -50,26 +52,7 @@ require([
 
         var deviceID = "Mx550";
         var deviceType = "SpO2 Monitor";
-        let alarmsOn = true
-        let triangle0 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%" viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" /></g></svg>'
-        let triangle1 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
-        let triangle2 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
-        let triangle3 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
-        let triangle4 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
-        let triangle5 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
-        let triangle6 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
-        let triangle7 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
-        let triangle8 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%" height="100%"   viewBox="0 0 52.916665 105.83334"   version="1.1"   id="svg8">  <defs     id="defs2" />  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(-1,-190)">    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"       id="path3705"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"       id="path3707"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"       id="path3709"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"       id="path3711"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"       id="path3713"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"       id="path3715"/>    <path       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"       id="path3717"/>    <path       style="fill:#0FF0FF;stroke:#04d5e293bcff;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"       id="path3719" />  </g></svg>'
-        let rectangle0 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458333 79.375002"   id="svg16">0  <g     id="layer1"     transform="translate(0,-217.62498)">    <rect       style="fill:none;stroke:#04d5e2;stroke-width:4"       id="rect3732"       width="25.324404"       height="78.241081"       x="0.66145831"       y="218.09744"       ry="5.6843419e-14" />    <rect style="fill:#04d5e2;stroke:#04d5e2;stroke-width:0.26458332" id="rect8" width="17.105249" height="43.564945" x="4.2816849" y="221.57956" ry="5.6843348e-14" /></g></svg>'
-        let rectangle1 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width="100%"   height="100%"   viewBox="0 0 26.458333 79.375002"   id="svg16">  <g     id="layer1"     transform="translate(0,-217.62498)">    <rect       style="fill:none;stroke:#04d5e2;stroke-width:4"       id="rect3732"       width="25.324404"       height="78.241081"       x="0.66145831"       y="218.09744"       ry="5.6843419e-14" />    <rect       style="fill:#04d5e2;stroke:#04d5e2;stroke-width:0.26458332"       id="rect8"       width="17.105249"       height="43.564945"       x="4.8108516"       y="234.45891"       ry="5.6843348e-14" />  </g></svg>'
-        let rectangle2 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458333 79.375002"   id="svg16" >  <g     id="layer1"     transform="translate(0,-217.62498)">    <rect       style="fill:none;stroke:#04d5e2;stroke-width:4"       id="rect3732"       width="25.324404"       height="78.241081"       x="0.66145831"       y="218.09744"       ry="5.6843419e-14" />    <rect       style="fill:#04d5e2;stroke:#04d5e2;stroke-width:0.26458332"       id="rect8"       width="17.105249"       height="43.564945"       x="4.6472802"       y="249.06947"       ry="5.6843348e-14" />  </g></svg>' 
-        let alarmVol0 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458332 13.229167"   id="svg8">  <g     id="layer1"     transform="translate(0,-283.77082)">    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 0.42522322,296.62201 H 25.749628 v -12.33147 z"       id="path12"/>  </g></svg>'
-        let alarmVol1 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458332 13.229167"   id="svg8">  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(0,-283.77082)">    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 0.42522322,296.62201 H 25.749628 v -12.33147 z"       id="path12"       inkscape:connector-curvature="0" />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 9.4966516,292.27528 c 0,4.20499 0.047247,4.39398 0.047247,4.39398 z"       id="path33"       inkscape:connector-curvature="0" />    <path       style="fill:#cccccc;stroke:#ffffff;stroke-width:2px"       d="m 6.228187,46.993884 c 1.0803571,-0.540989 8.03125,-3.936161 15.446429,-7.544828 l 13.482142,-6.561213 0.109025,4.38556 c 0.05996,2.412057 0.120231,5.811898 0.133929,7.555202 l 0.0249,3.169643 -15.580358,-0.01037 -15.5803567,-0.01038 1.9642857,-0.983615 z"       id="path4637"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />  </g></svg>'
-        let alarmVol2 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458332 13.229167"   id="svg8">  <g     inkscape:label="Layer 1"     inkscape:groupmode="layer"     id="layer1"     transform="translate(0,-283.77082)">    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 0.42522322,296.62201 H 25.749628 v -12.33147 z"       id="path12"       inkscape:connector-curvature="0" />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 9.4966516,292.27528 c 0,4.20499 0.047247,4.39398 0.047247,4.39398 z"       id="path33"       inkscape:connector-curvature="0" />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 15.827753,289.15698 v 7.37054 z"       id="path54"       inkscape:connector-curvature="0" />    <path       style="fill:#cccccc;stroke:#FFFFFF;stroke-width:2px"       d="m 6.228187,46.993884 c 1.0803571,-0.540989 8.03125,-3.936161 15.446429,-7.544828 l 13.482142,-6.561213 0.109025,4.38556 c 0.05996,2.412057 0.120231,5.811898 0.133929,7.555202 l 0.0249,3.169643 -15.580358,-0.01037 -15.5803567,-0.01038 1.9642857,-0.983615 z"       id="path4624"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#cccccc;stroke:#FFFFFF;stroke-width:2px"       d="m 36.592602,42.417891 c -0.06773,-3.069197 -0.09708,-6.622013 -0.06521,-7.895148 l 0.05794,-2.31479 9.821428,-4.795051 c 5.401786,-2.637278 10.484375,-5.106035 11.294643,-5.486126 l 1.473215,-0.691075 V 34.616974 47.998248 H 47.945184 36.715753 Z"       id="path4626"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />  </g></svg>'        
-        let alarmVol3 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458332 13.229167" >  <g     id="layer1"     transform="translate(0,-283.77082)">    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 0.42522322,296.62201 H 25.749628 v -12.33147 z"       id="path12"       />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 9.4966516,292.27528 c 0,4.20499 0.047247,4.39398 0.047247,4.39398 z"       id="path33"       />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 15.827753,289.15698 v 7.37054 z"       id="path54"       />    <path       style="fill:#b3b3b3;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 20.930431,286.55839 v 9.96913 z"       id="path75"       />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="M 4.4229713,47.904654 C 4.5245611,47.803064 35.179145,32.851951 35.213164,32.887401 c 0.01138,0.01186 0.06525,3.41665 0.119706,7.566204 l 0.09902,7.544642 H 19.880632 c -8.55319,0 -15.5091371,-0.04212 -15.4576607,-0.09359 z"       id="path4608"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="m 36.648901,46.257176 c -0.06341,-0.957589 -0.113809,-4.513393 -0.111993,-7.901786 l 0.0033,-6.160714 10.452986,-5.089286 c 5.749142,-2.799107 10.84992,-5.268522 11.335059,-5.48759 L 59.21033,21.219496 V 34.608871 47.998247 H 47.987263 36.764196 Z"       id="path4610"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="M 60.46033,34.283378 V 20.568506 l 9.017857,-4.393376 9.017858,-4.393376 V 29.890001 47.998247 H 69.478187 60.46033 Z"       id="path4612"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />  </g></svg>'
-        let alarmVol4 = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   width="100%"   height="100%"   viewBox="0 0 26.458332 13.229167"   id="svg8">  <g     id="layer1"     transform="translate(0,-283.77082)">    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="M 0.42522322,296.62201 H 25.749628 v -12.33147 z"       id="path12"       inkscape:connector-curvature="0" />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 9.4966516,292.27528 c 0,4.20499 0.047247,4.39398 0.047247,4.39398 z"       id="path33"       inkscape:connector-curvature="0" />    <path       style="fill:none;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 15.827753,289.15698 v 7.37054 z"       id="path54"       inkscape:connector-curvature="0" />    <path       style="fill:#b3b3b3;stroke:#FFFFFF;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"       d="m 20.930431,286.55839 v 9.96913 z"       id="path75"       inkscape:connector-curvature="0" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="M 4.4229713,47.904654 C 4.5245611,47.803064 35.179145,32.851951 35.213164,32.887401 c 0.01138,0.01186 0.06525,3.41665 0.119706,7.566204 l 0.09902,7.544642 H 19.880632 c -8.55319,0 -15.5091371,-0.04212 -15.4576607,-0.09359 z"       id="path4608"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="m 36.648901,46.257176 c -0.06341,-0.957589 -0.113809,-4.513393 -0.111993,-7.901786 l 0.0033,-6.160714 10.452986,-5.089286 c 5.749142,-2.799107 10.84992,-5.268522 11.335059,-5.48759 L 59.21033,21.219496 V 34.608871 47.998247 H 47.987263 36.764196 Z"       id="path4610"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="M 60.46033,34.283378 V 20.568506 l 9.017857,-4.393376 9.017858,-4.393376 V 29.890001 47.998247 H 69.478187 60.46033 Z"       id="path4612"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />    <path       style="fill:#e6e6e6;stroke:#ffffff;stroke-width:0.17857143"       d="m 79.789853,29.567242 0.04548,-18.431004 8.303572,-4.0570687 c 4.566964,-2.2313879 8.363839,-4.0624357 8.4375,-4.0689954 0.07366,-0.00656 0.133928,10.1130731 0.133928,22.4880731 v 22.5 h -8.482977 -8.482977 z"       id="path4614"       inkscape:connector-curvature="0"       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)" />  </g></svg>'
-        
-        let contador = 0;
+
         function parseNCUpdate(event) {
 
             var from = event.from;
@@ -141,19 +124,123 @@ require([
         ),
 
         mx550.btnAlarmOff = new ButtonEVO("btn_alarm_off", {
-            top: 250, left: 990, height: 20, width: 20
+            top: 230, left: 990, height: 20, width: 20
           }, {
             //visibleWhen: "isOn = TRUE", //TODO: i can use this attribute insted of checking if it is on or off on javascript
+            parent: 'prototype',
             callback: onMessageReceived
           });
 
           mx550.btnOnOff = new ButtonEVO("btn_on_off", {
-            top: 935, left: 316, height: 46, width: 46
+            top: 915, left: 316, height: 46, width: 46
           }, {
+              parent: 'prototype',
               //backgroundColor: 'red',
             callback: onMessageReceived
           });
 
+
+
+
+        /* TOP information */
+
+        /* TODO: define this as an imagerender as there isn't any glyphicon with network to render */
+        mx550.network = new BasicDisplayEVO('network',
+        {top: 179, left: 106, width: 78, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: "#FFFFFF",
+            backgroundColor: "#211E1C",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            align: 'left'
+        }
+        )
+
+        mx550.bed = new BasicDisplayEVO('bed',
+            {top: 180, left: 184, width: 186, height: 17},
+            {
+                parent: 'prototype',
+                fontColor: '#FFFFFF',
+                backgroundColor: '#211E1C',
+                visibleWhen: 'isOn = TRUE',
+                fontWeight: 'bolder',
+                fontSize: 8,
+                align: 'left',
+                displayKey: 'bed'
+            }
+        )
+
+
+        mx550.patientName = new BasicDisplayEVO('patient-name',
+            {top: 179, left: 370, width: 300, height: 17},
+            {
+                parent: 'prototype',
+                fontColor: "#FFFFFF",
+                backgroundColor: "#211E1C",
+                visibleWhen: "isOn = TRUE",
+                fontWeight: 'bolder',
+                fontSize: 8,
+                align: 'left',
+                displayKey: 'patientName',            
+            }
+        )
+
+        mx550.date_display = new DateTime('datetime',
+            {left: 670, top: 180, width: 142, height: 17},
+            {
+                    parent: "prototype",
+                    fontColor: 'white',
+                    backgroundColor: "#211E1C",
+                    useCurrentDateTime: true,
+                    fontFamilly: 'sans-serif',
+                    dateFontSize: '8',
+                    timeFontSize: '8',
+                    relativePosition: 'horizontal',
+                    visibleWhen: 'isOn = TRUE',
+                    locale: 'en-US',
+                    dateFormat: { year: 'numeric', month: 'short', day: 'numeric'},
+                    timeFormat: { hour12: false, hour:'numeric', minute: 'numeric'},
+            })
+
+        mx550.profile = new BasicDisplayEVO('profile-display',
+            {top: 179, left: 812, width: 165, height: 17},
+            {
+                parent: 'prototype',
+                fontColor: "#FFFFFF",
+                backgroundColor: "#211E1C",
+                visibleWhen: "isOn = TRUE",
+                fontWeight: 'bolder',
+                fontSize: 8,
+                align: 'left',
+                displayKey: 'profile',            
+            }
+        )
+        mx550.view = new BasicDisplayEVO('view-display',
+            {top: 179, left: 977, width: 114, height: 17},
+            {
+                parent: 'prototype',
+                fontColor: '#FFFFFF',
+                backgroundColor: '#211E1C',
+                visibleWhen: 'isOn = TRUE',
+                fontWeight: 'bolder',
+                fontSize: 8, 
+                align: 'left',
+                displayKey: 'view'
+            })
+
+
+            mx550.alarmVol = new ImageRender(
+                'alarm-volume-graphics',
+                {top: 179, left: 1092, width: 30, height:10},
+                {
+                    parent: 'prototype',
+                    displayKey: 'alarmVolGraphics',
+                    visibleWhen: 'isOn = TRUE',
+                    backgroundColor: '#211E1C'
+                }
+            )
+        
         // WAVES
         mx550.ecgII_wave = new Wave('ecgii-wave',
             {top: 210, left: 115, height: 70, width: 730},
@@ -165,6 +252,7 @@ require([
                 waveColor: "#00FF00",
                 background: "#000000",
                 scanBarWidth:20,
+                fontSize: 14,
                 pvsDefinition: {
                     waveColor: 'ecg_color',
                     backgroundColor: 'ecg_back_color',
@@ -181,6 +269,7 @@ require([
                  waveColor: "#00FF00",
                  background: "#000000",
                  scanBarWidth:20,
+                 fontSize: 14,
                  pvsDefinition: {
                      waveColor: 'ecg_color',
                      backgroundColor: 'ecg_back_color',
@@ -197,6 +286,7 @@ require([
                   waveColor: "#0FF0FF",
                   background: "#000000",
                   scanBarWidth:20,
+                  fontSize: 14,
                   pvsDefinition: {
                       waveColor: 'spo2_wave_color',
                       backgroundColor: 'spo2_wave_back_color',
@@ -214,6 +304,7 @@ require([
                  waveColor: "#E33632",
                  background: "#000000",
                  scanBarWidth:20,
+                 fontSize: 14,
                  pvsDefinition: {
                     waveColor: 'abp_wave_color',
                     backgroundColor: 'abp_wave_back_color',
@@ -231,6 +322,7 @@ require([
                   waveColor: "#FAE15C",
                   background: "#000000",
                   scanBarWidth:20,
+                  fontSize: 14,
                   pvsDefinition: {
                     waveColor: 'pap_wave_color',
                     backgroundColor: 'pap_wave_back_color',
@@ -248,6 +340,7 @@ require([
                    waveColor: "#41DAF9",
                    background: "#000000",
                    scanBarWidth:20,
+                   fontSize: 14,
                    pvsDefinition: {
                         waveColor: 'cvp_wave_color',
                         backgroundColor: 'cvp_wave_back_color',
@@ -265,6 +358,7 @@ require([
                     waveColor: "#E827F4",
                     background: "#000000",
                     scanBarWidth:20,
+                    fontSize: 14,
                     pvsDefinition: {
                         waveColor: 'icp_wave_color',
                         backgroundColor: 'icp_wave_back_color',
@@ -274,8 +368,7 @@ require([
 
 
                
-        mx550.co2_wave = new Wave(
-            'co2-wave',
+        mx550.co2_wave = new Wave('co2-wave',
             { top: 610, left: 115, height:50, width: 730 },
             { 
                 waveType: 'co2', 
@@ -286,6 +379,7 @@ require([
                 filled: 'down',
                 fillColor: '#999a9b',
                 scanBarWidth:20,
+                fontSize: 14,
                 pvsDefinition: {
                     waveColor: 'co2_wave_color',
                     backgroundColor: 'co2_wave_back_color',
@@ -295,40 +389,27 @@ require([
             }
         )
 
-
-        // DISPLAYs
-        mx550.date_display = new BasicDisplayEVO('date-display', 
-            {top: 203, left: 670, width: 200, height: 17},
-            {
-                fontColor: "#FFFFFF",
-                backgroundColor: 'none',
-                visibleWhen: "isOn = TRUE",
-                align: 'left',
-                fontSize: 8,
-                fontFamily: 'Arial, Helvetica, sans-serif',
-                fontWeight: 'bold',
-                displayKey: 'date'
-            }
-        )
         mx550.alarmsoff_display = new BasicDisplayEVO('alarmsoff-display', 
-            {top: 223, left: 930, width: 200, height: 17},
+            {top: 200, left: 925, width: 200, height: 17},
             {
+                parent: 'prototype',
                 fontColor: "#FF0000",
                 backgroundColor: '#FFFFFF',
                 /*TODO: arranjar forma de fcriar um novo parametro que seja algo como isOnANDisAlarmOff como tratar isto no PVS? */
                 visibleWhen: "isAlarmOn = FALSE",
                 align: 'left',
-                fontSize: 14,
+                fontSize: 10,
                 fontFamily: 'Arial, Helvetica, sans-serif',
                 fontWeight: 'bold',
                 displayKey: 'alarmsOffMsg'
             }
         )
         mx550.alarmsoff_img = new BasicDisplayEVO('alarmsoff-img', 
-            {top: 222, left: 910, width: 20, height: 17},
+            {top: 199, left: 905, width: 20, height: 17},
             {
+                parent: 'prototype',
                 fontColor: "#FF0000",
-                backgroundColor: '#FF00FF',
+                backgroundColor: '#FFFFFF',
                 visibleWhen: "isAlarmOn = FALSE",
                 align: 'left',
                 fontSize: 12,
@@ -347,11 +428,6 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
-                /* title: 'HR',
-                type: 'Integer',
-                valueMin: '50',
-                valueMax: '120',
-                value: '76' */
                 pvsValue:'pulse', 
                 pvsMinValue: 'hr_min', 
                 pvsMaxValue:'hr_max', 
@@ -361,6 +437,7 @@ require([
         mx550.pulse_display = new BasicDisplayEVO('pulse-display', 
             {top: 245, left: 1030, width: 50, height: 50},
             {
+                parent: 'prototype',
                 fontColor: "#0FF0FF",
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
@@ -370,8 +447,7 @@ require([
             }
         )
 
-        mx550.spo2_display = new MaxMinDisplay(
-            'sop2-display',
+        mx550.spo2_display = new MaxMinDisplay('sop2-display',
             {top: 336, left: 860, width: 100, height: 50},
             {
                 parent: 'prototype',
@@ -380,339 +456,359 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
-                /* title: 'SpO2',
-                type: 'Integer',
-                valueMin: '96',
-                valueMax: '100',
-                value: '95', */
                 pvsValue:'spo2', 
                 pvsMinValue: 'spo2_min', 
                 pvsMaxValue:'spo2_max', 
                 pvsTitle:'spo2_label'
             }
         )
-        
-        mx550.perf_display = new BasicDisplayEVO('perf-display', 
-            {top: 360, left: 1030, width: 70, height: 50},
+
+        mx550.perf_display = new MaxMinDisplay('perf-display',
+            {top: 336, left: 1000, width: 100, height: 50},
             {
-                fontColor: "#0FF0FF",
-                backgroundColor: 'none',
-                visibleWhen: "isOn = TRUE",
-                fontSize: 26,
+                parent: 'prototype',
+                fontColor: '#0FF0FF',
+                fontSize: 24,
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-                displayKey: 'perf'
-            }
-        )
-
-
+                backgroundColor: 'transparent',
+                visibleWhen: "isOn = TRUE",
+                pvsValue:'perf', 
+                pvsTitle:'perfLabel'
+            })
+        
         mx550.STI = new BasicDisplayEVO('sti',
-        {top: 287, left: 854, width: 50, height: 20},
-        {
-            fontColor: "#00FF00",
-            backgroundColor: "transparent",
-            visibleWhen: "isOn = TRUE",
-            fontSize: 8,
-            textAlign: "left",
-            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-            displayKey: 'sti'
-        }
-        )
+            {top: 257, left: 854, width: 50, height: 20},
+            {
+                parent: 'prototype',
+                fontColor: "#00FF00",
+                backgroundColor: "transparent",
+                visibleWhen: "isOn = TRUE",
+                fontSize: 8,
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'left',
+                displayKey: 'sti'
+            }
+            )
 
         mx550.STII = new BasicDisplayEVO('stii',
-        {top: 297, left: 854, width: 50, height: 20},
+        {top: 267, left: 854, width: 50, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
             displayKey: 'stii'
         }
         )
         mx550.STIII = new BasicDisplayEVO('stiii',
-        {top: 307, left: 854, width: 50, height: 20},
+        {top: 277, left: 854, width: 50, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
             displayKey: 'stiii'
         }
         )
         mx550.STAVR = new BasicDisplayEVO('stavr',
-        {top: 317, left: 854, width: 50, height: 20},
+        {top: 287, left: 854, width: 50, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
             displayKey: 'staVR'
         }
         )
         mx550.STAVL = new BasicDisplayEVO('stavl',
-        {top: 327, left: 854, width: 50, height: 20},
+        {top: 297, left: 854, width: 50, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
             displayKey: 'staVL'
         }
         )
         mx550.STAVF = new BasicDisplayEVO('stavf',
-        {top: 337, left: 854, width: 50, height: 20},
-        {
-            fontColor: "#00FF00",
-            backgroundColor: "transparent",
-            visibleWhen: "isOn = TRUE",
-            fontSize: 8,
-            textAlign: "left",
-            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-            displayKey: 'staVF'
-        }
+            {top: 307, left: 854, width: 50, height: 20},
+            {
+                parent: 'prototype',
+                fontColor: "#00FF00",
+                backgroundColor: "transparent",
+                visibleWhen: "isOn = TRUE",
+                fontSize: 8,
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'left',
+                displayKey: 'staVF'
+            }
         )
         /* STI values */
 
         mx550.STI_val = new BasicDisplayEVO('sti_val',
-        {top: 287, left: 890, width: 20, height: 20},
-        {
-            fontColor: "#00FF00",
-            backgroundColor: "transparent",
-            visibleWhen: "isOn = TRUE",
-            fontSize: 8,
-            textAlign: "left",
-            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-            displayKey: 'sti_v'
-        }
+            {top: 257, left: 890, width: 20, height: 20},
+            {
+                parent: 'prototype',
+                fontColor: "#00FF00",
+                backgroundColor: "transparent",
+                visibleWhen: "isOn = TRUE",
+                fontSize: 8,
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'right',
+                displayKey: 'sti_v'
+            }
         )
 
         mx550.STII_val = new BasicDisplayEVO('stii_val',
-        {top: 297, left: 890, width: 20, height: 20},
-        {
-            fontColor: "#00FF00",
-            backgroundColor: "transparent",
-            visibleWhen: "isOn = TRUE",
-            fontSize: 8,
-            textAlign: "left",
-            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-            displayKey: 'stii_v'
-        }
+            {top: 267, left: 890, width: 20, height: 20},
+            {
+                parent: 'prototype',
+                fontColor: "#00FF00",
+                backgroundColor: "transparent",
+                visibleWhen: "isOn = TRUE",
+                fontSize: 8,
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'right',
+                displayKey: 'stii_v'
+            }
         )
         mx550.STIII_val = new BasicDisplayEVO('stiii_val',
-        {top: 307, left: 890, width: 20, height: 20},
-        {
-            fontColor: "#00FF00",
-            backgroundColor: "transparent",
-            visibleWhen: "isOn = TRUE",
-            fontSize: 8,
-            textAlign: "left",
-            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-            displayKey: 'stiii_v'
-        }
+            {top: 277, left: 890, width: 20, height: 20},
+            {
+                parent: 'prototype',
+                fontColor: "#00FF00",
+                backgroundColor: "transparent",
+                visibleWhen: "isOn = TRUE",
+                fontSize: 8,
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'right',
+                displayKey: 'stiii_v'
+            }
         )
         mx550.STAVR_val = new BasicDisplayEVO('stavr_val',
-        {top: 317, left: 890, width: 20, height: 20},
-        {
-            fontColor: "#00FF00",
-            backgroundColor: "transparent",
-            visibleWhen: "isOn = TRUE",
-            fontSize: 8,
-            textAlign: "left",
-            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-            displayKey: 'staVR_v'
-        }
+            {top: 287, left: 890, width: 20, height: 20},
+            {
+                parent: 'prototype',
+                fontColor: "#00FF00",
+                backgroundColor: "transparent",
+                visibleWhen: "isOn = TRUE",
+                fontSize: 8,
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'right',
+                displayKey: 'staVR_v'
+            }
         )
         mx550.STAVL_val = new BasicDisplayEVO('stavl_val',
-        {top: 327, left: 890, width: 20, height: 20},
-        {
-            fontColor: "#00FF00",
-            backgroundColor: "transparent",
-            visibleWhen: "isOn = TRUE",
-            fontSize: 8,
-            textAlign: "left",
-            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-            displayKey: 'staVL_v'
-        }
+            {top: 297, left: 890, width: 20, height: 20},
+            {
+                parent: 'prototype',
+                fontColor: "#00FF00",
+                backgroundColor: "transparent",
+                visibleWhen: "isOn = TRUE",
+                fontSize: 8,
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'right',
+                displayKey: 'staVL_v'
+            }
         )
         mx550.STAVF_val = new BasicDisplayEVO('stavf_val',
-        {top: 337, left: 890, width: 20, height: 20},
+        {top: 307, left: 890, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'right',
             displayKey: 'staVF_v'
         }
         )
         
         mx550.STV1 = new BasicDisplayEVO('stv1',
-        {top: 287, left: 920, width: 20, height: 20},
+        {top: 257, left: 920, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
             displayKey: 'stv1'
         }
         )
         mx550.STV1_val = new BasicDisplayEVO('stv1_val',
-        {top: 287, left: 955, width: 20, height: 20},
+        {top: 257, left: 955, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'right',
             displayKey: 'stv1_v'
         }
         )
         mx550.STV2 = new BasicDisplayEVO('stv2',
-        {top: 297, left: 920, width: 20, height: 20},
+        {top: 267, left: 920, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
             displayKey: 'stv2'
         }
         )
         mx550.STV2_val = new BasicDisplayEVO('stv2_val',
-        {top: 297, left: 955, width: 20, height: 20},
+        {top: 267, left: 955, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'right',
             displayKey: 'stv2_v'
         }
         )
         mx550.STV3 = new BasicDisplayEVO('stv3',
-        {top: 307, left: 920, width: 20, height: 20},
+        {top: 277, left: 920, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
             displayKey: 'stv3'
         }
         )
         mx550.STV3_val = new BasicDisplayEVO('stv3_val',
-        {top: 307, left: 955, width: 20, height: 20},
+        {top: 277, left: 955, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'right',
             displayKey: 'stv3_v'
         }
         )
         mx550.STV4 = new BasicDisplayEVO('stv4',
-        {top: 317, left: 920, width: 20, height: 20},
+        {top: 287, left: 920, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
             displayKey: 'stv4'
         }
         )
         mx550.STV4_val = new BasicDisplayEVO('stv4_val',
-        {top: 317, left: 955, width: 20, height: 20},
+        {top: 287, left: 955, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'right',
             displayKey: 'stv4_v'
         }
         )
         mx550.STV5 = new BasicDisplayEVO('stv5',
-        {top: 327, left: 920, width: 20, height: 20},
+        {top: 297, left: 920, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
             displayKey: 'stv5'
         }
         )
         mx550.STV5_val = new BasicDisplayEVO('stv5_val',
-        {top: 327, left: 955, width: 20, height: 20},
+        {top: 297, left: 955, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'right',
             displayKey: 'stv5_v'
         }
         )
         mx550.STV6 = new BasicDisplayEVO('stv6',
-        {top: 337, left: 920, width: 20, height: 20},
+        {top: 307, left: 920, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
             displayKey: 'stv6'
         }
         )
         mx550.STV6_val = new BasicDisplayEVO('stv6_val',
-        {top: 337, left: 955, width: 20, height: 20},
+        {top: 307, left: 955, width: 20, height: 20},
         {
+            parent: 'prototype',
             fontColor: "#00FF00",
             backgroundColor: "transparent",
             visibleWhen: "isOn = TRUE",
             fontSize: 8,
-            textAlign: "left",
             fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'right',
             displayKey: 'stv6_v'
         }
         )
 
-
-        mx550.noPatientMessage = new BasicDisplayEVO('stv6_val',
-        {top: 800, left: 100, width: 20, height: 20},
+        mx550.noPatientMessage = new BasicDisplayEVO('no_patient_message',
+        {top: 735, left: 106, width: 500, height: 15},
         {
-            fontColor: "#00FF00",
-            backgroundColor: "$FF0000",
+            parent: 'prototype',
+            fontColor: "#FFFFFF",
+            backgroundColor: "transparent",
             visibleWhen: "noPatient = TRUE",
-            fontSize: 16,
-            textAlign: "left",
-            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
-            displayKey: 'noPatientMsg'
+            fontWeight: 'bolder',
+            align: 'left',
+            fontSize: 8,
+            /* fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif', */
+            displayKey: 'noPatientMsg',
+            
         }
         )
-
 
         mx550.tCore_display = new MaxMinDisplay(
             'tcore-display',
@@ -724,12 +820,7 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
-                //title: 'Tcore',
-                // type: 'Float', // I need to change it because i don't know how to pass float on PVS state
                 type: 'String',
-                //valueMin: '36.0',
-                //valueMax: '39.0',
-                //value: '37.0',
                 pvsValue: 'tcore',
                 pvsMinValue: 'tcore_min',
                 pvsMaxValue: 'tcore_max',
@@ -747,11 +838,7 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
-                // title: 'Tskin',
                 type: 'String',
-                //valueMin: '36.0',
-                //valueMax: '39.0',
-                //value: '37.0',
                 pvsValue: 'tskin',
                 pvsTitle: 'tskin_label',
                 pvsMinValue: 'tskin_min',
@@ -769,11 +856,7 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
-                /* title: 'NBP', */
                 type: 'String',
-                //valueMin: '90',
-                //valueMax: '160',
-                //value: '123/79 (89)'
                 pvsValue: 'nbp',
                 pvsTitle: 'nbp_label',
                 pvsMinValue: 'nbp_min',
@@ -791,12 +874,6 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
-                /* title: 'ABP',
-                subtitle: 'Sys.',
-                type: 'String',
-                valueMin: '90',
-                valueMax: '160',
-                value: '120/70 (91)', */
                 pvsValue:'abp', 
                 pvsMinValue: 'abp_min', 
                 pvsMaxValue:'abp_max', 
@@ -815,12 +892,6 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
-                /* title: 'PAP',
-                subtitle: 'Dia.',
-                type: 'String',
-                valueMin: '0',
-                valueMax: '16',
-                value: '28/15 (21)', */
                 pvsValue:'pap', 
                 pvsMinValue: 'pap_min', 
                 pvsMaxValue:'pap_max', 
@@ -839,13 +910,8 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
-                /* title: 'CVP',
-                subtitle: 'Mean', */
                 type: 'Integer',
                 bracket: 'parenthesis',
-                /* valueMin: '0',
-                valueMax: '10',
-                value: '9', */
                 pvsValue:'cvp', 
                 pvsMaxValue:'cvp_max', 
                 pvsTitle:'cvp_label',
@@ -863,13 +929,8 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
-                /* title: 'ICP',
-                subtitle: 'Mean', */
                 type: 'Integer',
                 bracket: 'parenthesis',
-                /* valueMin: '0',
-                valueMax: '10',
-                value: '9', */
                 pvsValue:'icp', 
                 pvsMaxValue:'icp_max', 
                 pvsTitle:'icp_label',
@@ -886,11 +947,7 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
-                /* title: 'ICP', */
                 type: 'Integer',
-                /* valueMin: '50',
-                valueMax: '130',
-                value: '82', */
                 pvsValue:'cpp', 
                 pvsMinValue: 'cpp_min', 
                 pvsMaxValue:'cpp_max', 
@@ -926,11 +983,7 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 backgroundColor: 'none',
                 visibleWhen: "isOn = TRUE",
-                /* title: 'awRR', */
                 type: 'Integer',
-                /* valueMin: '8',
-                valueMax: '30',
-                value: '17', */
                 pvsValue: 'awrr',
                 pvsTitle: 'awrr_label',
                 pvsMinValue: 'awrr_min',
@@ -940,25 +993,21 @@ require([
 
         mx550.spo2_graphics = new ImageRender(
             'spo2_graphics',
-            {top: 370, left: 860, width: 20, height: 20},
+            {top: 370, left: 860, width: 10, height: 20},
             {
                 parent: 'prototype',
+                displayKey: 'spo2Graphics',
+                visibleWhen: 'isOn = TRUE'
             }
         )
 
         mx550.spo2_rec = new ImageRender(
             'spo2_rectangle',
-            {top: 330, left: 995, width: 10, height: 70},
+            {top: 355, left: 1005, width: 7, height: 50},
             {
                 parent: 'prototype',
-            }
-        )
-
-        mx550.alarmVol = new ImageRender(
-            'wifi',
-            {top: 205, left: 1090, width: 30, height:15},
-            {
-                parent: 'prototype'
+                displayKey: 'spo2Rectangle',
+                visibleWhen: 'isOn = TRUE'
             }
         )
 
@@ -987,18 +1036,267 @@ require([
              }
         )
 
+
+        /* NBPs displays */
+        mx550.NBP_title = new BasicDisplayEVO('nbp_title',
+        {top: 680, left: 470, width: 30, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbpTitle'
+        }
+        )
+
+        mx550.NBP_subtitle = new BasicDisplayEVO('nbp_subtitle',
+        {top: 693, left: 470, width: 30, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 6,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbpSubtitle'
+        }
+        )
+
+        mx550.NBP1h = new BasicDisplayEVO('nbp1hour',
+        {top: 682, left: 533, width: 30, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 6,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp1hour'
+        }
+        )
+
+        mx550.NBP1 = new BasicDisplayEVO('nbp1',
+        {top: 682, left: 584, width: 50, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp1'
+        }
+        )
+
+        mx550.NBP2h = new BasicDisplayEVO('nbp2hour',
+        {top: 692, left: 533, width: 30, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 6,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp2hour'
+        }
+        )
+
+        mx550.NBP2 = new BasicDisplayEVO('nbp2',
+        {top: 692, left: 584, width: 50, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp2'
+        }
+        )
+
+        mx550.NBP3h = new BasicDisplayEVO('nbp3hour',
+        {top: 703, left: 533, width: 30, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 6,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp3hour'
+        }
+        )
+
+        mx550.NBP3 = new BasicDisplayEVO('nbp3',
+        {top: 703, left: 584, width: 50, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp3'
+        }
+        )
+
+        mx550.NBP4h = new BasicDisplayEVO('nbp4hour',
+        {top: 714, left: 533, width: 30, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 6,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp4hour'
+        }
+        )
+
+        mx550.NBP4 = new BasicDisplayEVO('nbp4',
+        {top: 714, left: 584, width: 50, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp4'
+        }
+        )
+
+        mx550.NBP5h = new BasicDisplayEVO('nbp5hour',
+        {top: 725, left: 533, width: 30, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 6,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp5hour'
+        }
+        )
+
+        mx550.NBP5 = new BasicDisplayEVO('nbp5',
+        {top: 725, left: 584, width: 50, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp5'
+        }
+        )
+
+        mx550.NBP6h = new BasicDisplayEVO('nbp6hour',
+        {top: 736, left: 533, width: 30, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 6,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp6hour'
+        }
+        )
+
+        mx550.NBP6 = new BasicDisplayEVO('nbp6',
+        {top: 736, left: 584, width: 50, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 8,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbp6'
+        }
+        )
+
+        mx550.NBPMode = new BasicDisplayEVO('nbp_mode',
+        {top: 680, left: 245, width: 50, height: 17},
+        {
+            parent: 'prototype',
+            fontColor: '#F47F7E',
+            backgroundColor: "transparent",
+            visibleWhen: "isOn = TRUE",
+            fontSize: 7,
+            fontWeight: 'bold',
+            fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+            align: 'left',
+            displayKey: 'nbpMode'
+        }
+        )
+
+        mx550.NBPGraphics = new ImageRender(
+            'nbp_graphics',
+            {top: 660, left: 370, width: 26, height: 6},
+            {
+                parent: 'prototype',
+                backgroundColor: "transparent",
+                displayKey: 'nbpGraphics',
+                visibleWhen: 'isOn = TRUE'
+            }
+        )
+        mx550.NBPTime = new BasicDisplayEVO('nbp_time',
+            {top: 665, left: 396, width: 30, height: 10},
+            {
+                parent: 'prototype',
+                fontColor: '#F47F7E',   
+                backgroundColor: "transparent",
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 7,
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'left',
+                displayKey: 'nbpTime' 
+            }
+        )
+
         // LEDs
-        mx550.onoff_led = new LED("onoff_led", {
-            top: 930,
-            left: 380,
-            width: 17,
-            height: 17
-        },{
-            parent: "prototype",
-            color: "orange",
-            callback: onMessageReceived,
-            backgroundColor: "transparent" // does this button light up?
-        })
+        mx550.onoff_led = new LED("onoff_led", 
+            {top: 930, left: 380, width: 17, height: 17},
+            {
+                parent: "prototype",
+                color: "orange",
+                callback: onMessageReceived,
+                backgroundColor: "transparent" // does this button light up?
+            })
 
         // utility function
         function evaluate(str) {
@@ -1077,33 +1375,68 @@ require([
             mx550.spo2_rec.render(res)
             mx550.alarmVol.render(res)
                 //mx550.onoff_led.render(res)
-            let today = new Date()
-            mx550.date_display.render(res)
+                
+            /* Top bar  */
+            mx550.network.render(res)
+            mx550.network.renderGlyphicon('glyphicon-user', {'blinking':false})
 
-            mx550.STI.render(res,{align:'left'})
-            mx550.STII.render(res,{align:'left'})
-            mx550.STIII.render(res,{align:'left'})
-            mx550.STAVR.render(res,{align:'left'})
-            mx550.STAVL.render(res,{align:'left'})
-            mx550.STAVF.render(res,{align:'left'})
-            mx550.STI_val.render(res,{align:'right'})
-            mx550.STII_val.render(res,{align:'right'})
-            mx550.STIII_val.render(res,{align:'right'})
-            mx550.STAVR_val.render(res,{align:'right'})
-            mx550.STAVL_val.render(res,{align:'right'})
-            mx550.STAVF_val.render(res,{align:'right'})
+            mx550.bed.render(res)
+            mx550.patientName.render(res)
+            mx550.patientName.renderGlyphicon('glyphicon-user',{'blinking':false})
+            mx550.date_display.render(res)
+            mx550.profile.render(res)
+            mx550.profile.renderGlyphicon('glyphicon-credit-card', {'blinking': false})
+            mx550.view.render(res)
+            mx550.view.renderGlyphicon('glyphicon-modal-window', {'blinking': false})
+
+
+            mx550.STI.render(res)
+            mx550.STII.render(res)
+            mx550.STIII.render(res)
+            mx550.STAVR.render(res)
+            mx550.STAVL.render(res)
+            mx550.STAVF.render(res)
+            mx550.STI_val.render(res)
+            mx550.STII_val.render(res)
+            mx550.STIII_val.render(res)
+            mx550.STAVR_val.render(res)
+            mx550.STAVL_val.render(res)
+            mx550.STAVF_val.render(res)
             mx550.STV1.render(res)
-            mx550.STV1_val.render(res,{align: 'right'})
+            mx550.STV1_val.render(res)
             mx550.STV2.render(res)
-            mx550.STV2_val.render(res,{align: 'right'})
+            mx550.STV2_val.render(res)
             mx550.STV3.render(res)
-            mx550.STV3_val.render(res,{align: 'right'})
+            mx550.STV3_val.render(res)
             mx550.STV4.render(res)
-            mx550.STV4_val.render(res,{align: 'right'})
+            mx550.STV4_val.render(res)
             mx550.STV5.render(res)
-            mx550.STV5_val.render(res,{align: 'right'})
+            mx550.STV5_val.render(res)
             mx550.STV6.render(res)
-            mx550.STV6_val.render(res,{align: 'right'})
+            mx550.STV6_val.render(res)
+
+            mx550.noPatientMessage.render(res)
+
+            /* NBP displays */
+            
+            mx550.NBP_title.render(res)
+            mx550.NBP_subtitle.render(res)
+            mx550.NBP1h.render(res)
+            mx550.NBP1.render(res)
+            mx550.NBP2h.render(res)
+            mx550.NBP2.render(res)
+            mx550.NBP3h.render(res)
+            mx550.NBP3.render(res)
+            mx550.NBP4h.render(res)
+            mx550.NBP4.render(res)
+            mx550.NBP5h.render(res)
+            mx550.NBP5.render(res)
+            mx550.NBP6h.render(res)
+            mx550.NBP6.render(res)
+            mx550.NBPMode.render(res)
+            mx550.NBPGraphics.render(res)
+            mx550.NBPTime.render(res)
+            
         }
 
         /**
@@ -1113,7 +1446,7 @@ require([
         function onMessageReceived(err, event) {
             function prettyprintState(str) {
                 var state = stateParser.parse(str);
-                state.spo2_label = state.spo2_label.replace(/"/g, "");
+                //state.spo2_label = state.spo2_label.replace(/"/g, "");
                 return JSON.stringify(state, null, " ");
             }
 
