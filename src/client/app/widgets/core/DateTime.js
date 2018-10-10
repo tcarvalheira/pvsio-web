@@ -47,6 +47,7 @@ define(function (require, exports, module) {
     "use strict";
     var WidgetEVO = require("widgets/core/WidgetEVO");
     var BasicDisplayEVO = require("widgets/core/BasicDisplayEVO")
+    let d3 = require('d3/d3')
     /**
      * @function <a name="DateTime">DateTime</a>
      * @description Constructor.
@@ -75,6 +76,8 @@ define(function (require, exports, module) {
      * @param {String} [opt.timeFormat.second]
      * @param {'vertical' | 'horizontal'} [opt.relativePosition='vertical'] Whether date and time should be placed vertically or horizontally realtive to each other
      * @param {'date-time' | 'time-date'} [opt.relativeOrder='date-time'] Sets the relative order to show the date and time. If it is set to date-time, date is shown first, above or on leftmost depending on relativePosition is set to vertical or horizontal.
+     * @param {String} [opt.visibleWhen] - set visibility condition
+     * @param {String} [opt.displayKey] - set PVS state key
      * @memberof module:DateTime
      * @instance
      */
@@ -105,22 +108,32 @@ define(function (require, exports, module) {
         this.opt.timeFontSize = opt.timeFontSize || '14'
         this.opt.relativePosition = opt.relativePosition || 'vertical' //vertical || horaizontal
         this.opt.relativeOrder = opt.relativeOrder || 'date-time' // date-time || time-date 
+        this.opt.dateDisplayKey = opt.dateDisplayKey || ''
+        this.opt.timeDisplayKey = opt.timeDisplayKey || ''
+        this.visibleWhen = opt.visibleWhen || 'true'
 
         this.currentDate = new Date()
 
         this.parent = (opt.parent) ? (`#${opt.parent}`) : 'body'
-        this.div = d3.select(this.parent)
-            .append('div')
-            .attr('id', this.id)
+        // invoke WidgetEVO constructor to create the widget
+        WidgetEVO.apply(this, [id, coords, opt]);
+        //this.div = d3.select(this.parent)
+        //    .append('div')
+        //    .attr('id', this.id)
 
+        
         /* set specific opt and coords for the date and time */
         let dateOpt = Object.assign({}, opt); // copy object without reference
         let timeOpt = Object.assign({}, opt);
         let dateCoords = Object.assign({}, coords)
         let timeCoords = Object.assign({}, coords)
         dateOpt.parent = this.id
+        dateOpt.displayKey = this.opt.dateDisplayKey
+        dateOpt.position = 'relative'
         dateOpt.fontSize = this.opt.dateFontSize
         timeOpt.parent = this.id
+        timeOpt.displayKey = this.opt.timeDisplayKey
+        timeOpt.position = 'relative'
         timeOpt.fontSize = this.opt.timeFontSize
         /* calculate positions of the two widgets */
         if (this.opt.relativePosition === 'horizontal') {
@@ -128,18 +141,34 @@ define(function (require, exports, module) {
             timeCoords.width = this.coords.width / 2
             dateCoords.width = this.coords.width / 2
             if (this.opt.relativeOrder === 'date-time') {
-                timeCoords.left = this.coords.left + dateCoords.width
+                // [absolute] timeCoords.left = this.coords.left + dateCoords.width
+                dateCoords.left = 0
+                dateCoords.top = 0
+                timeCoords.top = 0
+                timeCoords.left = dateCoords.width /* left corner is where date ends */
             } else {
-                dateCoords.left = this.coords.left + timeCoords.width
+                // [absolute] dateCoords.left = this.coords.left + timeCoords.width
+                timeCoords.left = 0
+                timeCoords.top = 0
+                dateCoords.top = 0
+                dateCoords.left = timeCoords.width /* left corner is where time ends */
             }
         } else {
             // the element should be vertically positioned
             timeCoords.height = this.coords.height / 2
             dateCoords.height = this.coords.height / 2
             if (this.opt.relativeOrder === 'date-time') {
-                timeCoords.top = this.coords.top + dateCoords.height
+                // [absolute] timeCoords.top = this.coords.top + dateCoords.height
+                dateCoords.top = 0
+                timeCoords.top = dateCoords.height
+                dateCoords.left = 0
+                timeCoords.left = 0
             } else {
-                dateCoords.top = this.coords.top + timeCoords.height
+                // [absolute] dateCoords.top = this.coords.top + timeCoords.height
+                timeCoords.top = 0
+                dateCoords.top = timeCoords.height
+                dateCoords.left = 0
+                timeCoords.left = 0
             }
         }
         /* date and time displays */
@@ -150,15 +179,14 @@ define(function (require, exports, module) {
             timeCoords,
             timeOpt)
 
-        if (this.opt.useCurrentDateTime) {
+       /* if (this.opt.useCurrentDateTime) {
             setInterval(() => {
-                this.setDateInternal(this)
+                this.setDateInternal(this, '', this.state)
                 //this.render()
             }, 1000)
-        }
+        }*/
 
-        // invoke WidgetEVO constructor to create the widget
-        WidgetEVO.apply(this, [id, coords, opt]);
+        
         return this;
     }
     DateTime.prototype = Object.create(WidgetEVO.prototype);
@@ -174,26 +202,40 @@ define(function (require, exports, module) {
      * @instance
      */
     DateTime.prototype.render = function (state, opt) {
-        // set style
+        // set state to a class variable so that it can be used on callback for setInterval. If there is not 
+        //this.state = state || this.state
+        this.setDateInternal(this, '', state)
         opt = this.normaliseOptions(opt);
 
         this.setStyle(opt);
 
         // render content
         if (this.opt.showDate) {
-            this.date.render(this.getDateString())
+            if(this.opt.useCurrentDateTime && this.evalViz(state)){
+                this.date.render(this.getDateString())
+            }else{
+                this.date.render(state)
+            }
         } else {
             this.date.hide()
         }
 
         if (this.opt.showTime) {
-            this.time.render(this.getTimeString())
+            if(this.opt.useCurrentDateTime && this.evalViz(state)){
+                this.time.render(this.getTimeString())
+            }else{
+                this.time.render(state)
+            }
         } else {
             this.time.hide()
         }
 
-
-        this.reveal();
+        if(this.evalViz(state)){
+            this.reveal();
+        }else{
+            this.hide();
+        }
+        
         return this;
     }
 
@@ -238,7 +280,7 @@ define(function (require, exports, module) {
         } else {
             obj.currentDate = new Date(date);
         }
-        return obj.render()
+        //return obj.render()
     }
     /**
     * @function <a name="setDate">setDate</a>
