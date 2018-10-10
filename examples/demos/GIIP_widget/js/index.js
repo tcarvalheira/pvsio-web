@@ -1,7 +1,7 @@
 /**
  *
- * @author Paolo Masci
- * @date Dec 12, 2017
+ * @author Tiago Carvalheira
+ * @date Jun 14, 2018
  */
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
 require.config({
