@@ -70,6 +70,7 @@ define(function (require, exports, module) {
 
          // override default style options of WidgetEVO as necessary before creating the DOM element with the constructor of module WidgetEVO
          opt.backgroundColor = opt.backgroundColor || "black";
+         opt["text-align"] = opt.align;
          opt.cursor = opt.cursor || "default";
          opt.overflow = "hidden";
 
