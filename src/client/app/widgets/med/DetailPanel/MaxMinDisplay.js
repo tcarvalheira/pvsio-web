@@ -59,8 +59,8 @@ define(function (require, exports, module) {
      * @param {('Integer'|'Float'|'String')} [opt.type='Float'] set widget type. 
      * @param {Integer} [opt.decimalPlaces=1] Set the number of decimal places
      * @param {('none' | 'parenthesis' | 'bracked' | 'curly')} [opt.bracket='none'] options are  default is none
-     * @param {String} [opt.pvsMinValue='minValue'] - name of PVS state variable that holds the widget min value
-     * @param {String} [opt.pvsMaxValue='maxValue'] - name of PVS state variable that holds the widget max value
+     * @param {String} [opt.pvsMinValue] - name of PVS state variable that holds the widget min value
+     * @param {String} [opt.pvsMaxValue] - name of PVS state variable that holds the widget max value
      * @param {String} [opt.pvsValue='value'] - name of PVS state variable that holds the widget value
      * @param {String} [opt.pvsTitle='title] - name of PVS state variable that holds the widget title
      * @param {String} [opt.pvsSubtitle='subtitle'] - name of PVS state variable that holds the widget subtitle
@@ -76,11 +76,13 @@ define(function (require, exports, module) {
          this.type = this.type || "MaxMinDisplay";
         this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : id;
         this.pvsValue = opt.pvsValue || this.pvsValue || 'value'
-        this.pvsMinValue = opt.pvsMinValue || this.pvsMinValue || 'minValue'
-        this.pvsMaxValue = opt.pvsMaxValue || this.pvsMaxValue || 'maxValue'
+        this.pvsMinValue = opt.pvsMinValue || this.pvsMinValue
+        this.pvsMaxValue = opt.pvsMaxValue || this.pvsMaxValue
         this.pvsTitle = opt.pvsTitle || this.pvsTitle || 'title'
         this.pvsSubTitle = opt.pvsSubtitle || this.pvsSubTitle || 'subtitle'
         this.parent = (opt.parent) ? (`#${opt.parent}`) : 'body'
+        this.valueMax = opt.valueMax
+        this.valueMin = opt.valueMin
         
         this.div = d3.select(this.parent)
             .append('div')
@@ -128,7 +130,7 @@ define(function (require, exports, module) {
             top = top+10
         }
 
-        if(this.valueMax !== '' || opt.pvsMinValue !== undefined){
+        if((this.valueMax !== undefined && this.valueMax !== null) || opt.pvsMaxValue !== undefined){
             let coordsMax = Object.assign({},coords)
             //coordsMax.top = top
             coordsMax.top = top
@@ -143,7 +145,7 @@ define(function (require, exports, module) {
             top = top + 10
         }
         
-        if(this.valueMin != '' || opt.pvsMinValue !== undefined){
+        if((this.valueMin !== undefined && this.valueMin !== null) || opt.pvsMinValue !== undefined){
             let coordsMin = Object.assign({},coords)
             //coordsMin.top = top
             coordsMin.top = top
