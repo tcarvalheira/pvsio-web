@@ -62,6 +62,7 @@ define(function (require, exports, module) {
      * @param {uInt} [opt.pvsDefinition.backgroundColor]
      * @param {uInt} [opt.pvsDefinition.fillColor]
      * @param {String} [opt.visibleWhen] - set visibility condition for wave, based on PVS state
+     * @param {Integer} [opt.fontSize] set fontSize for title
      * @memberof module:Wave
      * @instance
      */
@@ -79,6 +80,7 @@ define(function (require, exports, module) {
         this.left = coords.left || 0;
         this.aspectRatio = 1125/155
         this.visibleWhen = this.visibleWhen || opt.visibleWhen || true
+        this.fontSize = opt.fontSize || 10
     
 
 
@@ -150,6 +152,7 @@ define(function (require, exports, module) {
         this.titleDiv.style.left = `${this.left}px`
         this.titleDiv.style.position = opt.position
         this.titleDiv.style.zIndex = 20
+        this.titleDiv.style.fontSize = `${this.fontSize}px`
         this.titleDiv.width = 30
         this.titleDiv.height = 10
         this.titleDiv.style.color = this.waveColor
