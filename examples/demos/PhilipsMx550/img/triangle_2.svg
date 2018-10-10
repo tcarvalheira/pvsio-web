@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="200"
+   height="400"
+   viewBox="0 0 52.916665 105.83334"
+   id="svg8"
+   xmlns="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer1"
+     transform="translate(-1,-190)">
+    <path
+       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 0,191.16665 h 52.916666 v 13.22917 H 6.6145832 Z"
+       id="path3705"/>
+    <path
+       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 6.6145832,204.39582 H 52.916666 v 13.22916 H 13.229167 Z"
+       id="path3707"/>
+    <path
+       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 13.229167,217.62498 h 39.687499 v 13.22917 H 19.84375 Z"
+       id="path3709"/>
+    <path
+       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 19.84375,230.85415 h 33.072916 v 13.22917 H 26.458333 Z"
+       id="path3711"/>
+    <path
+       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 26.458333,244.08332 h 26.458333 v 13.22916 h -19.84375 z"
+       id="path3713"/>
+    <path
+       style="fill:none;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 33.072916,257.31248 h 19.84375 v 13.22917 H 39.6875 Z"
+       id="path3715"/>
+    <path
+       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 52.916666,270.54165 v 13.22917 H 46.302083 L 39.6875,270.54165 v 0 0 0 0 0 z"
+       id="path3717"/>
+    <path
+       style="fill:#0FF0FF;stroke:#04d5e2;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 52.916666,283.77082 v 13.22916 l -6.614583,-13.22916 z"
+       id="path3719" />
+  </g>
+</svg>
