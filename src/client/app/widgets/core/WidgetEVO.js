@@ -119,6 +119,7 @@ define(function (require, exports, module) {
         this.style["background-color"] = opt.backgroundColor || "transparent";
         this.style["font-size"] = (opt.fontSize || (this.height - opt.borderWidth) / 2) + "pt";
         this.style["font-family"] = opt.fontFamily || "sans-serif";
+        this.style["font-weight"] = opt.fontWeight || 'normal';
         this.style.color = opt.fontColor || "white";
         this.style["text-align"] = opt.align || "center";
         this.style["border-width"] = opt.borderWidth + "px";
@@ -162,7 +163,7 @@ define(function (require, exports, module) {
      */
     WidgetEVO.prototype.reveal = function () {
         if (this.div && !this.div.empty()) {
-            console.log("revealing button " + this.id);
+            //console.log("revealing button " + this.id);
             this.div.style("display", "block");
         }
         return this;
@@ -176,7 +177,7 @@ define(function (require, exports, module) {
      */
     WidgetEVO.prototype.hide = function () {
         if (this.div && !this.div.empty()) {
-            console.log("hiding button " + this.id);
+            //console.log("hiding button " + this.id);
             this.div.style("display", "none");
         }
         return this;
