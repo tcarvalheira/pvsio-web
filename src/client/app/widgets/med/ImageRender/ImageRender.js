@@ -31,6 +31,7 @@ define(function (require, exports, module) {
     var WidgetEVO = require("widgets/core/WidgetEVO");
     let property = require("util/property");
     var imagesvg = require("text!widgets/med/ImageRender/alarmoff.svg");
+    //var svgImages = require("text!img/");
     let d3 = require('d3/d3')
     /**
      * @function <a name="ImageRender">ImageRender</a>
@@ -43,8 +44,9 @@ define(function (require, exports, module) {
      * @param {String} [opt.svg='alarmoff.svg'] svg file
      * @param {String} [opt.position='absolute'] set the position style
      * @param {Number} [opt.opacity] value between 0 and 1
-     * @param {String} [opt.backColor] Sets image background color
-     * @param {String} [opt.color] sets image foreground color
+     * @param {String} [opt.displayKey] set PVS state value for the image to render. The image should exist on img folder inside prototype folder.
+     * @param {String} [opt.visibleWhen='true'] sets when widget should be rendered
+     * @param {String} [opt.backgroundColor='transparent'] set background widget color
      * @memberof module:ImageRender
      * @instance
      */
@@ -52,23 +54,33 @@ define(function (require, exports, module) {
          coords = coords || {};
          opt = this.normaliseOptions(opt);
          // set widget type & display key
+         this.id = id
          this.type = this.type || "ImageRender";
          this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : id;
+         this.visibleWhen = opt.visibleWhen || 'true'
          this.parent = (opt.parent) ? `#${opt.parent}` : "body";
          // override default style options of WidgetEVO as necessary before creating the DOM element with the constructor of module WidgetEVO
-         opt.backgroundColor = opt.backgroundColor || "none";
+         this.backgroundColor = opt.backgroundColor || "transparent";
          this.backColor = opt.backColor
          this.color = opt.color
          opt.cursor = opt.cursor || "default";
          opt.overflow = "hidden";
          this.width = coords.width || 100
          this.height = coords.height || 100
-         opt.svg = opt.svg || 'alarmoff.svg'
+         //opt.svg = opt.svg || 'alarmoff.svg'
+
+         this.svg = opt.svg || 'img/alarmoff.svg'
+         this.imageAbsolutePath = opt.imageAbsolutePath || false
 
          opt.position = opt.position || "absolute";
          opt.opacity = opt.opacity || 1;
          this.id = id
-         
+
+         // invoke WidgetEVO constructor to create the widget
+         WidgetEVO.apply(this, [ id, coords, opt ]);
+         // var imagesvg = svgImages[opt.svg]
+
+
          var elemClass = id + " ImageRenderWidget" + " noselect ";
          this.div = d3.select(this.parent)
                          .append("div")
@@ -80,24 +92,19 @@ define(function (require, exports, module) {
                          .attr("class", elemClass)
                          .style('z-index',100)
                          .style('display','block')
-                         
- 
-          this.image = this.div.append("div")
-                            .attr("id", id + "_drawnimage")
-                            .style("width","100%")
-                            .style('height','100%')
-                            .attr('display', 'block')
-                            .html(imagesvg)
-                                
-                            
+                                 
+        if(this.svg !== undefined){
+            this.image = this.div.append('object')
+                            .attr('id',`${id}_svg_object`)
+                            .style('width','100%')
+                            .style('background-color','yellow')
+                            .attr('type','image/svg+xml')
+                            .attr("data", `img/${this.svg}`)
+        }
+                                                            
 
         this.image.select("svg")
 
-        this.setBackgroundColor(this.backColor)
-        this.setColor(this.color)
-
-        // invoke WidgetEVO constructor to create the widget
-         WidgetEVO.apply(this, [ id, coords, opt ]);
          return this;
      }
      ImageRender.prototype = Object.create(WidgetEVO.prototype);
@@ -108,74 +115,34 @@ define(function (require, exports, module) {
     * @function render
     * @description this method will render the widget
     */
-        ImageRender.prototype.render = function () {
-            this.image.style('display','block') 
+        ImageRender.prototype.render = function (state, opt={}) {
+            var imagePath = ''
+            /* if displayKey is defined then use it, else use default svg */
+            if(this.displayKey !== undefined && this.displayKey !== null && this.displayKey !== ''){
+                imagePath = this.evaluate(this.displayKey,state)                
+            }else{
+                imagePath = this.svg
+            }
+            this.backgroundColor = opt.backgroundColor || this.backgroundColor || 'transparent'
+
+            this.image.remove()
+            this.image = this.div.append('object')
+                            .attr('id',`${this.id}_plugged_img`)
+                            .style('width','100%')
+                            //.style('font-size','10px')
+                            .style('background-color',`${this.backgroundColor}`)
+                            .attr('type','image/svg+xml')
+                            .attr("data", `${imagePath}`) 
+
+            if(this.evalViz(state)){
+                this.reveal()
+            }else{
+                this.hide()
+            }
+            
             return this
         }
-
-    /**
-    * @function <a name="hide">hide</a>
-    * @description This method will hide the widget
-    * @memberof module:ImageRender
-    * @instance
-    */
-        ImageRender.prototype.hide = function () {
-        this.image.style('display','none')
-        return this
-    }
-
-    /**
-    * @function <a name="setImage">setImage</a>
-    * @description This method will change the rendered image to another passed by argument.
-    * @param {SVG} img The image should be a svg object that will be rendered
-    * @memberof module:ImageRender
-    * @instance
-    */
-    ImageRender.prototype.setImage = function (img) {
-        let svg = img
-        this.image.remove()
-        this.image = this.div.append("div").attr("id", this.id + "_drawnimage")
-                        .style('height','100%')
-                        .style('width','100%')
-                        .html(svg)
-                        .style('fill', '#00FF00')    
-                        .attr('display', 'block')
         
-        return this
-    }
-
-    	/**
-        * @function <a name="setColor">setColor</a>
-        * @description Sets color of all image paths to the given color
-        * @param {String} color color in hex. ex. #FF0000
-        * @memberof module:ImageRender
-        * @instance
-        */
-        ImageRender.prototype.setColor = function (color) {
-            console.log(`Set color to ${this.color}`)
-            if(this.isValidColor(color) && this.color !== undefined){
-                this.image.selectAll('path')
-                    .style('stroke',color) 
-            }
-            return this
-    }  
-
-    	/**
-        * @function <a name="setBackgroundColor">setBackgroundColor</a>
-        * @description Set the image background color
-        * @param {String} color color in hex. Ex. #FF0000
-        * @memberof module:ImageRender
-        * @instance
-        */
-        ImageRender.prototype.setBackgroundColor = function (color) {
-            console.log(`Set background color to ${color}`)
-            if(this.isValidColor(color) && this.backColor !== undefined){
-                this.image.select('svg')
-                    .style('background-color',color)
-            }
-            return this
-    }
-
     	/**
         * @private
         * @function <a name="isValidColor">isValidColor</a>
