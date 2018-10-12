@@ -256,9 +256,23 @@ define(function (require, exports, module) {
          if (this.evalViz(state)) {
              this.base.text(this.softLabel);
              this.reveal();
+         }else{
+             this.hide();
          }
          return this;
      };
+
+     ButtonEVO.prototype.resize = function(coords){
+        const width = (isNaN(parseFloat(coords.width))) ? this.width : parseFloat(parseFloat(coords.width).toFixed(3))
+        const height = (isNaN(parseFloat(coords.height))) ? this.height : parseFloat(parseFloat(coords.height).toFixed(3))
+
+         this.base.style('width', `${width}px`)
+         this.overlay.style('width', `${width}px`)
+         this.base.style('height', `${height}px`)
+         this.overlay.style('height', `${height}px`)
+         this.div.style('width', `${width}px`)
+         this.div.style('height', `${height}px`)
+     }
 
 
      /**
