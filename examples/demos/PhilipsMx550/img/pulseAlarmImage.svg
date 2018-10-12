@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="50mm"
+   height="65mm"
+   viewBox="0 0 50 65"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="pulseAlarmImage.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="79.777202"
+     inkscape:cy="145.83563"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1327"
+     inkscape:window-height="713"
+     inkscape:window-x="39"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-232)">
+    <rect
+       style="fill:#ffffff;fill-opacity:0.96341463;stroke:#161e19;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.98780488"
+       id="rect815"
+       width="44.979168"
+       height="44.979168"
+       x="2.7794678"
+       y="251.03935"
+       ry="8.3154764" />
+    <path
+       sodipodi:type="star"
+       style="fill:#ffffff;fill-opacity:0.96341463;stroke:#ff0002;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.98780488"
+       id="path836"
+       sodipodi:sides="3"
+       sodipodi:cx="25.500843"
+       sodipodi:cy="277.70357"
+       sodipodi:r1="22.094837"
+       sodipodi:r2="11.047419"
+       sodipodi:arg1="0.52195707"
+       sodipodi:arg2="1.5691546"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 44.653644,288.71957 6.3843151,288.7824 25.46457,255.60878 Z"
+       inkscape:transform-center-x="-0.018136672"
+       inkscape:transform-center-y="-5.5079874" />
+    <path
+       style="fill:none;stroke:#ff0000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 5.9922656,255.38607 c 34.4903264,36.19121 34.4903264,36.19121 34.4903264,36.19121 v -0.0945 z"
+       id="path838"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#ff0000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 44.80203,255.50068 c -79.512577,82.78126 0,0 0,0 z"
+       id="path840"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.96341463;stroke:#ff0000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path858"
+       sodipodi:type="arc"
+       sodipodi:cx="32.497845"
+       sodipodi:cy="266.30011"
+       sodipodi:rx="5.2444196"
+       sodipodi:ry="7.5122766"
+       sodipodi:start="4.8776577"
+       sodipodi:end="0.74403881"
+       d="m 33.360643,258.89019 a 5.2444196,7.5122766 0 0 1 4.097378,4.97033 5.2444196,7.5122766 0 0 1 -1.101651,7.52739"
+       sodipodi:open="true" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:19.53910637px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#00ffff;fill-opacity:1;stroke:#09ffff;stroke-width:0.48847765;stroke-opacity:0.99512196;"
+       x="-1.1453162"
+       y="247.80273"
+       id="text862"
+       transform="scale(0.99881749,1.0011839)"><tspan
+         sodipodi:role="line"
+         id="tspan860"
+         x="-1.1453162"
+         y="247.80273"
+         style="stroke-width:0.48847765;stroke:#09ffff;stroke-opacity:0.99512196;fill:#00ffff;fill-opacity:1;">Pulse</tspan></text>
+  </g>
+</svg>
