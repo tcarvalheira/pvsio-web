@@ -160,7 +160,9 @@ main: THEORY
     nbpTime: string,
 
     spo2Graphics: string,
-    spo2Rectangle: string
+    spo2Rectangle: string,
+
+    pulseAlarmOffImage: string
   #]
 
   init(x: real): state = (#
@@ -325,7 +327,9 @@ main: THEORY
 
     spo2Graphics := "img/triangle_5.svg",
 
-    spo2Rectangle := "img/rectangle1.svg"
+    spo2Rectangle := "img/rectangle1.svg",
+
+    pulseAlarmOffImage := "img/pulseAlarmImage.svg"
 
   #)
 
