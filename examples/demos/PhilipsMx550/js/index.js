@@ -19,7 +19,6 @@ require.config({
 });
 
 require([
-        "widgets/core/ButtonEVO",
         "widgets/LED",
         "widgets/TracingsDisplay",
         "widgets/med/Wave/Wave2",
@@ -33,8 +32,7 @@ require([
         "stateParser",
         "PVSioWebClient",
         "NCDevice"],
-    function (Button,
-              LED,
+    function (LED,
               TracingsDisplay,
               Wave,
               MaxMinDisplay,
@@ -123,13 +121,26 @@ require([
             }
         ),
 
-        mx550.btnAlarmOff = new ButtonEVO("btn_alarm_off", {
+        /* mx550.btnAlarmOff = new ButtonEVO("btn_alarm_off", {
             top: 230, left: 990, height: 20, width: 20
           }, {
             //visibleWhen: "isOn = TRUE", //TODO: i can use this attribute insted of checking if it is on or off on javascript
+            visibleWhen: 'isOn = TRUE',
             parent: 'prototype',
-            callback: onMessageReceived
-          });
+            callback: onMessageReceived,
+            softLabel: 'Pulse',
+            fontColor: '#00FFFF',
+            fontSize: 6,
+            align: 'left'
+          }); */
+
+          mx550.pulseAlarmOff = new ImageRender('pulse_alarm',
+            {top: 222, left: 988, height: 30, width: 20},
+            {
+                parent: 'prototype',
+                displayKey: 'pulseAlarmOffImage',
+                visibleWhen: 'isAlarmOn = FALSE'
+            })
 
           mx550.btnOnOff = new ButtonEVO("btn_on_off", {
             top: 915, left: 316, height: 46, width: 46
@@ -240,7 +251,258 @@ require([
                     backgroundColor: '#211E1C'
                 }
             )
+
+
+        /* TOP Buttons */
+        mx550.topButton1 = new ButtonEVO('top_button_1',
+            {
+                top: 162, left: 108, height: 18, width: 55
+            }, 
+            {
+                visibleWhen: 'isOn = TRUE',
+                parent: 'prototype',
+                callback: onMessageReceived,
+                softLabel: 'Guest2',
+                fontColor: '#FFFFFF',
+                backgroundColor: '#211E1C',
+                fontSize: 7,
+                align: 'center'
+              }
+        )
+
+        mx550.topButton2 = new ButtonEVO('top_button_2',
+        {
+            top: 162, left: 165, height: 18, width: 55
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Ovw6',
+            fontColor: '#FFFFFF',
+            backgroundColor: '#403D3B',
+            fontSize: 7,
+            align: 'center'
+          }
+    )        
+    mx550.topButton3 = new ButtonEVO('top_button_3',
+        {
+            top: 162, left: 222, height: 18, width: 55
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Wmon1',
+            fontColor: '#000000',
+            backgroundColor: '#00E7E8',
+            fontSize: 7,
+            align: 'center'
+          }
+    ) 
+    mx550.topButton4 = new ButtonEVO('top_button_4',
+        {
+            top: 162, left: 281, height: 18, width: 55
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Ovw1',
+            fontColor: '#FFFFFF',
+            backgroundColor: '#211E1C',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
         
+    mx550.topButton5 = new ButtonEVO('top_button_5',
+        {
+            top: 162, left: 370, height: 18, width: 55
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Ovw2',
+            fontColor: '#FFFFFF',
+            backgroundColor: '#211E1C',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+    mx550.topButton6 = new ButtonEVO('top_button_6',
+        {
+            top: 162, left: 427, height: 18, width: 56
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Ovw3',
+            fontColor: '#FFFFFF',
+            backgroundColor: '#211E1C',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+
+    mx550.topButton7 = new ButtonEVO('top_button_7',
+        {
+            top: 162, left: 487, height: 18, width: 56
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Ovw4',
+            fontColor: '#FFFFFF',
+            backgroundColor: '#211E1C',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+    mx550.topButton8 = new ButtonEVO('top_button_8',
+        {
+            top: 162, left: 545, height: 18, width: 56
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Ovw5',
+            fontColor: '#FFFFFF',
+            backgroundColor: '#211E1C',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+    mx550.topButton9 = new ButtonEVO('top_button_9',
+        {
+            top: 162, left: 632, height: 18, width: 56
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Ovw7',
+            fontColor: '#000000',
+            backgroundColor: '#00E7E8',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+
+    mx550.topButton10 = new ButtonEVO('top_button_10',
+        {
+            top: 162, left: 690, height: 18, width: 56
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Ovw9',
+            fontColor: '#FFFFFF',
+            backgroundColor: '#211E1C',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+
+    mx550.topButton11 = new ButtonEVO('top_button_11',
+        {
+            top: 162, left: 748, height: 18, width: 56
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Guest3',
+            fontColor: '#FFFFFF',
+            backgroundColor: '#211E1C',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+    mx550.topButton12 = new ButtonEVO('top_button_12',
+        {
+            top: 162, left: 804, height: 18, width: 56
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Bed31',
+            fontColor: '#000000',
+            backgroundColor: '#00E7E8',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+
+    mx550.topButton13 = new ButtonEVO('top_button_13',
+        {
+            top: 162, left: 893, height: 18, width: 56
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: '*** Bed32',
+            fontColor: '#FFFFFF',
+            backgroundColor: '#E20000',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+
+    mx550.topButton14 = new ButtonEVO('top_button_14',
+        {
+            top: 162, left: 951, height: 18, width: 56
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Bed33',
+            fontColor: '#FFFFFF',
+            backgroundColor: '#211E1C',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+    mx550.topButton15 = new ButtonEVO('top_button_15',
+        {
+            top: 162, left: 1009, height: 18, width: 56
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: '** Bed34',
+            fontColor: '#000000',
+            backgroundColor: '#E2E300',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+
+    mx550.topButton16 = new ButtonEVO('top_button_16',
+        {
+            top: 162, left: 1067, height: 18, width: 56
+        }, 
+        {
+            visibleWhen: 'isOn = TRUE',
+            parent: 'prototype',
+            callback: onMessageReceived,
+            softLabel: 'Bed35',
+            fontColor: '#000000',
+            backgroundColor: '#00E7E8',
+            fontSize: 7,
+            align: 'center'
+          }
+    )
+
         // WAVES
         mx550.ecgII_wave = new Wave('ecgii-wave',
             {top: 210, left: 115, height: 70, width: 730},
@@ -1308,135 +1570,22 @@ require([
             return (v <= 0) ? "--" : ((v < 10) ? v.toFixed(1).toString() : v.toFixed(0).toString());
         }
 
-        // led and onOff button
-        function render_onoff(res){
-            // onOff button is allways rendered
-            mx550.btnOnOff.render(res)
-            // led will display different color based on state
+        function render_widgets(res){
+            for(var widget in mx550){
+                if(!mx550.hasOwnProperty(widget)) continue;
+                mx550[widget].render(res)
+            }
+
+            mx550.network.renderGlyphicon('glyphicon-user', {'blinking':false})
+            mx550.patientName.renderGlyphicon('glyphicon-user',{'blinking':false})
+            mx550.profile.renderGlyphicon('glyphicon-credit-card', {'blinking': false})
+            mx550.view.renderGlyphicon('glyphicon-modal-window', {'blinking': false})
+            mx550.alarmsoff_img.renderGlyphicon('glyphicon-bell',{'blinking':false});
             if(res.isOn === 'TRUE'){
                 mx550.onoff_led.render(res, {color: "#b0ff77"}) /* bright green */
             }else{
                 mx550.onoff_led.render(res, {color: 'grey'})
             }
-        }
-
-        // alarm
-        function render_alarms(res){
-            mx550.pulseAlarm.render(res)
-            mx550.btnAlarmOff.render(res);
-            mx550.alarmsoff_display.render(res)
-            mx550.alarmsoff_img.renderGlyphicon('glyphicon-bell',{'blinking':false});
-            if(!mx550.alarmsoff_img.evalViz(res)){
-                mx550.alarmsoff_img.hide()
-            }else{
-                mx550.alarmsoff_img.reveal()
-            }
-        }
-        function hide_alarms(res){
-            mx550.pulseAlarm.hide()
-            mx550.btnAlarmOff.hide()
-            mx550.alarmsoff_display.hide()
-            mx550.alarmsoff_img.hide()
-        }
-
-        // waves
-        function render_waves(res){
-            mx550.ecgII_wave.render(res)
-            mx550.ecgV_wave.render(res)
-            mx550.spo2_wave.render(res)
-            mx550.co2_wave.render(res)
-            mx550.abp_wave.render(res)
-            mx550.pap_wave.render(res)
-            mx550.cvp_wave.render(res)
-            mx550.icp_wave.render(res)
-        }
-
-        function render_plugs(res){
-            mx550.spo2_plug.render(res)
-            mx550.ecg_plug.render(res)
-        }
-
-        function render_displays(res){
-            mx550.hr_display.render(res)
-            mx550.pulse_display.render(res)
-            mx550.spo2_display.render(res)
-            mx550.perf_display.render(res)
-            mx550.etco2_display.render(res)
-            mx550.awRR_display.render(res)
-            mx550.tCore_display.render(res)
-            mx550.tSkin_display.render(res)
-            mx550.nbp_display.render(res)
-            mx550.abp_display.render(res)
-            mx550.pap_display.render(res)
-            mx550.cvp_display.render(res)
-            mx550.icp_display.render(res)
-            mx550.cpp_display.render(res)
-            mx550.spo2_graphics.render(res)
-            mx550.spo2_rec.render(res)
-            mx550.alarmVol.render(res)
-                //mx550.onoff_led.render(res)
-                
-            /* Top bar  */
-            mx550.network.render(res)
-            mx550.network.renderGlyphicon('glyphicon-user', {'blinking':false})
-
-            mx550.bed.render(res)
-            mx550.patientName.render(res)
-            mx550.patientName.renderGlyphicon('glyphicon-user',{'blinking':false})
-            mx550.date_display.render(res)
-            mx550.profile.render(res)
-            mx550.profile.renderGlyphicon('glyphicon-credit-card', {'blinking': false})
-            mx550.view.render(res)
-            mx550.view.renderGlyphicon('glyphicon-modal-window', {'blinking': false})
-
-
-            mx550.STI.render(res)
-            mx550.STII.render(res)
-            mx550.STIII.render(res)
-            mx550.STAVR.render(res)
-            mx550.STAVL.render(res)
-            mx550.STAVF.render(res)
-            mx550.STI_val.render(res)
-            mx550.STII_val.render(res)
-            mx550.STIII_val.render(res)
-            mx550.STAVR_val.render(res)
-            mx550.STAVL_val.render(res)
-            mx550.STAVF_val.render(res)
-            mx550.STV1.render(res)
-            mx550.STV1_val.render(res)
-            mx550.STV2.render(res)
-            mx550.STV2_val.render(res)
-            mx550.STV3.render(res)
-            mx550.STV3_val.render(res)
-            mx550.STV4.render(res)
-            mx550.STV4_val.render(res)
-            mx550.STV5.render(res)
-            mx550.STV5_val.render(res)
-            mx550.STV6.render(res)
-            mx550.STV6_val.render(res)
-
-            mx550.noPatientMessage.render(res)
-
-            /* NBP displays */
-            
-            mx550.NBP_title.render(res)
-            mx550.NBP_subtitle.render(res)
-            mx550.NBP1h.render(res)
-            mx550.NBP1.render(res)
-            mx550.NBP2h.render(res)
-            mx550.NBP2.render(res)
-            mx550.NBP3h.render(res)
-            mx550.NBP3.render(res)
-            mx550.NBP4h.render(res)
-            mx550.NBP4.render(res)
-            mx550.NBP5h.render(res)
-            mx550.NBP5.render(res)
-            mx550.NBP6h.render(res)
-            mx550.NBP6.render(res)
-            mx550.NBPMode.render(res)
-            mx550.NBPGraphics.render(res)
-            mx550.NBPTime.render(res)
-            
         }
 
         /**
@@ -1479,16 +1628,10 @@ require([
 
                 // rendering
                 var res = event.data.toString();
-                // console.log(`STATE: ${res}`)
                 if (res.indexOf("(#") === 0) {
                     res = stateParser.parse(event.data.toString());
                     if (res) {
-                        // console.log(`Vou renderizar`)
-                        render_onoff(res)
-                        render_waves(res)
-                        render_displays(res)
-                        render_alarms(res)
-                        render_plugs(res)
+                        render_widgets(res)
                     }
                 }
             } else {
@@ -1515,36 +1658,6 @@ require([
                 tick = null;
             }
         };
-
-
-       /* d3.select(".btn_on").on("click", function () {
-            stop_tick();
-            client.getWebSocket()
-                .sendGuiAction("click_btn_on(" + client.getWebSocket().lastState() + ");", onMessageReceived);
-            start_tick();
-        });*/ 
-
-        /* d3.select("#submit_spo2_sensor_data").on("click", function () {
-            var data = d3.select("#spo2_sensor_data").node().value;
-            if (data) {
-                data = (isNaN(parseFloat(data))) ? -1 : parseFloat(data);
-                stop_tick();
-                client.getWebSocket()
-                    .sendGuiAction("spo2_sensor_data(" + data + ")(" + client.getWebSocket().lastState() + ");", onMessageReceived);
-                start_tick();
-            }
-        });*/ 
-
-       /* d3.select("#submit_rra_sensor_data").on("click", function () {
-            var data = d3.select("#rra_sensor_data").node().value;
-            if (data) {
-                data = (isNaN(parseFloat(data))) ? -1 : parseFloat(data);
-                stop_tick();
-                client.getWebSocket()
-                    .sendGuiAction("rra_sensor_data(" + data + ")(" + client.getWebSocket().lastState() + ");", onMessageReceived);
-                start_tick();
-            }
-        });*/ 
 
         // set demo prototype folder. PVS specification will load from here
         var demoFolder = "PhilipsMx550";
