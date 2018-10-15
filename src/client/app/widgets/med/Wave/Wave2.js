@@ -126,14 +126,16 @@ define(function (require, exports, module) {
             this.speed = this.width / (120*this.wavesPerScreen)
         }
 
+        WidgetEVO.apply(this, [ id, coords, opt ]);
+
         /* canvas creation to wave render */
         this.canvas = document.createElement('canvas');
         this.canvas.id     = `${id}_canvas`;
         this.canvas.width  = this.width;
         this.canvas.height = this.height;
-        this.canvas.style.position = opt.position
-        this.canvas.style.top = `${this.top}px`
-        this.canvas.style.left = `${this.left}px`
+        this.canvas.style.position = 'relative'
+        this.canvas.style.top = `0px`
+        this.canvas.style.left = `0px`
         this.canvas.style.zIndex   = 8;
         this.ctx = this.canvas.getContext('2d')
         this.canvas.style.backgroundColor = this.backgroundColor
@@ -146,7 +148,8 @@ define(function (require, exports, module) {
         /* add a horizontal line to complete the wave length based on heartrate*/
         this.addArrayElems();
 
-        this.titleDiv = document.createElement('div')
+        /* this.titleDiv = document.createElement('div')
+        //this.titleDiv = this.div.append('div')
         this.titleDiv. id = `${id}_title`
         this.titleDiv.style.top = `${this.top}px`
         this.titleDiv.style.left = `${this.left}px`
@@ -156,13 +159,30 @@ define(function (require, exports, module) {
         this.titleDiv.width = 30
         this.titleDiv.height = 10
         this.titleDiv.style.color = this.waveColor
-        this.titleDiv.innerHTML = this.title
+        this.titleDiv.innerHTML = this.title */
 
-        this.parentElem.appendChild(this.canvas)
-        this.parentElem.appendChild(this.titleDiv)
+
+        this.titleDiv = this.div.append('div')
+                            .attr('id',`${id}_title`)
+                            .style('top',`0px`)
+                            .style('left',`0px`)
+                            .style('width',20)
+                            .style('color',`${this.waveColor}`)
+                            .style('height',20)
+                            .style('position', `relative`)
+                            .style('z-index','20')
+                            .style('font-size',`${this.fontSize}`)
+                            .html(`${this.title}`)
+
+        //this.parentElem.appendChild(this.titleDiv.node())
+
+        this.div.node().appendChild(this.canvas)
+
+
+        //this.div.append(this.canvas)
         
         
-        WidgetEVO.apply(this, [ id, coords, opt ]);
+        
         return this;
     }
 
@@ -210,7 +230,7 @@ define(function (require, exports, module) {
         * @memberof module:Wave
         * @instance
         */
-        Wave.prototype.hide = function (opt) {
+        /* Wave.prototype.hide = function (opt) {
             opt = opt || {}
             let reset = opt.resetWave || false
             this.canvas.style.display = 'none'
@@ -219,7 +239,7 @@ define(function (require, exports, module) {
                 this.resetWave()
             }
             return this
-    }
+    } */
 
     	/**
         * @function <a name="resetWave">resetWave</a>
