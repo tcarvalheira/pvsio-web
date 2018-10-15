@@ -31,6 +31,7 @@ define(function (require, exports, module) {
     "use strict";
 
     var WidgetEVO = require("widgets/core/WidgetEVO");
+    let BasicDisplayEVO = require("widgets/core/BasicDisplayEVO")
     let property = require("util/property");
     var wavesvg = require("text!widgets/med/Wave/wave.svg");
     let d3 = require('d3/d3')
@@ -118,7 +119,6 @@ define(function (require, exports, module) {
         this.title = opt.title || ''
         this.filled = opt.filled || 'none'
         this.fillColor = opt.fillColor || this.waveColor
-        
         /* set how many wave it should be on each screen if heartrate is 60bps. */
         this.wavesPerScreen = parseInt(opt.wavesPerScreen) || 0
         /* calculate the speed based on wavesPerScreen. If waves per screen is not defined set speed to 1*/
@@ -128,61 +128,40 @@ define(function (require, exports, module) {
 
         WidgetEVO.apply(this, [ id, coords, opt ]);
 
+        //title display
+        this.titleDisp = new BasicDisplayEVO(`${id}_title`,
+                    {top: 0, left: 0, width:'100', height:'20'},
+                    {...opt,
+                        parent: this.div.node().id,
+                        position: 'relative',
+                        zIndex: '20',
+                        fontSize: `${this.fontSize}`,
+                        align: 'left',
+                        fontColor: this.waveColor,
+                        backgroundColor: 'transparent'
+                    })
+
         /* canvas creation to wave render */
         this.canvas = document.createElement('canvas');
         this.canvas.id     = `${id}_canvas`;
         this.canvas.width  = this.width;
         this.canvas.height = this.height;
         this.canvas.style.position = 'relative'
-        this.canvas.style.top = `0px`
         this.canvas.style.left = `0px`
         this.canvas.style.zIndex   = 8;
         this.ctx = this.canvas.getContext('2d')
         this.canvas.style.backgroundColor = this.backgroundColor
 
         var elemClass = id + " waveWidget" + " noselect ";
+        
         /* set wave points based on wavetype */
         this.setUpWave()
         this.setParameters(null, opt)
-
         /* add a horizontal line to complete the wave length based on heartrate*/
         this.addArrayElems();
-
-        /* this.titleDiv = document.createElement('div')
-        //this.titleDiv = this.div.append('div')
-        this.titleDiv. id = `${id}_title`
-        this.titleDiv.style.top = `${this.top}px`
-        this.titleDiv.style.left = `${this.left}px`
-        this.titleDiv.style.position = opt.position
-        this.titleDiv.style.zIndex = 20
-        this.titleDiv.style.fontSize = `${this.fontSize}px`
-        this.titleDiv.width = 30
-        this.titleDiv.height = 10
-        this.titleDiv.style.color = this.waveColor
-        this.titleDiv.innerHTML = this.title */
-
-
-        this.titleDiv = this.div.append('div')
-                            .attr('id',`${id}_title`)
-                            .style('top',`0px`)
-                            .style('left',`0px`)
-                            .style('width',20)
-                            .style('color',`${this.waveColor}`)
-                            .style('height',20)
-                            .style('position', `relative`)
-                            .style('z-index','20')
-                            .style('font-size',`${this.fontSize}`)
-                            .html(`${this.title}`)
-
-        //this.parentElem.appendChild(this.titleDiv.node())
-
+    
         this.div.node().appendChild(this.canvas)
 
-
-        //this.div.append(this.canvas)
-        
-        
-        
         return this;
     }
 
@@ -204,59 +183,19 @@ define(function (require, exports, module) {
     Wave.prototype.render = function (state, opt) {
 
         this.setParameters(state, opt)
+                .reRender()
             
-        this.canvas.style.display = 'block'
-        this.titleDiv.style.display = 'block'
-
-        
-        /* TODO: define the others variables from the state and define a state. */
-
         this.frame = requestAnimationFrame(this.animationLoop.bind(this))
 
         if(this.evalViz(state)){
+            this.titleDisp.render(this.title,{...opt, fontColor: this.waveColor})
+            this.canvas.style.display = 'block'
             this.reveal()
         }else{
             this.hide()
         }
         return this
     };
-
-    	/**
-        * @function <a name="hide">hide</a>
-        * @description This method hides the wave. The wave will not be reset and when it will be shown it will render from where it stops.
-        * @param {Object} opt Options:
-        * @param {Boolean} [opt.resetWave=false]
-        * @return returns this so that it could be chained
-        * @memberof module:Wave
-        * @instance
-        */
-        /* Wave.prototype.hide = function (opt) {
-            opt = opt || {}
-            let reset = opt.resetWave || false
-            this.canvas.style.display = 'none'
-            this.titleDiv.style.display = 'none'
-            if(reset === true){
-                this.resetWave()
-            }
-            return this
-    } */
-
-    	/**
-        * @function <a name="resetWave">resetWave</a>
-        * @description resetWaveMethod will reset waves to initial position. An example of use is when prototype is shutted down
-        * @return method return it self so that it can be called in a chain
-        * @memberof module:Wave
-        * @instance
-        */
-        Wave.prototype.resetWave = function () {
-            cancelAnimationFrame(this.frame)
-            this.px = 0
-            this.opx = 0
-            this.py = this.h/2
-            this.opy = this.py
-            this.ctx.clearRect(0, 0, this.w, this.h)
-            return this
-    }
 
     	/**
         * @protected
@@ -309,20 +248,6 @@ define(function (require, exports, module) {
                 }
             }
             this.reRender()
-    }
-
-    /**
-    * @function <a name="setColor">setColor</a>
-    * @description Rendering function for button widgets.
-    * @param {(uInt | string)} color ex. #f0a204 or blue
-    * @memberof module:Wave
-    * @instance
-    */
-    Wave.prototype.setColor = function (color) {
-        this.waveColor = color || this.waveColor
-        this.setUpWave()
-            .reRender()
-        return this
     }
    
     	/**
@@ -380,7 +305,7 @@ define(function (require, exports, module) {
                     this.wave = cvp
                 break
                 case 'icp':
-                this.wave = icp
+                    this.wave = icp
                 break
                 case 'userdefined':
                     this.wave = this.userDefinedWave
@@ -398,45 +323,6 @@ define(function (require, exports, module) {
             return this
     }
 
-    	/***
-        * @function <a name="setHeartRate">setHeartRate</a>
-        * @description Set a new heart Rate to wave form
-        * @param newHeartRate {Integer} new heart rate setted to wave. Default value is 60
-        * @memberof module:Wave
-        * @instance
-        */
-        /* Wave.prototype.setHeartRate = function (newHeartRate) {
-            // set default to 60
-            let hr = parseInt(newHeartRate) || 60
-            this.heartRate = hr
-            this.setUpWave()
-                .reRender()
-            return this
-    } */
-
-    	/***
-        * @function <a name="setWaveType">setWaveType</a>
-        * @description This method will set the wave type within a predefined range of wave types.
-        * @param newWaveType (String) options are:
-        *                       <li>ecg</li> 
-        *                       <li>co2</li>
-        *                       <li>pleth</li>
-        *                       <li>userdefined</li> 
-        * @param wavePoints (Array[<Integer>]) [Optional] If newWaveType is userdefined then this points shoul be setted
-        * @memberof module:Wave
-        * @instance
-        */
-        /* Wave.prototype.setWaveType = function (newWaveType, wavePoints) {
-             //defult is ECG 
-            this.waveType = newWaveType.toLowerCase() || 'ecg'
-            if(newWaveType === 'userdefined'){
-                this.userDefinedWave = wavePoints
-            }
-            this.userDefinedWave = wavePoints
-            this.setUpWave().reRender()
-            return this
-    } */ 
-
     	/**
         * @private 
         * @function <a name="reRender">rerender</a>
@@ -449,20 +335,6 @@ define(function (require, exports, module) {
             this.frame = requestAnimationFrame(this.animationLoop.bind(this))
             return this
     }
-
-    	/***
-        * @function <a name="setScanBarWidth">setScanBarWidth</a>
-        * @description Sets the width of scan bar.
-        * @param width (Integer) - scan bar width. Default value is 50
-        * @memberof module:Wave
-        * @instance
-        */
-        /* Wave.prototype.setScanBarWidth = function (width) {
-            this.scanBarWidth = parseInt(width) || 50
-            this.reRender()
-            return this
-    }  */ 
-
 
     	/**
         * @function <a name="setParameters">setParameters</a>
@@ -503,18 +375,22 @@ define(function (require, exports, module) {
             if(state !== null && state !== undefined){
 
                 if(this.pvsWaveColor !== undefined && this.pvsWaveColor !== null){
-                    let wavecolortmp = state[this.pvsWaveColor] || ''
+                    //let wavecolortmp = state[this.pvsWaveColor] || ''
+                    let wavecolortmp = this.evaluate(this.pvsWaveColor, state)
                     this.waveColor = `#${wavecolortmp.replace(/"/g, "")}` || this.waveColor
                 }
                 if(this.pvsHeartRate !== undefined && this.pvsHeartRate !== null){
-                    this.heartRate = state[this.pvsHeartRate] || this.heartRate
+                    //this.heartRate = state[this.pvsHeartRate] || this.heartRate
+                    this.heartRate = this.evaluate(this.pvsHeartRate, state) || this.heartRate
                 }
                 if(this.pvsBackgroundColor !== undefined && this.pvsBackgroundColor !== null){
-                    let backcolortmp = state[this.pvsBackgroundColor] || ''
+                    //let backcolortmp = state[this.pvsBackgroundColor] || ''
+                    let backcolortmp = this.evaluate(this.pvsBackgroundColor, state)
                     this.backgroundColor = `#${backcolortmp.replace(/"/g,"")}` || this.backgroundColor
                 }
                 if(this.pvsFillColor !== undefined && this.pvsFillColor !== null){
-                    let fillcolortmp = state[this.pvsFillColor]
+                    //let fillcolortmp = state[this.pvsFillColor]
+                    let fillcolortmp = this.evaluate(this.pvsFillColor, state)
                     this.fillColor = `#${fillcolortmp.replace(/"/g, "")}` || this.fillColor
                 }
             }
@@ -527,8 +403,9 @@ define(function (require, exports, module) {
                 this.titleDiv.style.color = this.waveColor 
             }
             this.addArrayElems();
+            
             this.setUpWave()
-                .reRender()
+                //.reRender()
             return this
     }
 
