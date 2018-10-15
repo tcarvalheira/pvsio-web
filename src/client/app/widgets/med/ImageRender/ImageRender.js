@@ -82,7 +82,7 @@ define(function (require, exports, module) {
 
 
          var elemClass = id + " ImageRenderWidget" + " noselect ";
-         this.div = d3.select(this.parent)
+         /* this.div = d3.select(this.parent)
                          .append("div")
                          .attr("id", `${id}_widget`)
                          .style("position", opt.position)
@@ -91,13 +91,14 @@ define(function (require, exports, module) {
                          .style("margin", 0).style("padding", 0).style("opacity", opt.opacity)
                          .attr("class", elemClass)
                          .style('z-index',100)
-                         .style('display','block')
+                         .style('display','block') */
                                  
         if(this.svg !== undefined){
-            this.image = this.div.append('object')
+            this.image = this.base.append('object')
                             .attr('id',`${id}_svg_object`)
                             .style('width','100%')
-                            .style('background-color','yellow')
+                            .style('height','100%')
+                            //.style('background-color','yellow')
                             .attr('type','image/svg+xml')
                             .attr("data", `img/${this.svg}`)
         }
@@ -129,8 +130,9 @@ define(function (require, exports, module) {
             this.image = this.div.append('object')
                             .attr('id',`${this.id}_plugged_img`)
                             .style('width','100%')
+                            .style('height','100%')
                             //.style('font-size','10px')
-                            .style('background-color',`${this.backgroundColor}`)
+                            .style('background-color',`transparent`)
                             .attr('type','image/svg+xml')
                             .attr("data", `${imagePath}`) 
 
