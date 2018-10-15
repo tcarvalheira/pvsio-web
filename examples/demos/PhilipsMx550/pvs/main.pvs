@@ -162,7 +162,13 @@ main: THEORY
     spo2Graphics: string,
     spo2Rectangle: string,
 
-    pulseAlarmOffImage: string
+    pulseAlarmOffImage: string,
+
+    silenceButtonText: string,
+    silenceButtonImage: string,
+
+    alarmsOffText: string,
+    alarmsOffImage: string
   #]
 
   init(x: real): state = (#
@@ -329,7 +335,13 @@ main: THEORY
 
     spo2Rectangle := "img/rectangle1.svg",
 
-    pulseAlarmOffImage := "img/pulseAlarmImage.svg"
+    pulseAlarmOffImage := "img/pulseAlarmImage.svg",
+
+    silenceButtonText := "Silence",
+    silenceButtonImage := "img/silenceImage.svg",
+
+    alarmsOffText := "Alarms Off",
+    alarmsOffImage := "img/alarmsOffImage.svg"
 
   #)
 

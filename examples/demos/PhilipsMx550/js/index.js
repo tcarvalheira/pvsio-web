@@ -29,6 +29,7 @@ require([
         "widgets/med/ImageRender/ImageRender",
         "widgets/med/Plug/Plug",
         "widgets/core/DateTime",
+        "widgets/core/ButtonImage",
         "stateParser",
         "PVSioWebClient",
         "NCDevice"],
@@ -42,6 +43,7 @@ require([
               ImageRender,
               Plug,
               DateTime,
+              ButtonImage,
               stateParser,
               PVSioWebClient,
               NCDevice) {
@@ -243,7 +245,7 @@ require([
 
             mx550.alarmVol = new ImageRender(
                 'alarm-volume-graphics',
-                {top: 179, left: 1092, width: 30, height:10},
+                {top: 179, left: 1092, width: 30, height:20},
                 {
                     parent: 'prototype',
                     displayKey: 'alarmVolGraphics',
@@ -512,7 +514,7 @@ require([
                 parent: 'prototype', 
                 visibleWhen: "isOn = TRUE",
                 waveColor: "#00FF00",
-                background: "#000000",
+                background: 'transparent',
                 scanBarWidth:20,
                 fontSize: 14,
                 pvsDefinition: {
@@ -529,7 +531,7 @@ require([
                  parent: 'prototype', 
                  visibleWhen: "isOn = TRUE",
                  waveColor: "#00FF00",
-                 background: "#000000",
+                 background: 'transparent',
                  scanBarWidth:20,
                  fontSize: 14,
                  pvsDefinition: {
@@ -546,7 +548,7 @@ require([
                   parent: 'prototype', 
                   visibleWhen: "isOn = TRUE",
                   waveColor: "#0FF0FF",
-                  background: "#000000",
+                  background: "transparent",
                   scanBarWidth:20,
                   fontSize: 14,
                   pvsDefinition: {
@@ -564,7 +566,7 @@ require([
                  parent: 'prototype', 
                  visibleWhen: "isOn = TRUE",
                  waveColor: "#E33632",
-                 background: "#000000",
+                 background: "red",
                  scanBarWidth:20,
                  fontSize: 14,
                  pvsDefinition: {
@@ -1511,7 +1513,7 @@ require([
         )
 
         mx550.NBPMode = new BasicDisplayEVO('nbp_mode',
-        {top: 680, left: 245, width: 50, height: 17},
+        {top: 660, left: 245, width: 50, height: 17},
         {
             parent: 'prototype',
             fontColor: '#F47F7E',
@@ -1549,6 +1551,47 @@ require([
                 displayKey: 'nbpTime' 
             }
         )
+
+        /* Bottom buttons */
+
+        mx550.silenceButton = new ButtonImage('silence',
+            {top: 752, left: 108, width: 48, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#FFCB00',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 7,
+                fontColor: '#000000',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'silenceButtonText',
+                imageDisplayKey: 'silenceButtonImage'
+            })
+        
+        mx550.alarmsoffborder = new BasicDisplayEVO('alarms-off-border',
+            {top: 752, left: 155, width: 48 , height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#FFCB00',
+                visibleWhen: 'isOn = TRUE'
+            })
+
+
+        mx550.alarmsOffButton = new ButtonImage('alarms-off-button',
+            {top: 754, left: 157, width: 43, height: 34},
+            {
+                parent: 'prototype',
+                backgroundColor: '#32352E', //'#FFCB00',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'alarmsOffText',
+                imageDisplayKey: 'alarmsOffImage'
+            })
 
         // LEDs
         mx550.onoff_led = new LED("onoff_led", 
