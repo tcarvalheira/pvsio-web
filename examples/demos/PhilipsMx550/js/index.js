@@ -638,7 +638,7 @@ require([
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 pvsDefinition: {
                     waveColor: 'co2_wave_color',
-                    backgroundColor: 'co2_wave_back_color',
+                    backgroundColor: 'co2_background_color',
                     heartRate: 'breath_rate',
                     fillColor: 'co2_fill_color'
                 }
@@ -1556,7 +1556,7 @@ require([
                 parent: 'prototype',
                 backgroundColor: '#FFCB00',
                 visibleWhen: 'isOn = TRUE',
-                fontSize: 7,
+                fontSize: 6,
                 fontColor: '#000000',
                 fontWeight: 'bold',
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
@@ -1566,7 +1566,7 @@ require([
             })
         
         mx550.alarmsoffborder = new BasicDisplayEVO('alarms-off-border',
-            {top: 752, left: 155, width: 48 , height: 38},
+            {top: 752, left: 157, width: 48 , height: 38},
             {
                 parent: 'prototype',
                 backgroundColor: '#FFCB00',
@@ -1575,7 +1575,7 @@ require([
 
 
         mx550.alarmsOffButton = new ButtonImage('alarms-off-button',
-            {top: 754, left: 157, width: 43, height: 34},
+            {top: 754, left: 159, width: 44, height: 34},
             {
                 parent: 'prototype',
                 backgroundColor: '#32352E', //'#FFCB00',
@@ -1608,13 +1608,13 @@ require([
 
 
             mx550.startStopButton = new ButtonImage('start-stop-button',
-            {top: 752, left: 108, width: 48, height: 38},
+            {top: 752, left: 251, width: 54, height: 38},
             {
                 parent: 'prototype',
-                backgroundColor: '#FFCB00',
+                backgroundColor: '#403D3B',
                 visibleWhen: 'isOn = TRUE',
-                fontSize: 7,
-                fontColor: '#000000',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
                 fontWeight: 'bold',
                 fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
                 align: 'center',
@@ -1622,9 +1622,126 @@ require([
                 imageDisplayKey: 'startStopButtonImage'
             })
 
+            mx550.stopAllButton = new ButtonImage('stop-all-button',
+            {top: 752, left: 308, width: 54, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#403D3B',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'stopAllButtonText',
+                imageDisplayKey: 'stopAllButtonImage'
+            })
 
+            mx550.repeatTimeButton = new ButtonImage('repeat-time-button',
+            {top: 752, left: 366, width: 54, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#403D3B',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'repeatTimeButtonText',
+                imageDisplayKey: 'repeatTimeButtonImage'
+            })
 
+            mx550.adjustSizeButton = new ButtonImage('adjust-size-button',
+            {top: 752, left: 423, width: 54, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#403D3B',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'adjustSizeButtonText',
+                imageDisplayKey: 'adjustSizeButtonImage'
+            })
 
+            mx550.zeroButton = new ButtonImage('zero-button',
+            {top: 752, left: 480, width: 54, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#403D3B',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'zeroButtonText',
+                imageDisplayKey: 'zeroButtonImage'
+            })
+
+            mx550.vitalTrendButton = new ButtonImage('vital-trend-button',
+            {top: 752, left: 537, width: 54, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#403D3B',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'vitalTrendButtonText',
+                imageDisplayKey: 'vitalTrendButtonImage'
+            })
+
+            mx550.recordingsButton = new ButtonImage('recordings-button',
+            {top: 752, left: 596, width: 54, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#403D3B',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'recordingsButtonText',
+                imageDisplayKey: 'recordingsButtonImage'
+            })
+
+            mx550.admitDischargButton = new ButtonImage('admit-discharge-button',
+            {top: 752, left: 655, width: 54, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#403D3B',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                /* TODO: how can i set two lines in a display? */
+                textDisplayKey: 'admitDischargeButtonText',
+                imageDisplayKey: 'admitDischargeButtonImage'
+            })
+
+            mx550.monitorStandbyutton = new ButtonImage('monitor-standby-button',
+            {top: 752, left: 714, width: 54, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#403D3B',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'monitorStandbyButtonText',
+                imageDisplayKey: 'monitorStandbyButtonImage'
+            })
 
         mx550.buttonNext = new ButtonEVO('next-button',
             {top: 752, left: 770, width: 30, height:38},
@@ -1642,6 +1759,52 @@ require([
                 visibleWhen: 'isOn = TRUE',
                 fontColor: '#FFFFFF'
             })
+
+
+            mx550.mainSetupBorder = new BasicDisplayEVO('main-setup-border',
+            {top: 752, left: 815, width: 48 , height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#0049D0',
+                visibleWhen: 'isOn = TRUE'
+            })
+
+
+        mx550.mainSetuputton = new ButtonImage('main-setup-button',
+            {top: 754, left: 817, width: 44, height: 34},
+            {
+                parent: 'prototype',
+                backgroundColor: '#32352E',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'mainSetupButtonText',
+                imageDisplayKey: 'mainSetupButtonImage'
+            })
+
+            mx550.mainScreenButton = new ButtonImage('main-screen-button',
+            {top: 752, left: 865, width: 46, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#0049D0',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'mainScreenButtonText',
+                imageDisplayKey: 'mainScreenButtonImage'
+            })
+        
+       
+
+
+
+
         // LEDs
         mx550.onoff_led = new LED("onoff_led", 
             {top: 930, left: 380, width: 17, height: 17},

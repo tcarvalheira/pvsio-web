@@ -171,7 +171,31 @@ main: THEORY
     alarmsOffImage: string,
 
     ecg_plugged: bool,
-    spo2_plugged: bool
+    spo2_plugged: bool,
+
+    startStopButtonText: string,
+    startStopButtonImage: string,
+
+    stopAllButtonText: string,
+    stopAllButtonImage: string,
+    repeatTimeButtonText :string,
+    repeatTimeButtonImage: string,
+    adjustSizeButtonText :string,
+    adjustSizeButtonImage: string,
+    zeroButtonText: string,
+    zeroButtonImage: string,
+    vitalTrendButtonText: string,
+    vitalTrendButtonImage: string,
+    recordingsButtonText: string,
+    recordingsButtonImage: string,
+    admitDischargeButtonText: string,
+    admitDischargeButtonImage: string,
+    monitorStandbyButtonText: string,
+    monitorStandbyButtonImage: string,
+    mainSetupButtonText: string,
+    mainSetupButtonImage: string,
+    mainScreenButtonText: string,
+    mainScreenButtonImage: string
   #]
 
   init(x: real): state = (#
@@ -347,7 +371,31 @@ main: THEORY
     alarmsOffImage := "img/alarmsOffImage.svg",
 
     ecg_plugged := false,
-    spo2_plugged := true
+    spo2_plugged := true,
+
+    startStopButtonText := "Start/Stop",
+    startStopButtonImage := "img/alarmsOffImage.svg",
+
+    stopAllButtonText := "Stop All",
+    stopAllButtonImage:= "img/alarmsOffImage.svg",
+    repeatTimeButtonText := "Repeat Time",
+    repeatTimeButtonImage:= "img/alarmsOffImage.svg",
+    adjustSizeButtonText := "Adjust Size",
+    adjustSizeButtonImage:= "img/alarmsOffImage.svg",
+    zeroButtonText := "Zero",
+    zeroButtonImage:= "img/alarmsOffImage.svg",
+    vitalTrendButtonText := "Vital Trend",
+    vitalTrendButtonImage:= "img/alarmsOffImage.svg",
+    recordingsButtonText := "Recordings",
+    recordingsButtonImage:= "img/alarmsOffImage.svg",
+    admitDischargeButtonText := "Admit/Dis...",
+    admitDischargeButtonImage:= "img/alarmsOffImage.svg",
+    monitorStandbyButtonText := "Monitor Standby",
+    monitorStandbyButtonImage:= "img/alarmsOffImage.svg",
+    mainSetupButtonText:= "Main Setup",
+    mainSetupButtonImage:= "img/alarmsOffImage.svg",
+    mainScreenButtonText:= "Main Screen",
+    mainScreenButtonImage:= "img/alarmsOffImage.svg"
 
   #)
 
