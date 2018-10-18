@@ -168,7 +168,10 @@ main: THEORY
     silenceButtonImage: string,
 
     alarmsOffText: string,
-    alarmsOffImage: string
+    alarmsOffImage: string,
+
+    ecg_plugged: bool,
+    spo2_plugged: bool
   #]
 
   init(x: real): state = (#
@@ -341,7 +344,10 @@ main: THEORY
     silenceButtonImage := "img/silenceImage.svg",
 
     alarmsOffText := "Alarms Off",
-    alarmsOffImage := "img/alarmsOffImage.svg"
+    alarmsOffImage := "img/alarmsOffImage.svg",
+
+    ecg_plugged := false,
+    spo2_plugged := true
 
   #)
 
