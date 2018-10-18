@@ -38,20 +38,24 @@ define(function (require, exports, module) {
     "use strict";
     var WidgetEVO = require("widgets/core/WidgetEVO");
     let d3 = require('d3/d3')
- 
+    const PVSioStateParser = require("util/PVSioStateParser");
     /**
      * @function <a name="Plug">Plug</a>
      * @description Constructor.
      * @param id {String} The ID of the touchscreen button.
-     * @param coords {Object} The six coordinates (top, left, width, height, top_plug, left_plug) of the display, specifying
-     *        the left, top corner, and the width and height of the (rectangular) widget area and the adicional area for the plug rest.
-     *        Default is { top: 0, left: 0, width: 32, height: 20, top_plug: 0, left_plug: 200 }.
+     * @param {Integer} [coords.top='0'] Coordinate for top corner of the widget. Defaulta is 0px
+     * @param {Integer} [coords.left='0'] Coordinate for left corner of widget. Default is 0px
+     * @param {Integer} [coords.width=100] Coordinate with width for widget
+     * @param {Integer} [coords.height=100] Coordinate defining height for widget
+     * @param {Integer} [coords.top_plug=100] Coordinate defining top corner for unplugged plugs rest. This coordinate must be relative to original widget's top coordinate.
+     * @param {Integer} [coords.loeft_plug=0] Coordinate defining left corner for unplugged plugs rest. This coordinate must be relative to original widget's left coordinate.
      * @param {Object} opt Style options defining the visual appearance of the widget.
      *                     Options can be given either as standard html style attributes or using the following widget attributes:
      * @param {String} opt.image_plugged path for the pugged image
      * @param {String} opt.image_unplugged path for the unplugged image
      * @param {String} opt.image_socket path for the socket image
      * @param {Boolean} [opt.isPlugged=false] set if the plug should be plugged in ou unplugged from the socket. Default is false
+     * @param {String} [opt.displayKey] set key in pvs model that sets if widget is pluged or unpluged
      * @memberof module:Plug
      * @instance
      */
@@ -76,30 +80,32 @@ define(function (require, exports, module) {
         this.image_unplugged = opt.image_unplugged
         this.image_socket = opt.image_socket
         this.isPlugged = opt.isPlugged || false
-        this.Wvisible = opt.visible || true
+        this.displayKey = opt.displayKey
+        this.visibleWhen = opt.visibleWhen || 'true'
 
-
+        // invoke WidgetEVO constructor to create the widget
+        WidgetEVO.apply(this, [ id, coords, opt ]);
 
         this.parentDiv = document.getElementById(opt.parent)
-        this.div = d3.select(this.parent)
+        this.div_widget = this.base //d3.select(this.parent)
                     .append("div")
                     .attr('id', `${id}_widget_div`)
 
         /* create the socket div and image */
-        this.socket = this.div //d3.select(this.parent)
+        this.socketDiv = this.div_widget //d3.select(this.parent)
                         .append("div")
                         .attr('id',`${id}_socket_div`)
                         .attr('data-code', `${id}`)
                         .attr('data-type','socket')
-                        .style('position', 'absolute')
-                        .style('top', `${this.top}px`)
-                        .style('left', `${this.left}px`)
+                        .style('position','relative')
+                        .style('top','0px')
+                        .style('left','0px')
                         .attr('class', `socket`)
                         .style('width', `${this.width}px`)
-                        .style('height', `${this.height}px`)
+                        .style('height', `0px`)
                         .style('z-index','1')
 
-                        .append('img')
+        this.socket = this.socketDiv.append('img')
                         .attr('id', `${id}_socket_img`)
                         .attr('class', `drag-socket ${id}`)
                         .attr('data-code',`${id}`)
@@ -110,21 +116,21 @@ define(function (require, exports, module) {
                         .attr("src", `${this.image_socket}`)
 
         /* create the plugged div and image, this will be placed on same location of the socket and will toggle visibility with socket */
-        this.plug_plugged = this.div //d3.select(this.parent)
+        this.plug_pluggedDiv = this.div_widget //d3.select(this.parent)
                         .append('div')
                         .attr('id',`${id}_plugged_div`)
                         .attr('data-code', `${id}`)
                         .attr('data-type','plugged')
-                        .style('position', 'absolute')                        
-                        .style('top', `${this.top}px`)
-                        .style('left', `${this.left}px`)
+                        .style('position','relative')
+                        .style('top',`0px`)
+                        .style('left','0px')
                         .attr('class','plug_plugged')
                         .style('width', `${this.width}px`)
-                        .style('height', `${this.height}px`)
+                        .style('height', `0px`)
                         .style('background-color', 'none')
                         .style('z-index','-2')
                         
-                        .append('img')
+        this.plug_plugged = this.plug_pluggedDiv.append('img')
                         .attr('id',`${id}_plugged_img`)
                         .attr('class', `drag-plugged ${id}`)
                         .attr('data-code',`${id}`)
@@ -137,20 +143,22 @@ define(function (require, exports, module) {
 
         /* create the unplugged div and img. The image will toggle visibility with plugged image. 
             The border is dashed so that one can drag back into rest */
-        this.plug_unplugged = this.div //d3.select(this.parent)
+        this.plug_unpluggedDiv = this.div_widget //d3.select(this.parent)
                         .append('div')
                         .attr('id',`${id}_unplugged_div`)
                         .attr('data-code', id)    
                         .attr('data-type','unplugged')                  
-                        .style('position', 'absolute')
+                        .style('position', 'relative')
                         .style('top', `${this.top_plug}px`)
                         .style('left', `${this.left_plug}px`)
                         .attr('class','plug_unplugged')
                         .style('width', `${this.width}px`)
                         .style('height', `${this.height}px`)
                         .style('border','dashed')
+                        .style('color','grey')
                         .style('z-index','1')
-                        .append('img')
+                        
+        this.plug_unplugged = this.plug_unpluggedDiv.append('img')
                         .attr('id',`${id}_unplugged_img`)
                         .attr('class', `drag-unplugged ${id}`)
                         .attr('data-code',`${id}`)
@@ -160,45 +168,37 @@ define(function (require, exports, module) {
                         .attr("src", `${this.image_unplugged}`)
                         .style('z-index', '2')
 
-        this.socket_div = document.getElementById(`${id}_socket_div`)
-        this.socket_img = document.getElementById(`${id}_socket_img`)
-        this.plugged_div = document.getElementById(`${id}_plugged_div`)
-        this.plugged_img = document.getElementById(`${id}_plugged_img`)
-        this.unplugged_div = document.getElementById(`${id}_unplugged_div`)
-        this.unplugged_img = document.getElementById(`${id}_unplugged_img`)                
+        if(this.socketDiv.node() !== undefined && this.socketDiv.node() !== null){
+            this.socketDiv.node().addEventListener('drop', event => this.drop(event, this))
+        }
 
-        
-        /* add listeners to set the DIV's where the image can be droped */
-        if(this.socket_div !== undefined && this.socket_div !== null){
-            this.socket_div.addEventListener('drop', event => this.drop(event, this))
+        if(this.socketDiv.node() !== undefined && this.socketDiv !== null){
+            this.socketDiv.node().addEventListener('dragover', event => this.allowDrop(event, this))
         }
-        if(this.socket_div !== undefined && this.socket_div !== null){
-            this.socket_div.addEventListener('dragover', event => this.allowDrop(event, this))
+
+        if(this.plug_pluggedDiv.node() !== undefined && this.plug_pluggedDiv.node() !== null){
+            this.plug_pluggedDiv.node().addEventListener('drop', event => this.drop(event, this))
         }
-        if(this.plugged_div !== undefined && this.socket_div !== null){
-            this.plugged_div.addEventListener('drop', event => this.drop(event, this))
+
+        if(this.plug_pluggedDiv.node() !== undefined && this.plug_pluggedDiv.node() !== null){
+            this.plug_pluggedDiv.node().addEventListener('dragover', event => this.allowDrop(event, this))
         }
-        if(this.plugged_div !== undefined && this.socket_div !== null){
-            this.plugged_div.addEventListener('dragover', event => this.allowDrop(event, this))
+
+        if(this.plug_unpluggedDiv.node() !== undefined && this.plug_unpluggedDiv.node() !== null){
+            this.plug_unpluggedDiv.node().addEventListener('drop', event => this.drop(event, this))
         }
-        if(this.unplugged_div !== undefined && this.socket_div !== null){
-            this.unplugged_div.addEventListener('drop', event => this.drop(event, this))
-        }
-        if(this.unplugged_div !== undefined && this.socket_div !== null){
-            this.unplugged_div.addEventListener('dragover', event => this.allowDrop(event, this))
+
+        if(this.plug_unpluggedDiv.node() !== undefined && this.plug_unpluggedDiv.node() !== null){
+            this.plug_unpluggedDiv.node().addEventListener('dragover', event => this.allowDrop(event, this))
         }
         
         /* add listeners to set the images that can be dragged */
-        //this.socket_img.addEventListener('dragstart', event => this.drag(event, this))
-        if(this.plugged_img !== undefined && this.plugged_img !== null){
-            this.plugged_img.addEventListener('dragstart', event => this.drag(event, this) )
+        if(this.plug_plugged.node() !== undefined && this.plug_plugged.node() !== null){
+            this.plug_plugged.node().addEventListener('dragstart', event => this.drag(event, this) )
         }
-        if(this.unplugged_img !== undefined && this.unplugged_img !== null){
-            this.unplugged_img.addEventListener('dragstart', event => this.drag(event, this))
+        if(this.plug_unplugged.node() !== undefined && this.plug_unplugged.node() !== null){
+            this.plug_unplugged.node().addEventListener('dragstart', event => this.drag(event, this))
         }
-
-         // invoke WidgetEVO constructor to create the widget
-         WidgetEVO.apply(this, [ id, coords, opt ]);
         
          /* set the initial state */
         if(this.isPlugged){
@@ -221,32 +221,27 @@ define(function (require, exports, module) {
       * @instance
       */
      Plug.prototype.render = function (state) {
-         this.reveal()
-         return this;
-     }
 
-     	/**
-         * @function <a name="reveal">reveal</a>
-         * @description Turn the widget visible 
-         * @memberof module:Plug
-         * @instance
-         */
-         Plug.prototype.reveal = function () {
-            d3.select(this.parent)
-                .style('display', 'block')
-            return this
+        if(state !== undefined && state !== null){
+            /* TODO: check if ther is a better way of doing this. */
+            // calculate the value with PVSioStateParser and parse it with JSON to get a boolean value
+            this.isPlugged = JSON.parse(PVSioStateParser.simpleExpressionParser(this.evaluate(this.displayKey,state)).res.constant)
         }
 
-        	/**
-            * @function <a name="hide">hide</a>
-            * @description hidden the widget 
-            * @memberof module:Plug
-            * @instance
-            */
-            Plug.prototype.hide = function () {
-                d3.select(this.parent).style('display', 'none')
-                return this
-            }
+        if(this.isPlugged){
+            this.connectPlug(this.id)
+        }else{
+            this.deconnectPlug(this.id)
+        }
+
+        if(this.evalViz(state)){
+            this.reveal()
+        }else{
+            this.hide()
+        }
+         
+         return this;
+     }
 
      	/**
          * @private
@@ -347,33 +342,23 @@ define(function (require, exports, module) {
         * @instance
         */
         Plug.prototype.connectPlug = function (code) {
+            this.socket
+                .style('display','none')
+                .style('z-index','-1')
+            this.socketDiv
+                .style('z-index','-2')
+                .style('display','none')
 
-            let socket = document.getElementsByClassName(`drag-socket ${code}`)[0]
-            let plugged = document.getElementsByClassName(`drag-plugged ${code}`)[0]
-            let unplugged = document.getElementsByClassName(`drag-unplugged ${code}`)[0]
+            this.plug_plugged
+                .style('display','block')
+                .style('z-index','2')
+            this.plug_pluggedDiv
+                .style('z-index','1')
+                .style('display','block')
 
-            
+            this.plug_unplugged 
+                .style('display','none')
 
-            /* If some of the images are undefined i can't do the procedures */
-            if(socket === undefined || plugged === undefined || unplugged === undefined){
-                return this
-            }
-
-            let socket_div = socket.parentElement
-            let plugged_div = plugged.parentElement
-            let unplugged_div = unplugged.parentElement
-            
-            socket.hidden = true
-            plugged.hidden = false
-            unplugged.hidden = true
-
-            /* in order to drag and drop the correct element, it is needed to change z-index of the elements */
-            /* socket goes back and plugged come to front*/
-            socket_div.style.zIndex = -2
-            socket.style.zIndex = -1
-            plugged_div.style.zIndex = 1
-            plugged.style.zIndex = 2
-            
             /* set as plugged in */
             this.isPlugged = true
 
@@ -389,31 +374,23 @@ define(function (require, exports, module) {
         * @instance
         */
         Plug.prototype.deconnectPlug = function (code) {
-            let socket = document.getElementsByClassName(`drag-socket ${code}`)[0]
-            let plugged = document.getElementsByClassName(`drag-plugged ${code}`)[0]
-            let unplugged = document.getElementsByClassName(`drag-unplugged ${code}`)[0]
-
+            this.socket
+                .style('display','block')
+                .style('z-index','2')
+            this.plug_plugged
+                .style('display','none')
+                .style('z-index','-1')
+            this.plug_unplugged
+                .style('display','block')
             
-
-
-            if(socket === undefined || plugged === undefined || unplugged === undefined){
-                return this
-            }
-
-            let socket_div = socket.parentElement
-            let plugged_div = plugged.parentElement
-            let unplugged_div = unplugged.parentElement
-
-            socket.hidden = false
-            plugged.hidden = true
-            unplugged.hidden = false
-            /* in order to drag and drop the correct element, it is needed to change z-index of the elements */
-            /* socket goes back and plugged come to front*/
-            socket_div.style.zIndex = 1
-            socket.style.zIndex = 2
-            plugged_div.style.zIndex = -2
-            plugged.style.zIndex = -1
-
+            this.socketDiv
+                .style('z-index','1')
+                .style('display','block')
+            this.plug_pluggedDiv
+                .style('z-index','-2')
+                .style('display','none')
+            
+    
             /* set as unplugged */
             this.isPlugged = true
 
