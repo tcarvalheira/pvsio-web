@@ -1271,24 +1271,28 @@ require([
         // PLUGS
         mx550.spo2_plug = new Plug(
             'spo2_plug',
-            { top: 155, left: 1350, width: 40, height:50, top_plug: 250, left_plug: 1350 },
+            { top: 155, left: 1350, width: 40, height:50, top_plug: 95, left_plug: 0 },
             { 
                 parent: 'plug-rack-widgets', 
+                visibleWhen: 'true',
                 image_unplugged: 'img/spo2_unplugged.png',
                 image_plugged: 'img/spo2_unplugged.png',
                 image_socket: 'img/spo2_socket.png',
-                isPlugged: false
+                isPlugged: false,
+                displayKey: 'spo2_plugged'
              }
         )
         mx550.ecg_plug = new Plug(
             'ecg_plug',
-            { top: 155, left: 1295, width: 50, height:50, top_plug: 250, left_plug: 1250 },
+            { top: 155, left: 1295, width: 50, height:50, top_plug: 95, left_plug: 0 },
             { 
                 parent: 'plug-rack-widgets', 
+                visibleWhen: 'true',
                 image_unplugged: 'img/ecg_unplugged.png',
                 image_plugged: 'img/ecg_plugged.png',
                 image_socket: 'img/ecg_socket.png',
-                isPlugged: false
+                isPlugged: false,
+                displayKey: 'ecg_plugged'
              }
         )
 
@@ -1585,6 +1589,59 @@ require([
                 imageDisplayKey: 'alarmsOffImage'
             })
 
+        mx550.buttonBack = new ButtonEVO('back-button',
+            {top: 752, left: 218, width: 30, height:38},
+            {
+                    parent: 'prototype',
+                    backgroundColor: 'transparent',
+                    visibleWhen: 'isOn = TRUE'
+            })
+        mx550.buttonBackLabel = new BasicDisplayEVO('back-button-label',
+            {top: 752, left: 218, width: 30, height:38},
+            {
+                parent: 'prototype',
+                fontSize: 8,
+                backgroundColor: '#2D2A28',
+                visibleWhen: 'isOn = TRUE',
+                fontColor: '#FFFFFF'
+            })
+
+
+            mx550.startStopButton = new ButtonImage('start-stop-button',
+            {top: 752, left: 108, width: 48, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#FFCB00',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 7,
+                fontColor: '#000000',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                textDisplayKey: 'startStopButtonText',
+                imageDisplayKey: 'startStopButtonImage'
+            })
+
+
+
+
+
+        mx550.buttonNext = new ButtonEVO('next-button',
+            {top: 752, left: 770, width: 30, height:38},
+            {
+                    parent: 'prototype',
+                    backgroundColor: 'transparent',
+                    visibleWhen: 'isOn = TRUE'
+            })
+        mx550.buttonNextLabel = new BasicDisplayEVO('next-button-label',
+            {top: 752, left: 770, width: 30, height:38},
+            {
+                parent: 'prototype',
+                fontSize: 8,
+                backgroundColor: '#2D2A28',
+                visibleWhen: 'isOn = TRUE',
+                fontColor: '#FFFFFF'
+            })
         // LEDs
         mx550.onoff_led = new LED("onoff_led", 
             {top: 930, left: 380, width: 17, height: 17},
@@ -1606,11 +1663,13 @@ require([
         }
 
         function render_widgets(res){
+
             for(var widget in mx550){
                 if(!mx550.hasOwnProperty(widget)) continue;
                 mx550[widget].render(res)
             }
-
+            mx550.buttonBackLabel.renderGlyphicon('glyphicon-backward',{'blinking': false})
+            mx550.buttonNextLabel.renderGlyphicon('glyphicon-forward',{'blinking':false})
             mx550.network.renderGlyphicon('glyphicon-user', {'blinking':false})
             mx550.patientName.renderGlyphicon('glyphicon-user',{'blinking':false})
             mx550.profile.renderGlyphicon('glyphicon-credit-card', {'blinking': false})
