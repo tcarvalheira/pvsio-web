@@ -43,7 +43,7 @@ require.config({
 define(function(require, exports, module){
     "use strict"
     let d3 = require("d3/d3")
-    let Widget = require("widgets/Widget")
+    let WidgetEVO = require("widgets/core/WidgetEVO")
     let PVSioStateParser = require("util/PVSioStateParser")
     let StateParser = require("util/PVSioStateParser")
     let property = require("util/property")
@@ -88,15 +88,17 @@ define(function(require, exports, module){
 
         this.parent = (opt.parent) ? (`#${opt.parent}`) : 'alarm'
 
-        this.div = d3.select(this.parent)
-                        .append('div')
-                        .attr("id", `${id}_audio_div` )
-                        .style("position", "absolute")
-                        .style("top", `${this.top}px`)
-                        .style("left", `${this.left}px`)
+        WidgetEVO.apply(this, [ id, coords, opt ]);
 
-        this.alarmDiv = this.div
-        this.body = d3.select("body")
+        //this.div = d3.select(this.parent)
+        //                .append('div')
+        //                .attr("id", `${id}_audio_div` )
+        //                .style("position", "absolute")
+        //                .style("top", `${this.top}px`)
+        //                .style("left", `${this.left}px`)
+
+        // this.alarmDiv = this.div
+        // this.body = d3.select("body")
         this.div.append("audio")
                 .attr("id", `${id}_audio`)
                 .attr("name", "alarm")
@@ -111,13 +113,13 @@ define(function(require, exports, module){
             this.mute()
         }
 
-        Widget.call(this, id, coords, opt)
+        
         return this
     }
 
-    Alarm.prototype = Object.create(Widget.prototype);
+    Alarm.prototype = Object.create(WidgetEVO.prototype);
     Alarm.prototype.constructor = Alarm;
-    Alarm.prototype.parentClass = Widget.prototype;
+    Alarm.prototype.parentClass = WidgetEVO.prototype;
 
     /**
      * @function hide
@@ -125,10 +127,10 @@ define(function(require, exports, module){
      * @memberof module:Alarm
      * @instance
      */
-    Alarm.prototype.hide = function () {
+    /* Alarm.prototype.hide = function () {
         this.alarmDiv.style("visibility", "hidden")
         return this
-    }
+    } */
 
      /**
       * @function reveal
@@ -136,13 +138,13 @@ define(function(require, exports, module){
       * @memberof module:Alarm
       * @instance
       */
-     Alarm.prototype.reveal = function () {
+     /* Alarm.prototype.reveal = function () {
         if(this.alarmDiv !== undefined){
             this.alarmDiv.style("visibility", "visible")
 
         }
         return this
-    }
+    } */
 
     /**
      * @function play
