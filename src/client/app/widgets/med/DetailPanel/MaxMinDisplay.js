@@ -84,10 +84,13 @@ define(function (require, exports, module) {
         this.valueMax = opt.valueMax
         this.valueMin = opt.valueMin
         
-        this.div = d3.select(this.parent)
+        // invoke WidgetEVO constructor to create the widget
+        WidgetEVO.apply(this, [ id, coords, opt ]);
+        
+        /* this.div = d3.select(this.parent)
             .append('div')
                 .attr('id', `${id}_div`)
-                .style('display','block')
+                .style('display','block') */
 
         opt.backgroundColor = opt.backgroundColor || "black";
         opt.cursor = opt.cursor || "default";
@@ -95,8 +98,7 @@ define(function (require, exports, module) {
         
         this.setProperties(opt)
         
-         // invoke WidgetEVO constructor to create the widget
-        WidgetEVO.apply(this, [ id, coords, opt ]);
+         
         let top = -15
         // if title is setted or will come from pvs state
         if(this.title !== '' || opt.pvsTitle !== undefined){
