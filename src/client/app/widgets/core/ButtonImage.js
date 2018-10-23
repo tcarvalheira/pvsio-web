@@ -72,7 +72,7 @@ define(function (require, exports, module) {
      *                                     The indicated name is prefixed with the string indicated in opt.evts.</li>
      * @param {Number} [opt.keyCode] : binds the widget to keyboard keyCodes. Use e.g., http://keycode.info/, to see keyCodes</li>
      * @param {Number} [opt.rate] : interval, in milliseconds, for repeating button clicks when the button is pressed and held down (default is 250ms)</li>
-     * @param {'bottom' | 'top' | 'left' | 'rigth'} [opt.imagePosition='bottom'] : relative position of the image to the label
+     * @param {'bottom' | 'top' | 'left' | 'rigth' | 'all'} [opt.imagePosition='top'] : relative position of the image to the label. If setted to all, image should take all button size
      * @param {String} [opt.imageDisplayKey] - sets PVS state variable that olds image path
      * @param {String} [opt.textDisplayKey] - sets PVS state variable that olds button label path
      * @memberof module:ButtonEVO
@@ -108,27 +108,44 @@ define(function (require, exports, module) {
         let leftImage = newLeft // should i center or should i implement align on image?
         let topText = coords.height/2
         let leftText = 0 // text will center automatically if setted
+        let imageWidth = coords.width/2
+        let imageHeight = coords.height/2
  
         if(this.imagePosition === 'bottom'){
-            // divive button in two vertically, image comes on top and text on bottom
+            // divive button in two vertically, image comes on bottom and text on bottom
             topImage = coords.height/2
             leftImage = newLeft
             topText = 0
             leftText = 0
+            imageWidth = coords.width/2
+            imageHeight = coords.height/2
         }else if(this.imagePosition === 'left'){
             // divide button in two, vertically and put image on left
             topImage = 0
             leftImage = 0
             topText = 0
             leftText = coords.width/2
+            imageWidth = coords.width/2
+            imageHeight = coords.height/2
         }else if(this.imagePosition === 'right'){
             topImage = 0
             leftImage = coords.width/2
             topText = 0
             leftText = 0
+            imageWidth = coords.width/2
+            imageHeight = coords.height/2
+        }else if(this.imagePosition === 'all'){
+            // if setted to all, image should take all button  size
+            topImage = 0
+            leftImage = 0
+            topText = 0
+            leftText = 0
+            imageWidth = coords.width
+            imageHeight = coords.height
         }
+        
 
-        this.image = new ImageRender(`${id}-image`, {...coords,top:topImage, left:leftImage, width: coords.width/2, height: coords.height/2}, {...opt, displayKey: opt.imageDisplayKey, parent: `${id}`, backgroundColor: 'transparent', position: 'relative'})
+        this.image = new ImageRender(`${id}-image`, {...coords,top:topImage, left:leftImage, width: imageWidth, height: imageHeight}, {...opt, displayKey: opt.imageDisplayKey, parent: `${id}`, backgroundColor: 'transparent', position: 'relative'})
         this.text = new BasicDisplayEVO(`${id}-label`,{...coords, top: topText, left: leftText, height: coords.height/2}, {...opt, displayKey: opt.textDisplayKey, parent: `${id}`, backgroundColor: 'transparent', position: 'relative'})
         this.button = new ButtonEVO(`${id}-button`, {...coords, top:0, left:0}, {...opt, parent: `${id}`, backgroundColor: 'transparent', position:'relative', zIndex:999})
         
