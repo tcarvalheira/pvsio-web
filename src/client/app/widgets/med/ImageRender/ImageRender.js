@@ -133,7 +133,7 @@ define(function (require, exports, module) {
                             .style('height','100%')
                             //.style('font-size','10px')
                             .style('background-color',`transparent`)
-                            .attr('type','image/svg+xml')
+                            .attr('type','image/png')
                             .attr("data", `${imagePath}`) 
 
             if(this.evalViz(state)){
