@@ -195,7 +195,11 @@ main: THEORY
     mainSetupButtonText: string,
     mainSetupButtonImage: string,
     mainScreenButtonText: string,
-    mainScreenButtonImage: string
+    mainScreenButtonImage: string,
+    measurementSelectionButtonText: string,
+    measurementSelectionButtonImage: string,
+    remoteAppsButtonText: string,
+    remoteAppsButtonImage: string
   #]
 
   init(x: real): state = (#
@@ -365,37 +369,41 @@ main: THEORY
     pulseAlarmOffImage := "img/pulseAlarmImage.svg",
 
     silenceButtonText := "Silence",
-    silenceButtonImage := "img/silenceImage.svg",
+    silenceButtonImage := "img/silence.svg",
 
     alarmsOffText := "Alarms Off",
-    alarmsOffImage := "img/alarmsOffImage.svg",
+    alarmsOffImage := "img/alarmsOff.svg",
 
     ecg_plugged := false,
     spo2_plugged := true,
 
     startStopButtonText := "Start/Stop",
-    startStopButtonImage := "img/alarmsOffImage.svg",
+    startStopButtonImage := "img/startStop.svg",
 
     stopAllButtonText := "Stop All",
-    stopAllButtonImage:= "img/alarmsOffImage.svg",
+    stopAllButtonImage:= "img/stopAll.svg",
     repeatTimeButtonText := "Repeat Time",
-    repeatTimeButtonImage:= "img/alarmsOffImage.svg",
+    repeatTimeButtonImage:= "img/repeatTime.svg",
     adjustSizeButtonText := "Adjust Size",
-    adjustSizeButtonImage:= "img/alarmsOffImage.svg",
+    adjustSizeButtonImage:= "img/adjustSize.svg",
     zeroButtonText := "Zero",
-    zeroButtonImage:= "img/alarmsOffImage.svg",
+    zeroButtonImage:= "img/zero.svg",
     vitalTrendButtonText := "Vital Trend",
-    vitalTrendButtonImage:= "img/alarmsOffImage.svg",
+    vitalTrendButtonImage:= "img/vitalTrends.svg",
     recordingsButtonText := "Recordings",
-    recordingsButtonImage:= "img/alarmsOffImage.svg",
+    recordingsButtonImage:= "img/recordings.svg",
     admitDischargeButtonText := "Admit/Dis...",
-    admitDischargeButtonImage:= "img/alarmsOffImage.svg",
+    admitDischargeButtonImage:= "img/admitDischarge.svg",
     monitorStandbyButtonText := "Monitor Standby",
-    monitorStandbyButtonImage:= "img/alarmsOffImage.svg",
+    monitorStandbyButtonImage:= "img/monitorStandby.svg",
     mainSetupButtonText:= "Main Setup",
-    mainSetupButtonImage:= "img/alarmsOffImage.svg",
+    mainSetupButtonImage:= "img/mainSetup.svg",
     mainScreenButtonText:= "Main Screen",
-    mainScreenButtonImage:= "img/alarmsOffImage.svg"
+    mainScreenButtonImage:= "img/mainScreen.svg",
+    measurementSelectionButtonText:= "",
+    measurementSelectionButtonImage:= "img/measurementSelection.svg",
+    remoteAppsButtonText:= "",
+    remoteAppsButtonImage:= "img/remoteApplications.svg"
 
   #)
 

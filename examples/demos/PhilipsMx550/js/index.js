@@ -1589,14 +1589,14 @@ require([
                 imageDisplayKey: 'alarmsOffImage'
             })
 
-        mx550.buttonBack = new ButtonEVO('back-button',
+        mx550.buttonBack = new ButtonEVO('back-button1',
             {top: 752, left: 218, width: 30, height:38},
             {
-                    parent: 'prototype',
-                    backgroundColor: 'transparent',
-                    visibleWhen: 'isOn = TRUE'
+                parent: 'prototype',
+                backgroundColor: 'transparent',
+                visibleWhen: 'isOn = TRUE'
             })
-        mx550.buttonBackLabel = new BasicDisplayEVO('back-button-label',
+        mx550.buttonBackLabel = new BasicDisplayEVO('back-button-label1',
             {top: 752, left: 218, width: 30, height:38},
             {
                 parent: 'prototype',
@@ -1770,7 +1770,27 @@ require([
             })
 
 
-        mx550.mainSetuputton = new ButtonImage('main-setup-button',
+        
+        
+        
+        mx550.buttonBack = new ButtonEVO('back-button',
+            {top: 752, left: 218, width: 30, height:38},
+            {
+                    parent: 'prototype',
+                    backgroundColor: 'transparent',
+                    visibleWhen: 'isOn = TRUE'
+            })
+        mx550.buttonBackLabel = new BasicDisplayEVO('back-button-label',
+            {top: 752, left: 218, width: 30, height:38},
+            {
+                parent: 'prototype',
+                fontSize: 8,
+                backgroundColor: '#2D2A28',
+                visibleWhen: 'isOn = TRUE',
+                fontColor: '#FFFFFF'
+            })
+
+            mx550.mainSetuputton = new ButtonImage('main-setup-button',
             {top: 754, left: 817, width: 44, height: 34},
             {
                 parent: 'prototype',
@@ -1799,11 +1819,39 @@ require([
                 textDisplayKey: 'mainScreenButtonText',
                 imageDisplayKey: 'mainScreenButtonImage'
             })
-        
-       
 
 
+            mx550.measurementSelectionButton = new ButtonImage('measurement-selection-button',
+            {top: 752, left: 922, width: 46, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#2D2A28',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                imagePosition: 'all',
+                textDisplayKey: 'measurementSelectionButtonText',
+                imageDisplayKey: 'measurementSelectionButtonImage'
+            })
 
+            mx550.remoteApplicationsButton = new ButtonImage('remote-apps-button',
+            {top: 752, left: 974, width: 46, height: 38},
+            {
+                parent: 'prototype',
+                backgroundColor: '#2D2A28',
+                visibleWhen: 'isOn = TRUE',
+                fontSize: 6,
+                fontColor: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif',
+                align: 'center',
+                imagePosition: 'all',
+                textDisplayKey: 'remoteAppsButtonText',
+                imageDisplayKey: 'remoteAppsButtonImage'
+            })
 
         // LEDs
         mx550.onoff_led = new LED("onoff_led", 
