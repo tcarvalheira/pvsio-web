@@ -121,20 +121,7 @@ require([
                     volume: 'alarm_vol'
                 } 
             }
-        ),
-
-        /* mx550.btnAlarmOff = new ButtonEVO("btn_alarm_off", {
-            top: 230, left: 990, height: 20, width: 20
-          }, {
-            //visibleWhen: "isOn = TRUE", //TODO: i can use this attribute insted of checking if it is on or off on javascript
-            visibleWhen: 'isOn = TRUE',
-            parent: 'prototype',
-            callback: onMessageReceived,
-            softLabel: 'Pulse',
-            fontColor: '#00FFFF',
-            fontSize: 6,
-            align: 'left'
-          }); */
+        )
 
           mx550.pulseAlarmOff = new ImageRender('pulse_alarm',
             {top: 222, left: 988, height: 30, width: 20},
@@ -1769,6 +1756,7 @@ require([
                 visibleWhen: 'isOn = TRUE'
             })
 
+            
 
         
         
@@ -1860,9 +1848,43 @@ require([
                 parent: "prototype",
                 color: "orange",
                 callback: onMessageReceived,
-                backgroundColor: "transparent" // does this button light up?
+                backgroundColor: "transparent",
+                ledKey: 'onOffLedColor'
             })
 
+        mx550.battery_led = new LED("battery_led", 
+            {top: 930, left: 405, width: 17, height: 17},
+            {
+                parent: "prototype",
+                color: "red",
+                callback: onMessageReceived,
+                backgroundColor: "transparent"
+            })
+
+        /* TOP LAMPS */
+        mx550.alarmsOffLamp = new ImageRender('alarms-off-lamp',
+            {top: 80, left: 255, height: 15, width: 130},
+            {
+                parent: 'prototype',
+                displayKey: 'alarmOffLamp',
+                visibleWhen: 'isAlarmOn = FALSE'
+            })
+
+        mx550.alarmLamp1 = new ImageRender('alarm-lamp1',
+            {top: 80, left: 100, height: 15, width: 65},
+            {
+                parent: 'prototype',
+                displayKey: 'alarmLamp1',
+                visibleWhen: 'alarmLamp1On = TRUE'
+            })
+        mx550.alarmLamp2 = new ImageRender('alarm-lamp2',
+            {top: 80, left: 180, height: 15, width: 65},
+            {
+                parent: 'prototype',
+                displayKey: 'alarmLamp2',
+                visibleWhen: 'alarmLamp2On = TRUE'
+            })
+        
         // utility function
         function evaluate(str) {
             var v = +str;
@@ -1877,6 +1899,9 @@ require([
 
             for(var widget in mx550){
                 if(!mx550.hasOwnProperty(widget)) continue;
+                if(widget == 'onoff_led' || widget == 'battery_led'){
+                    continue;  
+                } 
                 mx550[widget].render(res)
             }
             mx550.buttonBackLabel.renderGlyphicon('glyphicon-backward',{'blinking': false})
@@ -1887,9 +1912,20 @@ require([
             mx550.view.renderGlyphicon('glyphicon-modal-window', {'blinking': false})
             mx550.alarmsoff_img.renderGlyphicon('glyphicon-bell',{'blinking':false});
             if(res.isOn === 'TRUE'){
-                mx550.onoff_led.render(res, {color: "#b0ff77"}) /* bright green */
+                //mx550.onoff_led.render(res, {color: "#b0ff77"}) /* bright green */
+                mx550.onoff_led.on({color: "#b0ff77"})
             }else{
-                mx550.onoff_led.render(res, {color: 'grey'})
+                //mx550.onoff_led.render(res, {color: 'grey'})
+                mx550.onoff_led.off()
+            }
+
+            let x = res.batteryLedBlinking
+            if(res.isOn === 'TRUE'){
+                mx550.battery_led.on({color: `#${res.batteryLedColor.replace(/"/g,"")}`, [`${res.batteryLedBlinking === 'TRUE' ? 'blinking' : ''}`]: true})
+                //mx550.battery_led.render(res, {color: `#${res.batteryLedColor.replace(/"/g,"")}`, blinking: `${res.batteryLedBlinking}`})
+                //mx550.battery_led.render(res, {color: "#b0ff77"}) 
+            }else{
+                mx550.battery_led.off()
             }
         }
 

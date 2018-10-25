@@ -199,7 +199,17 @@ main: THEORY
     measurementSelectionButtonText: string,
     measurementSelectionButtonImage: string,
     remoteAppsButtonText: string,
-    remoteAppsButtonImage: string
+    remoteAppsButtonImage: string,
+
+    batteryLevel: nonneg_real,
+    batteryLedColor: string,
+    batteryLedBlinking: bool,
+    onOffLedColor: string,
+    alarmOffLamp: string,
+    alarmLamp1: string,
+    alarmLamp2: string,
+    alarmLamp1On: bool,
+    alarmLamp2On: bool
   #]
 
   init(x: real): state = (#
@@ -403,7 +413,21 @@ main: THEORY
     measurementSelectionButtonText:= "",
     measurementSelectionButtonImage:= "img/measurementSelection.svg",
     remoteAppsButtonText:= "",
-    remoteAppsButtonImage:= "img/remoteApplications.svg"
+    remoteAppsButtonImage:= "img/remoteApplications.svg",
+
+    batteryLevel := 95,
+    batteryLedColor := "f9af25",
+    batteryLedBlinking := false,
+    onOffLedColor := "FF0000",
+
+    alarmOffLamp := "img/alarmOffLamp.svg",
+    alarmLamp1 := "img/alarmLampOrange.svg",
+    alarmLamp2 := "img/alarmLampOrange.svg",
+
+    alarmLamp1On := false,
+    alarmLamp2On := true
+
+
 
   #)
 
