@@ -11,7 +11,8 @@
         root.PVSioWebClient = factory();
     }
 }(this, function () {
-    //almond, and your modules will be inlined here/**
+    //almond, and your modules will be inlined here
+    /**
  * almond 0.2.7 Copyright (c) 2011-2012, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/almond for details
