@@ -9,7 +9,7 @@ GIIP: THEORY
   %-- state attributes
   State: TYPE = [#
     mode: Mode,
-    battery_level: int,
+    battery_level: nonneg_real,
     bps: basal_profiles,
     flag_alarm: bool,
     flag_level_two_alarm: bool,
@@ -22,7 +22,7 @@ GIIP: THEORY
   %-- init function
   init: State = (#
     mode := POWERED_OFF, 
-    battery_level := 80, 
+    battery_level := 20, 
     bps := STANDARD_PROFILES, 
     flag_alarm := false, 
     flag_level_two_alarm := false, 
