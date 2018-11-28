@@ -51,8 +51,15 @@ define(function (require, exports, module) {
      * @param {String} [opt.fontColor='black'] set the icon and text color
      * @param {Boolean} [opt.show_icon=true] whether if there should be a visible icon or not
      * @param {Boolean} [opt.show_text=true] whether if there should be a visible text or not
+     * @param {Boolean} [opt.show_percentage=true] whether if there should be a visible percentage symbol in text or not
      * @param {Number} [opt.blinkingValue=10] if battery level is below this value, icon will blink
      * @param {Number} [opt.battery_level=100] Level of battery em percentage. This value should be between 0 and 100
+     * @param {String} [opt.displayKey] set PVS key with battery level.
+     * @param {Object} [opt.battery_limits] - lower limits to reveal battery states
+     * @param {Integer} [opt.battery_limits.quarter=10] - shows battery with a quarter of charge 
+     * @param {Integer} [opt.battery_limits.half=40] - shows battery with half charge
+     * @param {Integer} [opt.battery_limits.three_quarters=70] - shows batter with 3/4 charge
+     * @param {Integer} [opt.battery_limits.full=90] - shows battery full
      * @memberof module:Battery
      * @instance
      */
@@ -62,7 +69,8 @@ define(function (require, exports, module) {
         opt = this.normaliseOptions(opt);
         // set widget type & display key
         this.type = this.type || "Battery";
-        this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : id;
+        this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : id
+        this.valueKey = (opt.valueKey !== undefined && typeof opt.valueKey === "string") ? opt.valueKey : this.displayKey
 
         // override default style options of WidgetEVO as necessary before creating the DOM element with the constructor of module WidgetEVO
         opt.backgroundColor = opt.backgroundColor || "black";
@@ -76,18 +84,49 @@ define(function (require, exports, module) {
         this.battery_level = (parseInt(opt.battery_level) !== NaN && opt.battery_level !== undefined) ? opt.battery_level : 100
         this.show_icon = opt.show_icon !== undefined ? opt.show_icon : true
         this.show_text = opt.show_text !== undefined ? opt.show_text : true
+        this.show_percentage = opt.show_percentage !== undefined ? opt.show_percentage : true
         this.blinkingValue = opt.blinkingValue || 10
         this.iconFontSize = opt.iconFontSize || 20
         this.textFontSize = opt.textFontSize || 10
 
+        /* define limits */
+        this.battery_limits = {
+            'quarter' : (opt.battery_limits !== undefined && parseInt(opt.battery_limits.quarter) !== NaN && opt.battery_limits.quarter !== undefined) ? opt.battery_limits.quarter : 10,
+            'half': (opt.battery_limits !== undefined && parseInt(opt.battery_limits.half) !== NaN && opt.battery_limits.half != undefined) ? opt.battery_limits.half : 40,
+            'three_quarters': (opt.battery_limits !== undefined && parseInt(opt.battery_limits.three_quarters) !== NaN && opt.battery_limits.three_quarters != undefined) ? opt.battery_limits.three_quarters : 70,
+            'full' : (opt.battery_limits !== undefined && parseInt(opt.battery_limits.full) !== NaN && opt.battery_limits.full != undefined) ? opt.battery_limits.full : 90
+        }
 
+
+        /* define icon states. With an object i can be switched to another library  */
+        this.icon_states = {
+            'level5': 'fa-battery-full',
+            'level4': 'fa-battery-three-quarters',
+            'level3': 'fa-battery-half',
+            'level2': 'fa-battery-quarter',
+            'level1': 'fa-battery-empty'
+        }
         this.parent = (opt.parent) ? (`#${opt.parent}`) : 'body'
-        this.div = d3.select(this.parent)
-            .append('div')
-            .attr('id', this.id)
-
+        
         // invoke WidgetEVO constructor to create the widget
         WidgetEVO.apply(this, [id, coords, opt]);
+
+        if (this.show_icon) {
+            this.createIcon()
+            this.icon
+                .attr('class', `battery-icon fa fa-2x`) // ${this.getIconClass()}`)
+                .style('display', 'block')
+                .style('color', `${opt.fontColor}`)
+
+            if (this.battery_level < this.blinkingValue) {
+                this.icon.classed('blink', true)
+            }
+        }
+        
+        if (this.show_text) {
+            this.createText(opt)
+        }
+        
         return this;
     }
     Battery.prototype = Object.create(WidgetEVO.prototype);
@@ -103,20 +142,45 @@ define(function (require, exports, module) {
     * @instance
     */
     Battery.prototype.getIconClass = function () {
-        let icon = 'fa-battery-full'
-        if (this.battery_level > 90) {
-            icon = 'fa-battery-full'
-        } else if (this.battery_level > 70 && this.battery_level <= 90) {
-            icon = 'fa-battery-three-quarters'
-        } else if (this.battery_level > 40 && this.battery_level <= 70) {
-            icon = 'fa-battery-half'
-        } else if (this.battery_level > 10 && this.battery_level <= 40) {
-            icon = 'fa-battery-quarter'
-        } else if (this.battery_level <= 10) {
-            icon = 'fa-battery-empty'
+        let icon = this.icon_states.level5 // 'fa-battery-full'
+        if (this.battery_level > this.battery_limits.full) {
+            icon = this.icon_states.level5 //'fa-battery-full'
+        } else if (this.battery_level > this.battery_limits.three_quarters && this.battery_level <= this.battery_limits.full) {
+            icon = this.icon_states.level4 //'fa-battery-three-quarters'
+        } else if (this.battery_level > this.battery_limits.half && this.battery_level <= this.battery_limits.three_quarters) {
+            icon = this.icon_states.level3 // 'fa-battery-half'
+        } else if (this.battery_level > this.battery_limits.quarter && this.battery_level <= this.battery_limits.half) {
+            icon = this.icon_states.level2 // 'fa-battery-quarter'
+        } else if (this.battery_level <= this.battery_limits.quarter) {
+            icon = this.icon_states.level1//'fa-battery-empty'
         }
         return icon
     }
+
+    
+
+    /** 
+     * @protected
+     * @function <a name="setIconClass">setIconClass</a>
+     * @description This method will set the icon class to be shown
+     * @return self object
+     * @memberof module:Battery
+     * @instance
+    */
+    Battery.prototype.setIconClass = function () {
+        let iconClass = this.getIconClass()
+        for(var level in this.icon_states){
+            if(iconClass === this.icon_states[level]){
+                this.icon.classed(this.icon_states[level], true)
+            }else{
+                this.icon.classed(this.icon_states[level], false)
+            }            
+        }
+        return this
+    }
+    
+
+
     /**
     * @function <a name="setBatteryLevel">setBatteryLevel</a>
     * @description Sets the current battery level and render the widget with new value.
@@ -130,7 +194,6 @@ define(function (require, exports, module) {
         if (level != NaN) {
             if (level_int >= 0 && level_int <= 100) {
                 this.battery_level = parseInt(level_int)
-                this.render()
             }
         }
         return this
@@ -150,28 +213,17 @@ define(function (require, exports, module) {
     Battery.prototype.render = function (state, opt) {
         // set style
         opt = this.normaliseOptions(opt);
-
+        this.setBatteryLevel(this.evaluate(this.displayKey, state))
         opt.fontColor = opt.fontColor !== undefined ? opt.fontColor : this.opt.fontColor
         opt.fontColor = this.getIconClass() === 'fa-battery-empty' || this.getIconClass() === 'fa-battery-quarter' ? 'red' : opt.fontColor
         opt.fontsize = opt.textFontSize || this.textFontSize
-        this.setStyle(opt);
-        if (this.show_icon) {
-            this.createIcon()
-            this.icon
-                .attr('class', `battery-icon fa fa-2x ${this.getIconClass()}`)
-                .style('display', 'block')
-                .style('color', `${opt.fontColor}`)
-
-            if (this.battery_level < this.blinkingValue) {
-                this.icon.classed('blink', true)
-            }
+        this.setStyle(opt)
+        this.setIconClass()
+        if(this.show_percentage && state !== undefined){
+            state[this.displayKey] = this.evaluate(this.displayKey, state) + "%"
         }
-
-        if (this.show_text) {
-            this.createText(opt)
-            this.levelText.render(this.battery_level + "%", opt);
-        }
-
+        this.levelText.render(state, opt);
+        this.icon.style('color', opt.fontColor)
         this.reveal();
 
         return this;
@@ -191,12 +243,12 @@ define(function (require, exports, module) {
                 .append('i')
                 .attr('id', `${this.id}-battery-icon`)
                 .attr('aria-hidden', 'true')
-                .style('position', 'absolute')
-                .style('top', `${this.coords.top}px`)
-                .style('left', `${this.coords.left}px`)
+                .style('position', 'relative')
+                .style('top', `0px`)
+                .style('left', `0px`)
                 .style('width', `${this.coords.width}px`)
+                .style('height', `${this.coords.height/2}px`)
                 .style('font-size', `${this.iconFontSize}pt`)
-            //.style('height', `${this.coords.height}px`)
         }
         return this
     }
@@ -210,22 +262,22 @@ define(function (require, exports, module) {
    * @instance
    */
     Battery.prototype.createText = function (opt) {
-        /* TODO: if there is a way to change widget position i can create the icon once. 
-        * I can't figure out how to change position (top) so that i create a new widget */
         let iconCoords = this.icon.node().getBoundingClientRect()
         if (this.levelText !== undefined) {
             this.levelText.remove()
         }
         this.levelText = new BasicDisplayEVO(`${this.id}-battery-level`, {
             width: this.coords.width,
-            height: this.coords.height,
-            top: this.coords.top + iconCoords.height,
-            left: this.coords.left
+            height: this.coords.height/2,
+            top: '0px',
+            left: '0px'        
         }, {
                 fontColor: "white",
+                position: 'relative',
                 backgroundColor: "transparent",
                 fontsize: opt.fontsize,
-                parent: this.id
+                parent: this.div.node().id,
+                displayKey: this.displayKey
             });
         return this
     }
