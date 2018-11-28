@@ -86,19 +86,6 @@ require([
         }
 
         var device = {};
-
-        /* device.battery_level = new BasicDisplay("battery_level", {
-            width: 30,
-            height: 16,
-            top: 28,
-            left: 75
-        }, {
-            fontColor: "white",
-            backgroundColor: "transparent",
-            // opacity: "0.2",
-            fontsize: 11,
-            parent: "battery"
-        }); */
         device.reservoir = new Slider("reservoir", {
             top: 48,
             left: 530,
@@ -109,22 +96,11 @@ require([
             min: 0,
             init: 0,
             style: "level-indicator",
-            // orientation: "horizontal",
-            // handle: {
-            //     type: "hidden"
-            // },
-            // zero_padding: true,
-            // backgroundColor: "transparent",
-            // borderColor: "transparent",
             tooltip: {
                 arrowColor: "white",
                 position: "left",
                 fontSize: 11
             },
-            // track: {
-            //     color: "#3ac441"
-            // },
-            // readonly: true,
             labelFormat: function (value) {
                 if (value === 1) {
                     return value + " unit";
@@ -185,16 +161,14 @@ require([
                 left:90,
                 top:40,
                 width: 40,
-                height: 30
+                height: 40
             },
             {
                 fontColor: "#FFFFFF",
                 backgroundColor: "transparent",
-                textFontSize: 11,
+                textFontSize: 10,
                 parent: "topline_display",
-                battery_level: 20,
-                show_icon:true,
-                show_text:true,
+                displayKey: 'battery_level'
             }
         )
 
@@ -220,38 +194,6 @@ require([
                         showDate: true,
                         showTime: true
                 })
-
-        
-
-            /* moved carousel navigation inside Carousel */
-        /* device.next_screen = new ButtonEVO("next_screen", {
-            width: 70,
-            height: 50,
-            top: 210,
-            left: 402
-        }, {
-            softLabel: "",
-            backgroundColor: "steelblue",
-            opacity: "0.2",
-            borderRadius: "4px",
-            fontsize: 34,
-            parent: "giip",
-            callback: onMessageReceived
-        });
-        device.previous_screen = new ButtonEVO("previous_screen", {
-            width: 70,
-            height: 50,
-            top: 210,
-            left: 0
-        }, {
-            softLabel: "",
-            backgroundColor: "steelblue",
-            opacity: "0.2",
-            borderRadius: "4px",
-            fontsize: 34,
-            parent: "giip",
-            callback: onMessageReceived
-        }); */
 
         // basal profile screen
         device.edit_basal_profiles = new ButtonEVO("edit_basal_profiles", {
@@ -408,7 +350,6 @@ require([
             d3.select("#power_on_screen").style("display", "none");
             d3.select("#post_screen").style("display", "none");
             d3.select("#prime_screen").style("display", "none");
-            //d3.select("#giip").style("display", "none");
             d3.select("#basal_subscreens").style("display", "none");
         }
 
@@ -439,26 +380,8 @@ require([
             d3.select(id).style("display", "none");
         }
 
-        // todo: battery widget
         function render_battery (res) {
-            device.battery.setBatteryLevel(res.battery_level)
-            device.battery.render()
-            /* device.battery_level.render(res.battery_level + "%");
-            d3.selectAll(".battery-icon").style("display", "none");
-            if (res.battery_level > 90) {
-                d3.select("#battery-full").style("display", "block");
-            } else if ( res.battery_level > 70 && res.battery_level <= 90) {
-                d3.select("#battery-three-quarters").style("display", "block");
-            } else if ( res.battery_level > 40 && res.battery_level <= 70) {
-                d3.select("#battery-half").style("display", "block");
-            } else if ( res.battery_level > 10 && res.battery_level <= 40) {
-                d3.select("#battery-quarter").style("display", "block");
-            } else {
-                d3.select("#battery-empty").style("display", "block");
-            }
-            if (res.battery_level < 10 && !d3.select("#battery_level").classed("blink")) {
-                d3.select("#battery").classed("blink", true);
-            } */
+            device.battery.render(res)
         }
 
         device.basal_profiles = {};
@@ -542,17 +465,6 @@ require([
             } else if (NORMAL_OPERATION_MODE(res)) {
                 device.carousel.render(res)
                 viz("#giip");
-                /* if (res.mode === "NORMAL_OPERATION") {
-                    $('.carousel').carousel(screens.NORMAL_OPERATION_SCREEN);
-                } else if (res.mode === "BASAL_MANAGEMENT") {
-                    $('.carousel').carousel(screens.BASAL_MANAGEMENT_SCREEN);
-                } else if (res.mode === "BOLUS_MANAGEMENT") {
-                    $('.carousel').carousel(screens.BOLUS_MANAGEMENT_SCREEN);
-                } else if (res.mode === "PUMP_CONFIGURATION") {
-                    $('.carousel').carousel(screens.PUMP_CONFIGURATION_SCREEN);
-                } else if (res.mode === "EVENT_DATA_MANAGEMENT") {
-                    $('.carousel').carousel(screens.EVENT_DATA_MANAGEMENT_SCREEN);
-                } */
             } else if (BASAL_PROFILE_SUBMODE(res)) {
                 viz("#basal_subscreens");
                 if (res.mode === "EDIT_BASAL_PROFILES") {
@@ -592,34 +504,9 @@ require([
             device.review_alarm_log.render();
             device.review_infusion_statistics.render();
             // navigator
-            //device.next_screen.render();
-            //device.previous_screen.render();
-            // set carousel options
-            /* $('.carousel').carousel({
-                wrap: false
-            }).carousel('pause'); */
         }
         // this creates the buttons on the carousel
         init_carousel();
-
-        // TODO: digital clock widget
-        /* var hour = d3.select("#div_hour");
-        var am_pm = d3.select("#div_am_pm");
-        var date = d3.select("#div_date");
-        var hhmmss = d3.select("#div_hhmmss");
-        function set_clock() {
-            var d = new Date();
-            var hh = (d.getHours() < 10) ? "0" + d.getHours() : (d.getHours() < 12) ? d.getHours() : d.getHours() - 12;
-            var mm = (d.getMinutes() < 10) ? "0" + d.getMinutes() : d.getMinutes();
-            var ss = (d.getSeconds() < 10) ? "0" + d.getSeconds() : d.getSeconds();
-            var xx = (d.getHours() <= 12) ? "AM" : "PM";
-            hour.text(hh + ":" + mm);
-            date.text(d.toLocaleDateString("en-US", { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', timeZoneName: 'short'}));
-            am_pm.text(xx);
-            hhmmss.text(hh + ":" + mm + ":" + ss);
-        }
-        set_clock();
-        var clock = setInterval(set_clock, 1000); */
 
         var demoFolder = "GIIP_widget";
 
