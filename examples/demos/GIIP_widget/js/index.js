@@ -190,9 +190,7 @@ require([
                         relativeOrder: 'time-date',
                         locale: 'en-US',
                         dateFormat: { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', timeZoneName:'short'},
-                        timeFormat: { hour12: true, hour:'numeric', minute: 'numeric'},
-                        showDate: true,
-                        showTime: true
+                        timeFormat: { hour12: true, hour:'numeric', minute: 'numeric'}
                 })
 
         // basal profile screen

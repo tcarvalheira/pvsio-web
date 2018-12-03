@@ -22,7 +22,7 @@ GIIP: THEORY
   %-- init function
   init: State = (#
     mode := POWERED_OFF, 
-    battery_level := 20, 
+    battery_level := 3, 
     bps := STANDARD_PROFILES, 
     flag_alarm := false, 
     flag_level_two_alarm := false, 
