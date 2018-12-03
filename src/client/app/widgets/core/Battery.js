@@ -117,10 +117,6 @@ define(function (require, exports, module) {
                 .attr('class', `battery-icon fa fa-2x`) // ${this.getIconClass()}`)
                 .style('display', 'block')
                 .style('color', `${opt.fontColor}`)
-
-            if (this.battery_level < this.blinkingValue) {
-                this.icon.classed('blink', true)
-            }
         }
         
         if (this.show_text) {
@@ -219,8 +215,15 @@ define(function (require, exports, module) {
         opt.fontsize = opt.textFontSize || this.textFontSize
         this.setStyle(opt)
         this.setIconClass()
+        
+        let battery_level = this.evaluate(this.displayKey, state)
         if(this.show_percentage && state !== undefined){
-            state[this.displayKey] = this.evaluate(this.displayKey, state) + "%"
+            state[this.displayKey] = battery_level + "%"
+        }
+
+        /* make icon blink if level is lower than blinkingValue */
+        if (battery_level < this.blinkingValue) {
+            this.icon.classed('blink', true)
         }
         this.levelText.render(state, opt);
         this.icon.style('color', opt.fontColor)
