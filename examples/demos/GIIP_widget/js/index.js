@@ -378,9 +378,9 @@ require([
             d3.select(id).style("display", "none");
         }
 
-        function render_battery (res) {
+        /* function render_battery (res) {
             device.battery.render(res)
-        }
+        } */
 
         device.basal_profiles = {};
         function render_basal_profiles (db) {
@@ -472,7 +472,8 @@ require([
             }
 
             // the following elements are always visible / enabled in normal operation mode
-            render_battery(res);
+            // render_battery(res);
+            device.battery.render(res)
             device.date.render()
             device.on_off.render();
             device.reservoir.render(res.volume);
