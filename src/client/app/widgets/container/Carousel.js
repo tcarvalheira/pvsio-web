@@ -76,6 +76,7 @@ define(function (require, exports, module) {
      * a Element with id <widget_id>_rigth_controller
      * 
      * @param {Object} [opt.screens={}] Object with PVS states and corresponding index on carousel
+     * @param {String} [opt.displayKey='mode'] Key that holds active carousel page
      * @memberof module:Carousel
      * @instance
      */
@@ -85,7 +86,8 @@ define(function (require, exports, module) {
         opt = this.normaliseOptions(opt);
         // set widget type & display key
         this.type = this.type || "Carousel";
-        this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : id;
+        /* PVS keys definition */
+        this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : 'mode';
         // override default style options of WidgetEVO as necessary before creating the DOM element with the constructor of module WidgetEVO
         opt.backgroundColor = opt.backgroundColor || "black";
         opt.cursor = opt.cursor || "default";
@@ -127,8 +129,11 @@ define(function (require, exports, module) {
         this.parent = (opt.parent) ? (`#${opt.parent}`) : 'body'
         this.callback = opt.callback || ((a) => (a))
         this.id = id
+        WidgetEVO.apply(this, [id, coords, opt]);
         if(!this.usePreDoneHTML){
-            this.div = d3.select(this.parent)
+            this.base.style('z-index','-100')
+
+            this.masterDiv = this.div // = d3.select(this.parent)
             .append('div')
             .attr('id', `${id}`)
             .attr('class', 'screen carousel slide')
@@ -137,10 +142,12 @@ define(function (require, exports, module) {
             .attr('data-pause', this.pause)
             .attr('data-ride', this.ride)
             .attr('data-wrap', this.wrap)
-            .style('left', `${coords.left}px`)
-            .style('top', `${coords.top}px`)
-            .style('width', `${coords.width}px`)
-            .style('height', `${coords.height}px`)
+            .style('position','relative')
+            .style('left','0px')
+            .style('top','0px')
+            .style('width',`${this.div.style('width')}`)
+            .style('height',`${this.div.style('height')}`)
+            .style('z-index','-10')
 
             /*** create html elements */
             this.createHTML()
@@ -159,14 +166,12 @@ define(function (require, exports, module) {
         this.createButtons()
         this.hideCarouselElements()
 
-        /*set   event listeners */
-        $(`#${id}`).on('slide.bs.carousel', this.onSlideBsCarousel)
-        $(`#${id}`).on('slid.bs.carousel', this.onSlidBsCarousel)
+        /*set   event listeners. Para que preciso dos eventos aqui? */
+        //$(`#${id}`).on('slide.bs.carousel', this.onSlideBsCarousel)
+        //$(`#${id}`).on('slid.bs.carousel', this.onSlidBsCarousel)
         
-        
-        WidgetEVO.apply(this, [id, coords, opt]);
-
-        
+        /* need to render widget. This way i have width and height to set buttons */
+        this.render()
         return this;
     }
     Carousel.prototype = Object.create(WidgetEVO.prototype);
@@ -181,29 +186,34 @@ define(function (require, exports, module) {
      * @instance
      */
     Carousel.prototype.render = function (state, opt) {
-        // set style
-        console.log(state)
         opt = this.normaliseOptions(opt);
 
         this.setStyle(opt);
 
         this.revealCarouselElements()
-
-        // TODO: check if it is possible to do this without creating the resize function
         let leftOpts = this.leftControl.node().getBoundingClientRect()
-        this.previous_screen.resize({
+        this.previous_screen.setStyle({
             top:0,
             left:0,
-            width: leftOpts.width,
-            height: leftOpts.height
+            width: `${leftOpts.width}px`,
+            height: `${leftOpts.height}px`
         })
+        /* TODO: check if there should be a method resize or method setStyle should update overlay layer as well. Doing this way widget isn't encapsulated*/
+        /* need to resize overlay layer in order to button be clickable */
+        this.previous_screen.overlay.style('width',`${leftOpts.width}px`)
+        this.previous_screen.overlay.style('height',`${leftOpts.height}px`)
+    
         let rightOpts = this.rightControl.node().getBoundingClientRect()
-        this.next_screen.resize({
+        this.next_screen.setStyle({
             top:0,
             left:0,
-            width: rightOpts.width,
-            height: rightOpts.height
+            width: `${rightOpts.width}px`,
+            height: `${rightOpts.height}px`
         })
+        /* need to resize overlay layer in order to button be clickable */
+        this.next_screen.overlay.style('width',`${rightOpts.width}px`)
+        this.next_screen.overlay.style('height',`${rightOpts.height}px`)
+
 
         this.previous_screen.render(state,opt)
         this.next_screen.render(state,opt)
@@ -211,7 +221,9 @@ define(function (require, exports, module) {
         /*** goto to carousel id based on PVS state */
         if(state !== undefined){
             /* PVS states should be equal to carousel pages */
-            this.goTo(this.states[`${state.mode}`])    
+            let page = this.evaluate(this.displayKey, state)
+            //this.goTo(this.states[`${state.mode}`])    
+            this.goTo(this.states[page])
         }
         this.reveal()
         return this;
@@ -242,8 +254,10 @@ define(function (require, exports, module) {
                     parent:  this.rightControl.node().id,
                     callback: this.callback,
                     position:'relative',
-                    zIndex: 10
+                    zIndex: 0
                 })
+
+                this.next_screen.overlay.style('z-index','100')
             }
 
             if(this.previous_screen === undefined || this.previous_screen === null){
@@ -263,7 +277,7 @@ define(function (require, exports, module) {
                         parent: this.leftControl.node().id,
                         callback: this.callback,
                         position: 'relative',
-                        zIndex: 10
+                        zIndex: 100
                     });
             }
     }
@@ -275,8 +289,7 @@ define(function (require, exports, module) {
         * @instance
         */
         Carousel.prototype.hideCarouselElements = function () {
-            console.log(`I'll hide corousel elements`)
-            this.div.style('display','none')
+            this.masterDiv.style('display','none')
             this.indicators.style('display','none')
             this.captions.forEach((item) => {
                 item.forEach((i) => {
@@ -295,8 +308,7 @@ define(function (require, exports, module) {
         * @instance
         */
         Carousel.prototype.revealCarouselElements = function () {
-            console.log(`I'll show carousel elements`)
-            this.div.style('display','block')
+            this.masterDiv.style('display','block')
             this.indicators.style('display','block')
             this.captions.forEach( (item) => {
                 item.forEach( (i) => {
@@ -317,24 +329,30 @@ define(function (require, exports, module) {
      * @instance
      */
     Carousel.prototype.createHTML = function () {
-        console.log(`I'll create HTML`)
-        this.indicators = this.div
+        this.indicators = this.masterDiv
             .append('ol')
             .attr('id',`${this.id}_indicators`)
             .attr('class', 'carousel-indicators')
             .style('bottom', `-10px;`)
         this.captions = []
 
-        this.wrapper = this.div
+        this.wrapper = this.masterDiv
             .append('div')
             .attr('id',`${this.id}_wrapper`)
             .attr('class', 'carousel-inner')
+            .style('position', 'absolute')
+            .style('top','0px')
+            .style('left','0px')
+            .style('width','100%')
+            .style('height','100%')
+            .style('z-index','-10')
 
-        this.leftControl = this.div
+
+        this.leftControl = this.masterDiv
             .append('a')
             .attr('id',`${this.id}_left_control`)
             .attr('class', 'left carousel-control')
-            .attr('href', `#${this.id}`)
+            //.attr('href', `#${this.id}`)
             .style('height', `50px`)
             .style('top', `210px`)
             .style('background-color', 'black')
@@ -344,11 +362,11 @@ define(function (require, exports, module) {
             .append('span')
             .attr('class', 'glyphicon glyphicon-chevron-left')
 
-        this.rightControl = this.div
+        this.rightControl = this.masterDiv
             .append('a')
             .attr('id',`${this.id}_rigth_control`)
             .attr('class', 'right carousel-control')
-            .attr('href', `#${this.id}`)
+            //.attr('href', `#${this.id}`)
             .style('height', `50px`)
             .style('top', `210px`)
             .style('background-color', 'black')
@@ -376,12 +394,12 @@ define(function (require, exports, module) {
                 .attr('id', `${this.id}-${screen.id}`)
                 .attr('class', `item ${active} center`)
                 /* TODO: set w&h for each screen or inherit from parent? */
-                .style('height', `262px`)
-                .style(`width`, `480px`)
+                .style('height', '100%')
+                .style(`width`, '100%')
                 .append('div')
                 .attr('class', 'carousel-caption')
                 /* How to find  */
-                .style('top', `200px`)
+                //.style('top', `200px`)
                 .html(screen.title)
             /* left and right controls */
             counter += 1;
@@ -394,9 +412,8 @@ define(function (require, exports, module) {
      * @param {Object} opt options object:
      * @param {Number} [opt.inteval=5000] The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.</li>
      * @param {Boolean} [opt.keyboard=true] Whether the carousel should react to keyboard events.</li>
-     * @param {String} [opt.pause='hover'] If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it.
-
-On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.</li>
+     * @param {String} [opt.pause='hover'] If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it. 
+     * On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.</li>
      * @param {String} [opt.ride=false] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.</li>
      * @param {Boolean} [opt.wrap=true] Whether the carousel should cycle continuously or have hard stops.</li>
      * @return {Object} this
