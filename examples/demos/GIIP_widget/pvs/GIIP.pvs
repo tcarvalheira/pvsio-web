@@ -6,6 +6,9 @@ GIIP: THEORY
   %-- operating modes
   Mode: TYPE = { ACTIVATE_BASAL_PROFILES, BASAL_MANAGEMENT, BOLUS_MANAGEMENT, CONFIRM_POWER_OFF, EDIT_BASAL_PROFILES, EVENT_DATA_MANAGEMENT, LONEALARM, LTWOALARM, NORMAL_OPERATION, POST, POWER_ON, POWERED_OFF, PRIME, PUMP_CONFIGURATION, TEMPORARY_BASAL_MANAGEMENT, TIME_SETTING }
 
+
+    CarouselPage: TYPE = [# name: string, title: string, state: Mode #]
+
   %-- state attributes
   State: TYPE = [#
     mode: Mode,
@@ -17,11 +20,12 @@ GIIP: THEORY
     flag_prime_success: bool,
     flag_set_time: bool,
     volume: real
+    %-- pages: list[CarouselPage]
   #]
 
   %-- init function
   init: State = (#
-    mode := POWERED_OFF, 
+    mode := NORMAL_OPERATION,  %--POWERED_OFF, 
     battery_level := 3, 
     bps := STANDARD_PROFILES, 
     flag_alarm := false, 
@@ -30,6 +34,13 @@ GIIP: THEORY
     flag_prime_success := true, 
     flag_set_time := false, 
     volume := 300
+    %-- pages := (:
+    %--    (# name:= "home", title:= "Home", state:= NORMAL_OPERATION#),
+    %--    (# name:= "basal_mgm", title:= "Basal Management", state:= BASAL_MANAGEMENT#),
+    %--    (# name:= "bolus_mgm", title:= "Bolus Management", state:= BOLUS_MANAGEMENT#),
+    %--    (# name:= "config", title:= "Pump Configuration", state:= PUMP_CONFIGURATION#),
+    %--    (# name:= "data_mgm", title:= "Event Data Management", state:= EVENT_DATA_MANAGEMENT#)
+    %-- :)
   #)
 
   %-- leave/enter functions

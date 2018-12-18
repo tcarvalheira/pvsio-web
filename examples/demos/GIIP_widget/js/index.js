@@ -133,12 +133,13 @@ require([
                 left: 76
             },
             {
-                screens: [{"id" : "home", "title": "Home"}, 
-                            {"id": "basal_mgm", "title": "Basal Management"}, 
-                            {"id": "bolus_mgm", "title": "Bolus Management"}, 
-                            {"id": "config", "title": "Pump Configuration"}, 
-                            {"id": "data_mgm", "title": "Event Data Management"} ],
+                screens: [{"id" : "home", "title": "Home", state: "NORMAL_OPERATION", idx:0}, 
+                            {"id": "basal_mgm", "title": "Basal Management", state: "BASAL_MANAGEMENT", idx:1}, 
+                            {"id": "bolus_mgm", "title": "Bolus Management", state: "BOLUS_MANAGEMENT", idx:2}, 
+                            {"id": "config", "title": "Pump Configuration", state: "PUMP_CONFIGURATION", idx:3}, 
+                            {"id": "data_mgm", "title": "Event Data Management", state: "EVENT_DATA_MANAGEMENT", idx:4} ],
                 parent: "device",
+                screensKey: 'pages',
                 callback: onMessageReceived,
                 interval: false,
                 backgroundColor: 'transparent',
@@ -149,11 +150,11 @@ require([
                     //console.log('Carousel END')
                 },
                 usePreDoneHTML: false,
-                states: { 'NORMAL_OPERATION': 0,
+/*                 states: { 'NORMAL_OPERATION': 0,
                             'BASAL_MANAGEMENT': 1,
                             'BOLUS_MANAGEMENT': 2,
                             'PUMP_CONFIGURATION': 3,
-                            'EVENT_DATA_MANAGEMENT': 4 }, 
+                            'EVENT_DATA_MANAGEMENT': 4 },  */
             })
 
         device.battery = new Battery('battery_indicator',

@@ -38,7 +38,7 @@
             })
       disp.render();
  });
- *
+ * 
  */
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
 /*global define */
@@ -86,7 +86,7 @@ define(function (require, exports, module) {
         opt = this.normaliseOptions(opt);
         // set widget type & display key
         this.type = this.type || "Carousel";
-        /* PVS keys definition */
+        /* PVS keys definition. this will be where active page is placed */
         this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : 'mode';
         // override default style options of WidgetEVO as necessary before creating the DOM element with the constructor of module WidgetEVO
         opt.backgroundColor = opt.backgroundColor || "black";
@@ -124,18 +124,43 @@ define(function (require, exports, module) {
 
         /* variable to use html pre done*/
         this.usePreDoneHTML = opt.usePreDoneHTML === undefined ? false : opt.usePreDoneHTML
-        this.states = opt.states || {}
 
         this.parent = (opt.parent) ? (`#${opt.parent}`) : 'body'
         this.callback = opt.callback || ((a) => (a))
         this.id = id
+
+
         WidgetEVO.apply(this, [id, coords, opt]);
         if(!this.usePreDoneHTML){
             this.base.style('z-index','-100')
+            this.createMasterDiv()
+            this.createHTML()
+            this.createHTMLButtons()
+        }else{
+            this.loadPreDoneHTML()
+        }
+        /* create widget buttons */
+        this.createButtons()
+        this.render()
+        return this;
+    }
+    Carousel.prototype = Object.create(WidgetEVO.prototype);
+    Carousel.prototype.parentClass = WidgetEVO.prototype;
+    Carousel.prototype.constructor = Carousel;
 
-            this.masterDiv = this.div // = d3.select(this.parent)
+
+    /** 
+     * @protected
+     * @function <a name="createMasterDiv">createMasterDiv</a>
+     * @description Create HTML to Carousel master div. All other widgets should be loaded into this div.
+     * @return {Object} self object so that one can chain methods.
+     * @memberof module:Carousel
+     * @instance
+     */
+    Carousel.prototype.createMasterDiv = function (){
+        this.masterDiv = this.div // = d3.select(this.parent)
             .append('div')
-            .attr('id', `${id}`)
+            .attr('id', `${this.id}`)
             .attr('class', 'screen carousel slide')
             .attr('data-interval', this.interval)
             .attr('data-keyboard', this.keyboard)
@@ -149,34 +174,28 @@ define(function (require, exports, module) {
             .style('height',`${this.div.style('height')}`)
             .style('z-index','-10')
 
-            /*** create html elements */
-            this.createHTML()
-        }else{
-            /* load pre-existing elements based on its id */
-            /*** this will define name convention */
-            this.div = d3.select(`#${id}`)
-            this.indicators = d3.select(`#${this.id}_indicators`)
-            /* ATENTION: here is a selector class based */
-            this.captions = d3.selectAll(`.${this.id}_carousel_caption`)
-            this.wrapper = d3.select(`#${this.id}_wrapper`)
-            this.leftControl = d3.select(`#${this.id}_left_control`)
-            this.rightControl = d3.select(`#${this.id}_right_control`)
-        }
-        
-        this.createButtons()
-        this.hideCarouselElements()
-
-        /*set   event listeners. Para que preciso dos eventos aqui? */
-        //$(`#${id}`).on('slide.bs.carousel', this.onSlideBsCarousel)
-        //$(`#${id}`).on('slid.bs.carousel', this.onSlidBsCarousel)
-        
-        /* need to render widget. This way i have width and height to set buttons */
-        this.render()
-        return this;
     }
-    Carousel.prototype = Object.create(WidgetEVO.prototype);
-    Carousel.prototype.parentClass = WidgetEVO.prototype;
-    Carousel.prototype.constructor = Carousel;
+
+    /** 
+     * @protected
+     * @function <a name="loadPreDoneHTML">loadPreDoneHTML</a>
+     * @description Load the Carousel predone HTML
+     * @return {Object} self object so thar one can chain methods
+     * @memberof module:Carousel
+     * @instance
+     */
+    Carousel.prototype.loadPreDoneHTML = function (){
+        /* load pre-existing elements based on its id */
+        /*** this will define name convention */
+        this.div = d3.select(`#${id}`)
+        this.indicators = d3.select(`#${this.id}_indicators`)
+        /* ATENTION: here is a selector class based */
+        this.captions = d3.selectAll(`.${this.id}_carousel_caption`)
+        this.wrapper = d3.select(`#${this.id}_wrapper`)
+        this.leftControl = d3.select(`#${this.id}_left_control`)
+        this.rightControl = d3.select(`#${this.id}_right_control`)
+    }
+
 
     /**
      * @function <a name="render">render</a>
@@ -187,6 +206,7 @@ define(function (require, exports, module) {
      */
     Carousel.prototype.render = function (state, opt) {
         opt = this.normaliseOptions(opt);
+        
 
         this.setStyle(opt);
 
@@ -198,8 +218,6 @@ define(function (require, exports, module) {
             width: `${leftOpts.width}px`,
             height: `${leftOpts.height}px`
         })
-        /* TODO: check if there should be a method resize or method setStyle should update overlay layer as well. Doing this way widget isn't encapsulated*/
-        /* need to resize overlay layer in order to button be clickable */
         this.previous_screen.overlay.style('width',`${leftOpts.width}px`)
         this.previous_screen.overlay.style('height',`${leftOpts.height}px`)
     
@@ -218,68 +236,74 @@ define(function (require, exports, module) {
         this.previous_screen.render(state,opt)
         this.next_screen.render(state,opt)
 
-        /*** goto to carousel id based on PVS state */
-        if(state !== undefined){
-            /* PVS states should be equal to carousel pages */
-            let page = this.evaluate(this.displayKey, state)
-            //this.goTo(this.states[`${state.mode}`])    
-            this.goTo(this.states[page])
+        /*** goto to carousel id based on PVS state.*/
+        if(state !== undefined ){
+            let activePageState = this.evaluate(this.displayKey, state)
+            this.screens.forEach(s => {
+                if(s.state === activePageState){
+                    this.activePage = s
+                }
+            })
+            
+        }else{
+            this.activePage={state:"", idx:0}
         }
+        this.goTo(this.activePage.idx)
         this.reveal()
         return this;
     }
 
-    	/**
-         * @private
-        * @function <a name="createButtons">createButtons</a>
-        * @description This method will create the action buttons for the carousel
-        * @memberof module:Carousel
-        * @instance
-        */
-        Carousel.prototype.createButtons = function () {
-            if(this.next_screen === undefined || this.next_screen === null){
-                this.next_screen = new ButtonEVO("next_screen", {
-                    /* with position:relative, this will place widgets over original HTML */ 
-                    top: 0, 
-                    left: 0,
-                    /* the widget will be resized on render time */
-                    width: 0,
-                    height:  0
-                }, {
+    /**
+     * @private
+    * @function <a name="createButtons">createButtons</a>
+    * @description This method will create the action buttons for the carousel
+    * @memberof module:Carousel
+    * @instance
+    */
+    Carousel.prototype.createButtons = function () {
+        if(this.next_screen === undefined || this.next_screen === null){
+            this.next_screen = new ButtonEVO("next_screen", {
+                /* with position:relative, this will place widgets over original HTML */ 
+                top: 0, 
+                left: 0,
+                /* the widget will be resized on render time */
+                width: 0,
+                height:  0
+            }, {
+                softLabel: "",
+                backgroundColor: "steelblue",
+                opacity: "0.2",
+                borderRadius: "4px",
+                fontsize: 34,
+                parent:  this.rightControl.node().id,
+                callback: this.callback,
+                position:'relative',
+                zIndex: 0
+            })
+
+            this.next_screen.overlay.style('z-index','100')
+        }
+
+        if(this.previous_screen === undefined || this.previous_screen === null){
+            this.previous_screen = new ButtonEVO("previous_screen", {
+                /* this top and left set to  0 with position:relative will place widget over original HTML */
+                top: 0, 
+                left: 0,
+                /*the widget will be resized on render time */ 
+                width: 0,
+                height: 0
+            }, {
                     softLabel: "",
                     backgroundColor: "steelblue",
                     opacity: "0.2",
                     borderRadius: "4px",
                     fontsize: 34,
-                    parent:  this.rightControl.node().id,
+                    parent: this.leftControl.node().id,
                     callback: this.callback,
-                    position:'relative',
-                    zIndex: 0
-                })
-
-                this.next_screen.overlay.style('z-index','100')
-            }
-
-            if(this.previous_screen === undefined || this.previous_screen === null){
-                this.previous_screen = new ButtonEVO("previous_screen", {
-                    /* this top and left set to  0 with position:relative will place widget over original HTML */
-                    top: 0, 
-                    left: 0,
-                    /*the widget will be resized on render time */ 
-                    width: 0,
-                    height: 0
-                }, {
-                        softLabel: "",
-                        backgroundColor: "steelblue",
-                        opacity: "0.2",
-                        borderRadius: "4px",
-                        fontsize: 34,
-                        parent: this.leftControl.node().id,
-                        callback: this.callback,
-                        position: 'relative',
-                        zIndex: 100
-                    });
-            }
+                    position: 'relative',
+                    zIndex: 100
+                });
+        }
     }
 
     	/**
@@ -322,6 +346,44 @@ define(function (require, exports, module) {
 
     /**
      * @protected
+     * @function <a name="createHTMLButtons">createHTMLButtons</a>
+     * @description This methos appends the necessary HTML to create the HTML buttons.
+     * @return {Object} this
+     * @memberof modulo:Carousel
+     * @instance
+     */
+    Carousel.prototype.createHTMLButtons = function(){
+        this.leftControl = this.masterDiv
+            .append('a')
+            .attr('id',`${this.id}_left_control`)
+            .attr('class', 'left carousel-control')
+            .style('height', `50px`)
+            .style('top', `210px`)
+            .style('background-color', 'black')
+            .style('border-radius', '4px')
+
+        this.leftControl
+            .append('span')
+            .attr('class', 'glyphicon glyphicon-chevron-left')
+
+        this.rightControl = this.masterDiv
+            .append('a')
+            .attr('id',`${this.id}_rigth_control`)
+            .attr('class', 'right carousel-control')
+            .style('height', `50px`)
+            .style('top', `210px`)
+            .style('background-color', 'black')
+            .style('border-radius', '4px')
+            
+        this.rightControl
+            .append('span')
+            .attr('class', 'glyphicon glyphicon-chevron-right')
+
+        return this
+    }
+
+    /**
+     * @protected
      * @function <a name="createHTML">createHTML</a>
      * @description This method appends the necessary html to widget div
      * @return {Object} this
@@ -347,67 +409,35 @@ define(function (require, exports, module) {
             .style('height','100%')
             .style('z-index','-10')
 
-
-        this.leftControl = this.masterDiv
-            .append('a')
-            .attr('id',`${this.id}_left_control`)
-            .attr('class', 'left carousel-control')
-            //.attr('href', `#${this.id}`)
-            .style('height', `50px`)
-            .style('top', `210px`)
-            .style('background-color', 'black')
-            .style('border-radius', '4px')
-
-        this.leftControl
-            .append('span')
-            .attr('class', 'glyphicon glyphicon-chevron-left')
-
-        this.rightControl = this.masterDiv
-            .append('a')
-            .attr('id',`${this.id}_rigth_control`)
-            .attr('class', 'right carousel-control')
-            //.attr('href', `#${this.id}`)
-            .style('height', `50px`)
-            .style('top', `210px`)
-            .style('background-color', 'black')
-            .style('border-radius', '4px')
-            
-        this.rightControl
-            .append('span')
-            .attr('class', 'glyphicon glyphicon-chevron-right')
         let counter = 0
         /* foreach screen create an item */
         this.screens.forEach(screen => {
             /* Indicators */
-            let active = screen.id === 'home' ? 'active' : ''
-            // console.log(active)
+            let active = (screen.idx === 0) ? 'active' : ''
             this.indicators
                 .append('li')
                 .attr('data-target', `#${this.id}`)
                 .attr('class', `${active}`)
                 .attr('data-slide-to', this.activeIndicators ? counter : null)
                 .style('pointer-events:none;')
-
             /* Wraper for slides */
             this.wrapper
                 .append('div')
                 .attr('id', `${this.id}-${screen.id}`)
                 .attr('class', `item ${active} center`)
-                /* TODO: set w&h for each screen or inherit from parent? */
                 .style('height', '100%')
                 .style(`width`, '100%')
                 .append('div')
                 .attr('class', 'carousel-caption')
-                /* How to find  */
-                //.style('top', `200px`)
                 .html(screen.title)
-            /* left and right controls */
             counter += 1;
         });
         return this
     }
+    
+
     /**
-     * @function <a name="cyle">cyle</a>
+     * @function <a name="cycle">cycle</a>
      * @description Cycles through the carousel items from left to right
      * @param {Object} opt options object:
      * @param {Number} [opt.inteval=5000] The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.</li>
@@ -420,7 +450,7 @@ define(function (require, exports, module) {
      * @memberof module:Carousel
      * @instance
      */
-    Carousel.prototype.cyle = function (opt) {
+    Carousel.prototype.cycle = function (opt) {
         $('.carousel').carousel(opt)
         $('.carousel').carousel('cycle')
         return this;
