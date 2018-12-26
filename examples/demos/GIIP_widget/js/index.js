@@ -19,28 +19,22 @@ require.config({
 
 require([
         "widgets/core/ButtonEVO",
-        "widgets/core/NumericDisplayEVO",
         "widgets/SliderWidget",
-        "widgets/ToggleButton",
         "widgets/container/Carousel",
         "widgets/core/Battery",
         "widgets/core/DateTime",
-        "util/playback/Player",
         "widgets/ButtonActionsQueue",
         "stateParser",
-        "PVSioWebClient"
+        "PVSioWebClient",
     ], function (
         ButtonEVO,
-        BasicDisplay,
         Slider,
-        ToggleButton,
         Carousel,
         Battery,
         DateTime,
-        Player,
         ButtonActionsQueue,
         stateParser,
-        PVSioWebClient
+        PVSioWebClient,
     ) {
         "use strict";
         var client = PVSioWebClient.getInstance();
@@ -78,7 +72,6 @@ require([
                 var res = event.data.toString();
                 if (res.indexOf("(#") === 0) {
                     render(stateParser.parse(res));
-                   // console.log(res.replace(/\s\s+/g, ' '));
                 }
             } else {
                 console.log(err);
@@ -348,12 +341,6 @@ require([
             d3.select("#basal_subscreens").style("display", "none");
         }
 
-        var screens = { NORMAL_OPERATION_SCREEN: 0,
-                        BASAL_MANAGEMENT_SCREEN: 1,
-                        BOLUS_MANAGEMENT_SCREEN: 2,
-                        PUMP_CONFIGURATION_SCREEN: 3,
-                        EVENT_DATA_MANAGEMENT_SCREEN: 4 };
-
         function NORMAL_OPERATION_MODE (res) {
             return res.mode === "NORMAL_OPERATION" || res.mode === "BASAL_MANAGEMENT"
                     || res.mode === "BOLUS_MANAGEMENT" || res.mode === "PUMP_CONFIGURATION"
@@ -374,10 +361,6 @@ require([
         function hide(id) {
             d3.select(id).style("display", "none");
         }
-
-        /* function render_battery (res) {
-            device.battery.render(res)
-        } */
 
         device.basal_profiles = {};
         function render_basal_profiles (db) {
@@ -448,31 +431,23 @@ require([
         });
         device.basal_profiles_done.render();
 
-
         function render(res) {
             hide_all_screens(res);
 
-            //Render widgets
-            device.carousel.render(res)
-            device.edit_basal_profiles.render(res);
-            device.activate_basal_profiles.render(res);
-            device.manage_temporary_basal.render(res);
-            device.edit_food_database.render(res);
-            device.start_bolus.render(res);
-            device.set_time.render(res);
-            device.configure_pump_settings.render(res);
-            device.review_bg_readings.render(res);
-            device.review_alarm_log.render(res);
-            device.review_infusion_statistics.render(res);
-
+            for(var widget in device){
+                if(!device.hasOwnProperty(widget)){
+                    continue;
+                } 
+                if(typeof device[widget].render === 'function'){
+                    device[widget].render(res)
+                }
+            }
+            device.reservoir.render(res.volume);
             render_basal_profiles(res.bps.db);
 
             if (res.mode !== "POWERED_OFF") {
                 viz("#topline_display");
             }
-            
-            
-            
             if (res.mode === "POWER_ON") {
                 viz("#power_on_screen", { fade: true });
             } else if (res.mode === "POST") {
@@ -485,17 +460,8 @@ require([
                 viz("#basal_subscreens");
                 if (res.mode === "EDIT_BASAL_PROFILES") {
                     viz("#edit_basal_profiles_screen");
-                    //render_basal_profiles(res.bps.db);
                 }
             }
-
-            // the following elements are always visible / enabled in normal operation mode
-            // render_battery(res);
-            device.battery.render(res)
-            device.date.render()
-            device.on_off.render();
-            device.reservoir.render(res.volume);
-            // tick
             if (res.mode === "POWER_ON" || res.mode === "POST" || res.mode === "PRIME") {
                 start_tick();
             } else {
@@ -503,40 +469,16 @@ require([
             }
         }
 
-        // TODO: carousel widget
-        function init_carousel () {
-            //device.carousel.render()
-            // BASAL_MANAGEMENT
-            //device.edit_basal_profiles.render();
-            //device.activate_basal_profiles.render();
-            //device.manage_temporary_basal.render();
-            // BOLUS_MANAGEMENT
-            //device.edit_food_database.render();
-            //device.start_bolus.render();
-            // PUMP_CONFIGURATION
-            //device.set_time.render();
-            //device.configure_pump_settings.render();
-            // EVENT_DATA_MANAGEMENT
-            //device.review_bg_readings.render();
-            //device.review_alarm_log.render();
-            //device.review_infusion_statistics.render();
-            // navigator
-        }
-        // this creates the buttons on the carousel
-        init_carousel();
-
         var demoFolder = "GIIP_widget";
 
         //register event listener for websocket connection from the client
         client.addListener('WebSocketConnectionOpened', function (e) {
-            console.log("web socket connected");
             //start pvs process
             client.getWebSocket()
                 .startPVSProcess({name: "GIIP.pvs", demoName: demoFolder + "/pvs"}, function (err, event) {
                 client.getWebSocket().sendGuiAction("init;", onMessageReceived);
                 d3.select(".demo-splash").style("display", "none");
                 d3.select(".content").style("display", "block");
-                // start_tick();
             });
         }).addListener("WebSocketConnectionClosed", function (e) {
             console.log("web socket closed");
