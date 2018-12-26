@@ -77,6 +77,7 @@ define(function (require, exports, module) {
      * 
      * @param {Object} [opt.screens={}] Object with PVS states and corresponding index on carousel
      * @param {String} [opt.displayKey='mode'] Key that holds active carousel page
+     * @param {String} [opt.visibleWhen] 
      * @memberof module:Carousel
      * @instance
      */
@@ -89,6 +90,8 @@ define(function (require, exports, module) {
         /* PVS keys definition. this will be where active page is placed */
         this.displayKey = (typeof opt.displayKey === "string") ? opt.displayKey : 'mode';
         // override default style options of WidgetEVO as necessary before creating the DOM element with the constructor of module WidgetEVO
+        this.visibleWhen = this.visibleWhen || opt.visibleWhen || true
+
         opt.backgroundColor = opt.backgroundColor || "black";
         opt.cursor = opt.cursor || "default";
         opt.overflow = "hidden";
@@ -207,6 +210,23 @@ define(function (require, exports, module) {
     Carousel.prototype.render = function (state, opt) {
         opt = this.normaliseOptions(opt);
         
+        /*** goto to carousel id based on PVS state.*/
+        if(state !== undefined ){
+            let activePageState = this.evaluate(this.displayKey, state)
+            this.screens.forEach(s => {
+                if(s.state === activePageState){
+                    this.activePage = s
+                }
+            })
+        }else{
+            this.activePage={state:"", idx:0}
+        }
+        if(state !== undefined && this.evalViz(state)){
+            this.goTo(this.activePage.idx)
+            this.reveal()
+        }else{
+            this.hide()
+        }
 
         this.setStyle(opt);
 
@@ -236,20 +256,8 @@ define(function (require, exports, module) {
         this.previous_screen.render(state,opt)
         this.next_screen.render(state,opt)
 
-        /*** goto to carousel id based on PVS state.*/
-        if(state !== undefined ){
-            let activePageState = this.evaluate(this.displayKey, state)
-            this.screens.forEach(s => {
-                if(s.state === activePageState){
-                    this.activePage = s
-                }
-            })
-            
-        }else{
-            this.activePage={state:"", idx:0}
-        }
-        this.goTo(this.activePage.idx)
-        this.reveal()
+        
+        
         return this;
     }
 
@@ -278,6 +286,7 @@ define(function (require, exports, module) {
                 parent:  this.rightControl.node().id,
                 callback: this.callback,
                 position:'relative',
+                visibleWhen: this.visibleWhen,
                 zIndex: 0
             })
 
@@ -301,7 +310,8 @@ define(function (require, exports, module) {
                     parent: this.leftControl.node().id,
                     callback: this.callback,
                     position: 'relative',
-                    zIndex: 100
+                    visibleWhen: this.visibleWhen,
+                    zIndex: 0
                 });
         }
     }

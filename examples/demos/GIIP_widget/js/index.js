@@ -86,12 +86,9 @@ require([
         }
 
         var device = {};
-        device.reservoir = new Slider("reservoir", {
-            top: 48,
-            left: 530,
-            width: 44,
-            height: 74
-        }, {
+        device.reservoir = new Slider("reservoir", 
+            { top: 48, left: 530, width: 44, height: 74}, 
+            {
             max: 500,
             min: 0,
             init: 0,
@@ -143,18 +140,7 @@ require([
                 callback: onMessageReceived,
                 interval: false,
                 backgroundColor: 'transparent',
-                onSlideBsCarousel: () => {
-                    //console.log('Carousel INIT')
-                },
-                onSlidBsCarousel: () => {
-                    //console.log('Carousel END')
-                },
-                usePreDoneHTML: false,
-/*                 states: { 'NORMAL_OPERATION': 0,
-                            'BASAL_MANAGEMENT': 1,
-                            'BOLUS_MANAGEMENT': 2,
-                            'PUMP_CONFIGURATION': 3,
-                            'EVENT_DATA_MANAGEMENT': 4 },  */
+                visibleWhen: 'isReady=TRUE'
             })
 
         device.battery = new Battery('battery_indicator',
@@ -207,7 +193,8 @@ require([
             borderRadius: "8px",
             fontsize: 20,
             parent: "giip-basal_mgm",
-            callback: onMessageReceived
+            callback: onMessageReceived,
+            visibleWhen: "mode=BASAL_MANAGEMENT"
         });
         device.activate_basal_profiles = new ButtonEVO("activate_basal_profiles", {
             width: 472,
@@ -221,7 +208,8 @@ require([
             borderRadius: "8px",
             fontsize: 20,
             parent: "giip-basal_mgm",
-            callback: onMessageReceived
+            callback: onMessageReceived,
+            visibleWhen: "mode=BASAL_MANAGEMENT"
         });
         device.manage_temporary_basal = new ButtonEVO("manage_temporary_basal", {
             width: 472,
@@ -235,7 +223,8 @@ require([
             borderRadius: "8px",
             fontsize: 20,
             parent: "giip-basal_mgm",
-            callback: onMessageReceived
+            callback: onMessageReceived,
+            visibleWhen: "mode=BASAL_MANAGEMENT"
         });
 
         // bolus profile screen
@@ -251,7 +240,8 @@ require([
             borderRadius: "8px",
             fontsize: 20,
             parent: "giip-bolus_mgm",
-            callback: onMessageReceived
+            callback: onMessageReceived,
+            visibleWhen: "mode=BOLUS_MANAGEMENT"
         });
         device.start_bolus = new ButtonEVO("start_bolus", {
             width: 472,
@@ -265,7 +255,8 @@ require([
             borderRadius: "8px",
             fontsize: 20,
             parent: "giip-bolus_mgm",
-            callback: onMessageReceived
+            callback: onMessageReceived,
+            visibleWhen: "mode=BOLUS_MANAGEMENT"
         });
 
         // pump configuration screen
@@ -281,7 +272,8 @@ require([
             borderRadius: "8px",
             fontsize: 20,
             parent: "giip-config",
-            callback: onMessageReceived
+            callback: onMessageReceived,
+            visibleWhen: "mode=PUMP_CONFIGURATION"
         });
         device.configure_pump_settings = new ButtonEVO("configure_pump_settings", {
             width: 472,
@@ -295,7 +287,8 @@ require([
             borderRadius: "8px",
             fontsize: 20,
             parent: "giip-config",
-            callback: onMessageReceived
+            callback: onMessageReceived,
+            visibleWhen: "mode=PUMP_CONFIGURATION"
         });
 
         // event data maangement screen
@@ -312,7 +305,8 @@ require([
             borderRadius: "8px",
             fontsize: 20,
             parent: "giip-data_mgm",
-            callback: onMessageReceived
+            callback: onMessageReceived,
+            visibleWhen: "mode=EVENT_DATA_MANAGEMENT"
         });
         device.review_alarm_log = new ButtonEVO("review_alarm_log", {
             width: 472,
@@ -327,7 +321,8 @@ require([
             borderRadius: "8px",
             fontsize: 20,
             parent: "giip-data_mgm",
-            callback: onMessageReceived
+            callback: onMessageReceived,
+            visibleWhen: "mode=EVENT_DATA_MANAGEMENT"
         });
         device.review_infusion_statistics = new ButtonEVO("review_infusion_statistics", {
             width: 472,
@@ -342,7 +337,8 @@ require([
             borderRadius: "8px",
             fontsize: 20,
             parent: "giip-data_mgm",
-            callback: onMessageReceived
+            callback: onMessageReceived,
+            visibleWhen: "mode=EVENT_DATA_MANAGEMENT"
         });
 
         function hide_all_screens(res) {
@@ -406,7 +402,8 @@ require([
                     borderWidth: 1,
                     fontsize: 16,
                     parent: "basal_profiles_list",
-                    callback: onMessageReceived
+                    callback: onMessageReceived,
+                    visibleWhen: 'mode:EDIT_BASAL_PROFILES'
                 });
                 device.basal_profiles[key].render();
                 index++;
@@ -425,7 +422,8 @@ require([
                 borderWidth: 1,
                 fontsize: 16,
                 parent: "basal_profiles_list",
-                callback: onMessageReceived
+                callback: onMessageReceived,
+                visibleWhen: 'mode:EDIT_BASAL_PROFILES'
             });
             device.basal_profiles["new_basal_profile"].render();
         }
@@ -445,16 +443,36 @@ require([
             borderWidth: 1,
             fontsize: 16,
             parent: "basal_pager",
-            callback: onMessageReceived
+            callback: onMessageReceived,
+            visibleWhen: 'mode:EDIT_BASAL_PROFILES'
         });
         device.basal_profiles_done.render();
 
 
         function render(res) {
+            hide_all_screens(res);
+
+            //Render widgets
+            device.carousel.render(res)
+            device.edit_basal_profiles.render(res);
+            device.activate_basal_profiles.render(res);
+            device.manage_temporary_basal.render(res);
+            device.edit_food_database.render(res);
+            device.start_bolus.render(res);
+            device.set_time.render(res);
+            device.configure_pump_settings.render(res);
+            device.review_bg_readings.render(res);
+            device.review_alarm_log.render(res);
+            device.review_infusion_statistics.render(res);
+
+            render_basal_profiles(res.bps.db);
+
             if (res.mode !== "POWERED_OFF") {
                 viz("#topline_display");
             }
-            hide_all_screens(res);
+            
+            
+            
             if (res.mode === "POWER_ON") {
                 viz("#power_on_screen", { fade: true });
             } else if (res.mode === "POST") {
@@ -462,13 +480,12 @@ require([
             } else  if (res.mode === "PRIME") {
                 viz("#prime_screen", { fade: true });
             } else if (NORMAL_OPERATION_MODE(res)) {
-                device.carousel.render(res)
                 viz("#giip");
             } else if (BASAL_PROFILE_SUBMODE(res)) {
                 viz("#basal_subscreens");
                 if (res.mode === "EDIT_BASAL_PROFILES") {
                     viz("#edit_basal_profiles_screen");
-                    render_basal_profiles(res.bps.db);
+                    //render_basal_profiles(res.bps.db);
                 }
             }
 
@@ -490,19 +507,19 @@ require([
         function init_carousel () {
             //device.carousel.render()
             // BASAL_MANAGEMENT
-            device.edit_basal_profiles.render();
-            device.activate_basal_profiles.render();
-            device.manage_temporary_basal.render();
+            //device.edit_basal_profiles.render();
+            //device.activate_basal_profiles.render();
+            //device.manage_temporary_basal.render();
             // BOLUS_MANAGEMENT
-            device.edit_food_database.render();
-            device.start_bolus.render();
+            //device.edit_food_database.render();
+            //device.start_bolus.render();
             // PUMP_CONFIGURATION
-            device.set_time.render();
-            device.configure_pump_settings.render();
+            //device.set_time.render();
+            //device.configure_pump_settings.render();
             // EVENT_DATA_MANAGEMENT
-            device.review_bg_readings.render();
-            device.review_alarm_log.render();
-            device.review_infusion_statistics.render();
+            //device.review_bg_readings.render();
+            //device.review_alarm_log.render();
+            //device.review_infusion_statistics.render();
             // navigator
         }
         // this creates the buttons on the carousel

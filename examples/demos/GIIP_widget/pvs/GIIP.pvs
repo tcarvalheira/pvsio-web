@@ -12,6 +12,7 @@ GIIP: THEORY
   %-- state attributes
   State: TYPE = [#
     mode: Mode,
+    isReady: bool,
     battery_level: nonneg_real,
     bps: basal_profiles,
     flag_alarm: bool,
@@ -25,8 +26,9 @@ GIIP: THEORY
 
   %-- init function
   init: State = (#
-    mode := NORMAL_OPERATION,  %--POWERED_OFF, 
-    battery_level := 3, 
+    mode := POWERED_OFF,
+    isReady := false, 
+    battery_level := 55, 
     bps := STANDARD_PROFILES, 
     flag_alarm := false, 
     flag_level_two_alarm := false, 
@@ -46,6 +48,7 @@ GIIP: THEORY
   %-- leave/enter functions
   enter(m: Mode)(st: State): State = st WITH [ mode := m ]
   leave(m: Mode)(st: State): State = st
+  ready(r: bool)(st: State): State = st WITH [isReady := r]
 
   %-- triggers
   per_tick(st: State): bool = (mode(st) = POWER_ON)
@@ -106,7 +109,7 @@ GIIP: THEORY
           IN enter(PRIME)(st),
      mode(st) = PRIME AND ( flag_prime_success(st) )
       -> LET st = leave(PRIME)(st)
-          IN enter(NORMAL_OPERATION)(st),
+          IN enter(NORMAL_OPERATION)(ready(true)(st)),
      mode(st) = NORMAL_OPERATION AND ( flag_set_time(st) AND NOT flag_alarm(st) AND NOT flag_level_two_alarm(st) )
       -> LET st = leave(NORMAL_OPERATION)(st)
           IN enter(TIME_SETTING)(st),
