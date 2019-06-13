@@ -66,7 +66,6 @@ require([
         // Function automatically invoked by PVSio-web when the back-end sends states updates
         function onMessageReceived(err, event) {
             if (!err) {
-                // get new state
                 client.getWebSocket().lastState(event.data);
                 // parse and render new state
                 var res = event.data.toString();
@@ -116,14 +115,8 @@ require([
 
         // create carousel
         device.carousel = new Carousel('giip',
-            {
-                width: 472,
-                height: 260,
-                top: 114,
-                left: 76
-            },
-            {
-                screens: [{"id" : "home", "title": "Home", state: "NORMAL_OPERATION", idx:0}, 
+            {width: 472,height: 260,top: 114,left: 76},
+            {screens: [{"id" : "home", "title": "Home", state: "NORMAL_OPERATION", idx:0}, 
                             {"id": "basal_mgm", "title": "Basal Management", state: "BASAL_MANAGEMENT", idx:1}, 
                             {"id": "bolus_mgm", "title": "Bolus Management", state: "BOLUS_MANAGEMENT", idx:2}, 
                             {"id": "config", "title": "Pump Configuration", state: "PUMP_CONFIGURATION", idx:3}, 
@@ -133,34 +126,20 @@ require([
                 callback: onMessageReceived,
                 interval: false,
                 backgroundColor: 'transparent',
-                visibleWhen: 'isReady=TRUE'
-            })
+                visibleWhen: 'isReady=TRUE'})
 
         device.battery = new Battery('battery_indicator',
-            {
-                left:90,
-                top:40,
-                width: 40,
-                height: 40
-            },
-            {
-                fontColor: "#FFFFFF",
+            {left:90,top:40,width: 40,height: 40},
+            {fontColor: "#FFFFFF",
                 backgroundColor: "transparent",
                 textFontSize: 10,
                 parent: "topline_display",
-                displayKey: 'battery_level'
-            }
+                displayKey: 'battery_level'}
         )
 
         device.date = new DateTime('datatime',
-                {
-                    left: 200,
-                    top: 42,
-                    width: 240,
-                    height: 40
-                },
-                {
-                        parent: "topline_display",
+                {left: 200,top: 42,width: 240,height: 40},
+                {parent: "topline_display",
                         fontColor: 'white',
                         useCurrentDateTime: true,
                         fontFamilly: 'sans-serif',
@@ -170,8 +149,7 @@ require([
                         relativeOrder: 'time-date',
                         locale: 'en-US',
                         dateFormat: { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', timeZoneName:'short'},
-                        timeFormat: { hour12: true, hour:'numeric', minute: 'numeric'}
-                })
+                        timeFormat: { hour12: true, hour:'numeric', minute: 'numeric'}})
 
         // basal profile screen
         device.edit_basal_profiles = new ButtonEVO("edit_basal_profiles", {
