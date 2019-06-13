@@ -225,10 +225,11 @@ define(function (require, exports, module) {
         if (battery_level < this.blinkingValue) {
             this.icon.classed('blink', true)
         }
-        this.levelText.render(state, opt);
-        this.icon.style('color', opt.fontColor)
+        if(this.levelText !== undefined){
+            this.levelText.render(state, opt);
+            this.icon.style('color', opt.fontColor)
+        }
         this.reveal();
-
         return this;
     }
 
