@@ -47,18 +47,19 @@
                 <div id="prime_screen" class="screen center v-center">
                     <span style="font-size:32px;">Priming...</span><br>
                 </div>
+
                 <div id="giip" class="screen carousel slide" data-interval="false" wrap="false" style="left:76px;top:114px;width:472px;height:260px">
-                      <!-- Indicators giip -->
-                      <ol class="carousel-indicators" style="bottom:-10px;" id="giip_indicators">
+                        <!-- Indicators giip -->
+                        <ol class="carousel-indicators" style="bottom:-10px;" id="giip_indicators">
                         <li data-target="#giip" class="active" style="pointer-events:none;"></li>
                         <li data-target="#giip" style="pointer-events:none;"></li>
                         <li data-target="#giip" style="pointer-events:none;"></li>
                         <li data-target="#giip" style="pointer-events:none;"></li>
                         <li data-target="#giip" style="pointer-events:none;"></li>
-                      </ol>
+                        </ol>
 
-                      <!-- Wrapper for slides -->
-                      <div class="carousel-inner">
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" id="giip_wrapper">
                         <div id="home_screen" class="item active center" style="height:262px;width:480px;">
                             <div class="carousel-caption giip_carousel_caption" style="top:200px;">Home</div>
                         </div>
@@ -78,19 +79,18 @@
                         <div id="event_data_management_screen" class="item center" style="height:262px;width:480px;">
                             <div class="carousel-caption giip_carousel_caption" style="top:200px;">Event Data Management</div>
                         </div>
-                      </div>
+                        </div>
 
-                      <!-- Left and right controls -->
-                      <a class="left center carousel-control" id="giip_left_control" href="#giip" style="height:30px;top:220px;background-color:black;border-radius:4px;">
+                        <!-- Left and right controls -->
+                        <a class="left center carousel-control" id="giip_left_control" href="#giip" style="height:30px;top:220px;background-color:black;border-radius:4px;">
                         <span class="glyphicon glyphicon-chevron-left"></span>
                         <span class="sr-only">Previous</span>
-                      </a>
-                      <a class="right carousel-control" href="#giip" id="giip_right_control" style="height:30px;top:220px;background-color:black;border-radius:4px;">
+                        </a>
+                        <a class="right carousel-control" href="#giip" id="giip_right_control" style="height:30px;top:220px;background-color:black;border-radius:4px;">
                         <span class="glyphicon glyphicon-chevron-right"></span>
                         <span class="sr-only">Next</span>
-                      </a>
+                        </a>
                 </div>
-
                 <div id="basal_subscreens" class="screen" style="left:76px;top:114px;width:472px;height:270px">
                     <div id="edit_basal_profiles_screen" style="display:none;">
                         <div id="basal_profiles_list" class="basal_subscreen"></div>
