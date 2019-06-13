@@ -95,32 +95,18 @@ require([
             fontsize: 11,
             parent: "battery"
         });
-        device.reservoir = new Slider("reservoir", {
-            top: 48,
-            left: 530,
-            width: 44,
-            height: 74
-        }, {
+        device.reservoir = new Slider("reservoir", 
+            {top: 48,left: 530,width: 44,height: 74}, 
+            {
             max: 500,
             min: 0,
             init: 0,
             style: "level-indicator",
-            // orientation: "horizontal",
-            // handle: {
-            //     type: "hidden"
-            // },
-            // zero_padding: true,
-            // backgroundColor: "transparent",
-            // borderColor: "transparent",
             tooltip: {
                 arrowColor: "white",
                 position: "left",
                 fontSize: 11
             },
-            // track: {
-            //     color: "#3ac441"
-            // },
-            // readonly: true,
             labelFormat: function (value) {
                 if (value === 1) {
                     return value + " unit";
@@ -143,78 +129,20 @@ require([
             borderRadius: "8px",
             callback: onMessageReceived
         });
-
-        /* device.next_screen = new ButtonEVO("next_screen", {
-            width: 70,
-            height: 50,
-            top: 210,
-            left: 402
-        }, {
-            softLabel: "",
-            backgroundColor: "steelblue",
-            opacity: "0.2",
-            borderRadius: "4px",
-            fontsize: 34,
-            parent: "giip",
-            callback: onMessageReceived
-        });
-        device.previous_screen = new ButtonEVO("previous_screen", {
-            width: 70,
-            height: 50,
-            top: 210,
-            left: 0
-        }, {
-            softLabel: "",
-            backgroundColor: "steelblue",
-            opacity: "0.2",
-            borderRadius: "4px",
-            fontsize: 34,
-            parent: "giip",
-            callback: onMessageReceived
-        }); */
-
         device.carousel = new Carousel('giip',
+            {width: 472,height: 260,top: 114,left: 76},
             {
-                width: 472,
-                height: 260,
-                top: 114,
-                left: 76
-            },
-            {
-                /* screens: [{"id" : "home", "title": "Home"}, 
-                            {"id": "basal_mgm", "title": "Basal Management"}, 
-                            {"id": "bolus_mgm", "title": "Bolus Management"}, 
-                            {"id": "config", "title": "Pump Configuration"}, 
-                            {"id": "data_mgm", "title": "Event Data Management"} ], */
+                screens: [{"id" : "home", "title": "Home", state: "NORMAL_OPERATION", idx:0}, 
+                            {"id": "basal_mgm", "title": "Basal Management", state: "BASAL_MANAGEMENT", idx:1}, 
+                            {"id": "bolus_mgm", "title": "Bolus Management", state: "BOLUS_MANAGEMENT", idx:2}, 
+                            {"id": "config", "title": "Pump Configuration", state: "PUMP_CONFIGURATION", idx:3}, 
+                            {"id": "data_mgm", "title": "Event Data Management", state: "EVENT_DATA_MANAGEMENT", idx:4} ],
                 parent: "device",
                 callback: onMessageReceived,
                 interval: false,
                 backgroundColor: 'transparent',
-                /* if i can remove this when predone html is used... */
-                /* buttonPrevious: {
-                    coords: { top: '220',
-                            left: '0px',
-                            width: '50',
-                            heigh: '30'}
-                },
-                buttonNext: {
-                    coords: { top: '200',
-                            left: '100',
-                            width: '50',
-                            heigh: '30'}
-                }, */
                 usePreDoneHTML: true,
-                states: { 'NORMAL_OPERATION': 0,
-                            'BASAL_MANAGEMENT': 1,
-                            'BOLUS_MANAGEMENT': 2,
-                            'PUMP_CONFIGURATION': 3,
-                            'EVENT_DATA_MANAGEMENT': 4 },    
-                onSlideBsCarousel: () => {
-                    //console.log('Carousel INIT')
-                },
-                onSlidBsCarousel: () => {
-                    //console.log('Carousel END')
-                },
+                visibleWhen: 'isReady=TRUE'
             })
 
         // basal profile screen
@@ -504,17 +432,6 @@ require([
             } else if (NORMAL_OPERATION_MODE(res)) {
                 device.carousel.render(res)
                 viz("#giip");
-               /* if (res.mode === "NORMAL_OPERATION") {
-                    $('.carousel').carousel(screens.NORMAL_OPERATION_SCREEN);
-                } else if (res.mode === "BASAL_MANAGEMENT") {
-                    $('.carousel').carousel(screens.BASAL_MANAGEMENT_SCREEN);
-                } else if (res.mode === "BOLUS_MANAGEMENT") {
-                    $('.carousel').carousel(screens.BOLUS_MANAGEMENT_SCREEN);
-                } else if (res.mode === "PUMP_CONFIGURATION") {
-                    $('.carousel').carousel(screens.PUMP_CONFIGURATION_SCREEN);
-                } else if (res.mode === "EVENT_DATA_MANAGEMENT") {
-                    $('.carousel').carousel(screens.EVENT_DATA_MANAGEMENT_SCREEN);
-                }*/
             } else if (BASAL_PROFILE_SUBMODE(res)) {
                 viz("#basal_subscreens");
                 if (res.mode === "EDIT_BASAL_PROFILES") {
@@ -535,7 +452,6 @@ require([
             }
         }
 
-        // TODO: carousel widget
         function init_carousel () {
             // BASAL_MANAGEMENT
             device.edit_basal_profiles.render();
@@ -552,9 +468,6 @@ require([
             device.review_alarm_log.render();
             device.review_infusion_statistics.render();
             // navigator
-            // device.next_screen.render();
-            // device.previous_screen.render();
-            // set carousel options
             $('.carousel').carousel({
                 wrap: false
             }).carousel('pause');
