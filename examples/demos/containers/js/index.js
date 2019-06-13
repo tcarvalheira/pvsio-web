@@ -63,7 +63,7 @@ require([
             return parseFloat(ans);
         }
 
-        // Function automatically invoked by PVSio-web when the back-end sends states updates
+        /* // Function automatically invoked by PVSio-web when the back-end sends states updates
         function onMessageReceived(err, event) {
             if (!err) {
                 // get new state
@@ -76,7 +76,7 @@ require([
             } else {
                 console.log(err);
             }
-        }
+        } */
 
 /* 
         // create buttons to put inside each array
@@ -185,7 +185,7 @@ require([
                                 {name: 'giip-bolus_mgm', title: 'Bolus management', items: [edit_food_database, start_bolus]},
                                 {name: 'giip-basal_mgm', title: 'Basal Management', items: [set_time]}], */
                     callback: onMessageReceived,
-                    parent: 'pagination'
+                    parent: 'content'
                 }),
             tab: new Tab('nav-tab',
                 {
@@ -195,10 +195,11 @@ require([
                     height: 50
                 },
                 {
+                    parent: 'content',
                     pages: [{ id: 'page1', title: 'Page 1' }, { id: 'page2', title: 'Page 2' }, { id: 'page3', title: 'Page 3' }, { id: 'page4', title: 'Page 4' }],
                     type: 'tab',
                     callback: onMessageReceived,
-                    parent: 'tabs'
+                    opacity: "0",
                 }),
             pill: new Tab('nav-pill',
                 {
@@ -210,8 +211,9 @@ require([
                 {
                     pages: [{ id: 'page1', title: 'Page 1' }, { id: 'page2', title: 'Page 2' }, { id: 'page3', title: 'Page 3' }, { id: 'page4', title: 'Page 4' }],
                     type: 'pill',
+                    opacity: "0",
                     callback: onMessageReceived,
-                    parent: 'pills'
+                    parent: 'content'
                 }),
             battery: new Battery('battery_indicator',
                 {
@@ -224,7 +226,7 @@ require([
                     fontColor: "#00FFFF",
                     backgroundColor: "transparent",
                     fontsize: 11,
-                    parent: "battery",
+                    parent: "content",
                     battery_level: 80,
                     show_icon: true,
                     show_text: true,
@@ -240,7 +242,7 @@ require([
                     height: 40
                 },
                 {
-                    parent: "datetimediv",
+                    parent: 'content',
                     fontColor: 'DodgerBlue',
                     useCurrentDateTime: true,
                     dateFontSize: '14',
