@@ -63,120 +63,16 @@ require([
             return parseFloat(ans);
         }
 
-        /* // Function automatically invoked by PVSio-web when the back-end sends states updates
-        function onMessageReceived(err, event) {
-            if (!err) {
-                // get new state
-                client.getWebSocket().lastState(event.data);
-                // parse and render new state
-                var res = event.data.toString();
-                if (res.indexOf('(#') === 0) {
-                    render(stateParser.parse(res));
-                }
-            } else {
-                console.log(err);
-            }
-        } */
-
-/* 
-        // create buttons to put inside each array
-        let edit_basal_profiles = new ButtonEVO('edit_basal_profiles', {
-            width: 472,
-            height: 50,
-            top: 0,
-            left: 0
-        }, {
-            softLabel: 'Edit Basal Profiles',
-            backgroundColor: 'indigo',
-            opacity: '0.9',
-            borderRadius: '8px',
-            fontsize: 20,
-            parent: 'giip-basal_mgm',
-            callback: onMessageReceived
-        });
-        let activate_basal_profiles = new ButtonEVO('activate_basal_profiles', {
-            width: 472,
-            height: 50,
-            top: 70,
-            left: 0
-        }, {
-            softLabel: 'Activate Basal Profiles',
-            backgroundColor: 'indigo',
-            opacity: '0.85',
-            borderRadius: '8px',
-            fontsize: 20,
-            parent: 'giip-basal_mgm',
-            callback: onMessageReceived
-        });
-        let manage_temporary_basal = new ButtonEVO('manage_temporary_basal', {
-            width: 472,
-            height: 50,
-            top: 140,
-            left: 0
-        }, {
-            softLabel: 'Manage Temporary Basal',
-            backgroundColor: 'indigo',
-            opacity: '0.8',
-            borderRadius: '8px',
-            fontsize: 20,
-            parent: 'giip-basal_mgm',
-            callback: onMessageReceived
-        });
-
-        // bolus profile screen
-        let edit_food_database = new ButtonEVO('edit_food_database', {
-            width: 472,
-            height: 50,
-            top: 0,
-            left: 0
-        }, {
-            softLabel: 'Edit Food Database',
-            backgroundColor: 'seagreen',
-            opacity: '0.9',
-            borderRadius: '8px',
-            fontsize: 20,
-            parent: 'giip-bolus_mgm',
-            callback: onMessageReceived
-        });
-        let start_bolus = new ButtonEVO('start_bolus', {
-            width: 472,
-            height: 120,
-            top: 70,
-            left: 0
-        }, {
-            softLabel: 'Start Bolus',
-            backgroundColor: 'seagreen',
-            opacity: '0.9',
-            borderRadius: '8px',
-            fontsize: 20,
-            parent: 'giip-bolus_mgm',
-            callback: onMessageReceived
-        });
-
-        // pump configuration screen
-        let set_time = new ButtonEVO('set_time', {
-            width: 472,
-            height: 50,
-            top: 0,
-            left: 0
-        }, {
-            softLabel: 'Set Time',
-            backgroundColor: 'slategray',
-            opacity: '0.9',
-            borderRadius: '8px',
-            fontsize: 20,
-            parent: 'giip-config',
-            callback: onMessageReceived
-        }); */
-
         var widgets = {
-/*             pagination: new Pagination('pagination',
+             pagination: new Pagination('pagination',
                 {top: 100,left: 100,width: 400,height: 50},
                 {
-                    pages: ['Page1', 'Page2', 'Page3', 'Page4', 'Page5', 'Page6', 'Page7', 'Page8', 'Page9', 'Page10', 'Page11', 'Page12', 'Page13', 'Page14'],
+                    pages: 7, 
                     callback: onMessageReceived,
-                    parent: 'content'
-                }),*/
+                    opacity: '0',
+                    parent: 'content',
+                    displayKey: 'pag_active'
+                }),
             tab: new Tab('nav_tab',
                 {top: 300,left: 50,width: 500,height: 50},
                 {
@@ -203,7 +99,7 @@ require([
                     opacity: '0',
                     callback: onMessageReceived,
                     displayKey: 'mode',
-                    visibleWhen: 'isReady=FALSE'
+                    visibleWhen: 'isReady=TRUE'
                 }),
             battery: new Battery('battery_indicator',
                 {left: 0,top: 0,width: 40,height: 40},
@@ -307,6 +203,97 @@ require([
                     parent: 'nav_tab_cancel_pane',
                     callback: onMessageReceived
                 }),
+                buttonPage1: new ButtonEVO('buttonPage1', 
+                {width: 150,height: 50,top: 170,left: 0}, 
+                {
+                    softLabel: 'Page1',
+                    backgroundColor: 'gainsboro',
+                    fontColor: 'black',
+                    opacity: '0.7',
+                    borderRadius: '8px',
+                    fontsize: 20,
+                    parent: 'content',
+                    visibleWhen: 'pag_active=1',
+                    callback: onMessageReceived
+                }),
+                buttonPage2: new ButtonEVO('buttonPage2', 
+                {width: 150,height: 50,top: 170,left: 0}, 
+                {
+                    softLabel: 'Page2',
+                    backgroundColor: 'gainsboro',
+                    fontColor: 'black',
+                    opacity: '0.7',
+                    borderRadius: '8px',
+                    fontsize: 20,
+                    parent: 'content',
+                    visibleWhen: 'pag_active=2',
+                    callback: onMessageReceived
+                }),
+                buttonPage3: new ButtonEVO('buttonPage3', 
+                {width: 150,height: 50,top: 170,left: 0}, 
+                {
+                    softLabel: 'Page3',
+                    backgroundColor: 'gainsboro',
+                    fontColor: 'black',
+                    opacity: '0.7',
+                    borderRadius: '8px',
+                    fontsize: 20,
+                    parent: 'content',
+                    visibleWhen: 'pag_active=3',
+                    callback: onMessageReceived
+                }),
+                buttonPage4: new ButtonEVO('buttonPage4', 
+                {width: 150,height: 50,top: 170,left: 0}, 
+                {
+                    softLabel: 'Page4',
+                    backgroundColor: 'gainsboro',
+                    fontColor: 'black',
+                    opacity: '0.7',
+                    borderRadius: '8px',
+                    fontsize: 20,
+                    parent: 'content',
+                    visibleWhen: 'pag_active=4',
+                    callback: onMessageReceived
+                }),
+                buttonPage5: new ButtonEVO('buttonPage5', 
+                {width: 150,height: 50,top: 170,left: 0}, 
+                {
+                    softLabel: 'Page5',
+                    backgroundColor: 'gainsboro',
+                    fontColor: 'black',
+                    opacity: '0.7',
+                    borderRadius: '8px',
+                    fontsize: 20,
+                    parent: 'content',
+                    visibleWhen: 'pag_active=5',
+                    callback: onMessageReceived
+                }),
+                buttonPage6: new ButtonEVO('buttonPage6', 
+                {width: 150,height: 50,top: 170,left: 0}, 
+                {
+                    softLabel: 'Page6',
+                    backgroundColor: 'gainsboro',
+                    fontColor: 'black',
+                    opacity: '0.7',
+                    borderRadius: '8px',
+                    fontsize: 20,
+                    parent: 'content',
+                    visibleWhen: 'pag_active=6',
+                    callback: onMessageReceived
+                }),
+                buttonPage7: new ButtonEVO('buttonPage7', 
+                {width: 150,height: 50,top: 170,left: 0}, 
+                {
+                    softLabel: 'Page7',
+                    backgroundColor: 'gainsboro',
+                    fontColor: 'black',
+                    opacity: '0.7',
+                    borderRadius: '8px',
+                    fontsize: 20,
+                    parent: 'content',
+                    visibleWhen: 'pag_active=7',
+                    callback: onMessageReceived
+                })
         };
             
         function onMessageReceived(err, event) {
@@ -317,13 +304,11 @@ require([
                 var res = event.data.toString();
                 if (res.indexOf('(#') === 0) {
                     render(stateParser.parse(res));
-                    //    console.log(res.replace(/\s\s+/g, ' '));
                 }
             } else {
                 console.log(err);
             }
         }
-
 
         function render(res){
             if(res === undefined){res = {}}
@@ -332,40 +317,7 @@ require([
             }
         }
 
-        // Render widgets
-        /* function render(res) {
-            widgets.pagination.render()
-            widgets.tab.render()
-            widgets.pill.render() */
-            /* setTimeout(() => {
-                // console.log(`Set new TAB`)
-                widgets.tab.setActiveTab('page2')
-                widgets.pill.setActiveTab('page3')
-            }, 5000) */
-            /* widgets.battery.render();
-            widgets.date.render();
-            setTimeout(() => { */
-                /* widgets.battery.setBatteryLevel(8) */
-                //widgets.date.setDate('2018/06/05 15:24:20')
-                //widgets.battery.hideText()
-                //widgets.battery.hideIcon()
-          /*   }, 5000)
-        } */
-
-        /* $('#PrevBtn').on('click', function (e) {
-            let active = widgets.pagination.getActiveIndex()
-            if (active !== 1) {
-                widgets.pagination.setActivePage(active - 1)
-            }
-
-        })
-        $('#NextBtn').on('click', function (e) {
-            let active = widgets.pagination.getActiveIndex()
-            if (active !== 14) {
-                widgets.pagination.setActivePage(active + 1)
-            }
-        }) */
-
+      
         var demoFolder = 'containers';
         //register event listener for websocket connection from the client
         client.addListener('WebSocketConnectionOpened', function (e) {

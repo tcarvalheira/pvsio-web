@@ -14,19 +14,16 @@
  });
  require(["widgets/container/Pagination"], function (Pagination) {
       "use strict";
-      var disp = new Pagination('pagination',
+      var pagination: new Pagination('pagination',
+                {top: 100,left: 100,width: 400,height: 50},
                 {
-                    top: 100,
-                    left: 100,
-                    width: 400,
-                    height: 50
-                },
-                {
-                    pages: ["Page1", "Page2", "Page3", "Page4","Page5", "Page6", "Page7", "Page8", "Page9", "Page10","Page11", "Page12", "Page13", "Page14"],
+                    pages: 7, 
                     callback: onMessageReceived,
-                    parent: 'pagination'
-                })
-      disp.render();
+                    opacity: '0',
+                    parent: 'content',
+                    displayKey: 'pag_active'
+                }),
+      pagination.render();
  });
  *
  */
@@ -35,7 +32,6 @@
 define(function (require, exports, module) {
     "use strict";
     var WidgetEVO = require("widgets/core/WidgetEVO");
-
     const ButtonEVO = require("widgets/core/ButtonEVO")
 
     /**
@@ -70,22 +66,21 @@ define(function (require, exports, module) {
         this.coords = coords
         this.plainParent = opt.parent || 'body'
         this.parent = (opt.parent) ? (`#${opt.parent}`) : 'body'
+        this.callback = opt.callback || ((id) => id)
+        
         this.previousButton = opt.previousButton !== undefined ? opt.previousButton : true
         this.nextButton = opt.nextButton !== undefined ? opt.nextButton : true
         this.useIcons = opt.useIcons !== undefined ? opt.useIcons : true
-        this.page_array = opt.page_array || []
-        this.pages = opt.pages || [] // pages array may be just an array of strings name of the pages or an array of objects with name, title and items attributes
+        this.pages = opt.pages || []
         this.activeIndex = opt.activeIndex || 1
-        this.alignment = opt.alignment || 'left'
-        this.callback = opt.callback || ((id) => id)
-        this.div = d3.select(this.parent)
-        this.buttons_relative_position = opt.buttons_relative_position|| 'bottom' // it can be bottom or top
-
+        
 
         this.buttons = []
+        this.visibilityArray = new Array(this.pages)
 
-        // invoke WidgetEVO constructor to create the widget
-        //WidgetEVO.apply(this, [ id, coords, opt ]);
+        WidgetEVO.apply(this, [ `${id}`, coords, opt ]);
+
+        this.createHTML()
         return this;
     }
     Pagination.prototype = Object.create(WidgetEVO.prototype);
@@ -99,29 +94,17 @@ define(function (require, exports, module) {
      * @param {Object} opt Style options overriding the style attributes used when the widget was created.
      *                     The override style options are temporary, i.e., they are applied only for the present invocation of the render method.
      *                     Available options are either html style attributes or the following widget attributes:
+     * @return { Object } The object itself, so that methods can be chained
      * @memberof module:Pagination
      * @instance
      */
     Pagination.prototype.render = function (state, opt) {
-
-        /*** remove buttons */
-        this.buttons.forEach((button) => {
-            button.button.remove()
-        })
-        this.buttons = []
-
-        opt = this.normaliseOptions(opt);
-        this.setStyle(opt);
-        /*** remove html */
-        this.div.selectAll('nav').remove()
-        /*** create HTML will create relative buttons */
-        this.createHTML()
-
-        /*** render buttons */
-        this.buttons.forEach((button) => {
-            button.button.render()
-        })
-        this.reveal();
+        opt = this.normaliseOptions(opt)
+        this.setStyle(opt)
+            .reveal()
+            .resizeButtonWidgets(state, opt)
+            .renderButtonWidgets(state, opt)
+            .setActivePage(state)
         return this;
     }
 
@@ -129,6 +112,7 @@ define(function (require, exports, module) {
      * @protected
     * @function <a name="createHTML">createHTML</a>
     * @description This method creates the necessary HTML for the pagination widget
+    * @return { Object } The object itself, so that methods can be chained 
     * @memberof module:Pagination
     * @instance
     */
@@ -136,9 +120,9 @@ define(function (require, exports, module) {
         /*** create the ul element */
         let ul = this.div.append('nav')
             .attr('aria-label', this.ariaLabel)
-            .style('position', 'absolute')
-            .style('top', `${this.coords.top}px`)
-            .style('left', `${this.coords.left}px`)
+            .style('position', 'relative')
+            .style('top', 0)
+            .style('left', 0)
             .append('ul')
             .attr('class', 'pagination')
 
@@ -150,7 +134,7 @@ define(function (require, exports, module) {
         /*** create inner buttons */
         let numButtons = this.getNumButton()
         let num = Math.floor((numButtons - 3) / 2)
-        let total = this.pages.length
+        let total = this.pages
         let numLeft = num
         let numRight = num
         /*** calculate the number of pages on left */
@@ -163,51 +147,41 @@ define(function (require, exports, module) {
             numLeft = this.activeIndex - 2
             numRight = 2 * num - numLeft
         }
-        /*** for each page create a page while it fits on container width */
-        this.pages.forEach((page, index) => {
-            index = index + 1
-            /*** if the pages fits all inside container width */
-            if (this.pages.length < numButtons) {
-                this.createPage(ul, index, index)
-            } else {
-                /*** render first, last and then the inner pages that fits on widget width, create ... indicating ther are some more pages */
-                //render just the first, the last, the active one, ... after first and before last and then create how many buttons it fits
-                if (index === 1) {
-                    this.createPage(ul, index, index)
+
+
+        /* this cycle is the begining of handle more button than widget width can hold. */
+        for(let i = 1; i <= this.pages; i++){
+            /* if pages fits all inside container width */
+            if(this.pages < numButtons){
+                this.createPage(ul, i, i)
+            }else{
+                /* render first, last and then the inner pages that fits on widget. Create ... indicating there are some more pages */
+                if (i === 1) {
+                    this.createPage(ul, i, i)
                     if (this.activeIndex - num > 2) {
                         this.createPage(ul, '...', -1)
                     }
                 }
-                if (index === this.pages.length) {
-                    if (this.activeIndex + num < this.pages.length - 1) {
+                if (i === this.pages) {
+                    if (this.activeIndex + num < this.pages) {
                         this.createPage(ul, '...', -1)
                     }
-                    this.createPage(ul, index, index)
+                    this.createPage(ul, i, i)
                 }
-                if (index >= (this.activeIndex - numLeft) && index <= (this.activeIndex + numRight)) {
-                    if (index > 1 && index < this.pages.length) {
-                        this.createPage(ul, index, index)
+                if (i >= (this.activeIndex - numLeft) && i <= (this.activeIndex + numRight)) {
+                    if (i > 1 && i < this.pages) {
+                        this.createPage(ul, i, i)
                     }
 
                 }
             }
-        });
+        }
+
         /*** create next button if there is a next button */
         if (this.nextButton) {
             this.createOuttermostPage(ul, 'Next', false)
         }
-        this.position = 0;
-        /* if(this.page_array.length > 0){
-            this.div.append('div')
-                .style('position','absolute')
-                .style('top',`${this.coords.top + this.coords.height + 5}px`)
-                .style('left',`${this.coords.left}px`)
-                .style('background-color','red')
-
-            this.page_array.map(item => {
-                item.render()
-            })
-        } */
+        return this
     }
 
     /**
@@ -217,43 +191,42 @@ define(function (require, exports, module) {
     * @param {Element} parent the ul node where the html buttons will be placed
     * @param {String} title The title of the button
     * @param {Integer} index The index of the button on overall list 
-    * @return {Object} this
+    * @return {Object} slef object, so that methods can be chained
     * @memberof module:Pagination
     * @instance
     */
     Pagination.prototype.createPage = function (parent, title, index) {
         /*** create HTML */
         let li = parent.append('li')
+            .attr('id', `${this.id}_li_${index}`)
             .attr('class', 'page-item')
-        if (this.activeIndex === index) {
-            li.attr('class', 'active')
-        }
+            /* set inicial active page*/
+            .classed('active',this.activeIndex === index)
+
         let x = li.append('a')
+            .attr('id', `${this.id}_a_${index}`)
             .attr('class', 'page-link')
             .attr('href', '#')
             .html(title)
 
         /*** create ButtonEvo */
-        let element_coords = x.node().getBoundingClientRect()
         let found = false
-        found = this.buttons.find(function (element) { return element.id == index })
+        found = this.buttons.find(function (element) { return element.id === index })
         if (index !== -1 && !found) {
             this.buttons.push({
                 id: index,
-                button: new ButtonEVO(`${this.plainParent}_page_${index}`, {
-                    width: element_coords.width,
-                    height: element_coords.height,
-                    top: this.coords.top + 20, // this 20 is the margin, but i can't figure out how to work it arround
-                    left: element_coords.left
-                }, {
+                button: new ButtonEVO(`${this.id}_page_${index}`, 
+                    {width: 0,height: 0,top: 0,left: 0}, 
+                    {
+                        parent: `${this.id}_a_${index}`,
                         softLabel: "",
                         backgroundColor: "steelblue",
                         opacity: "0.2",
                         borderRadius: "4px",
                         fontsize: 34,
-                        parent: `${this.id}`,
                         callback: this.callback,
-                        zIndex: 10
+                        zIndex: 10,
+                        position: 'absolute'
                     })
             })
         }
@@ -271,7 +244,7 @@ define(function (require, exports, module) {
     */
     Pagination.prototype.getNumButton = function () {
         let numButtons = 0
-        numButtons = Math.floor(this.coords.width / 35) //button width
+        numButtons = Math.floor(this.coords.width / 37) //button width
         /*** remove one button if there is a previous button */
         if (this.previousButton) {
             numButtons = numButtons - 1
@@ -291,15 +264,19 @@ define(function (require, exports, module) {
     * @param {String} title The title of the button, shown if not useIcons.
     * @param {Boolean} isPrevious set if it is the previous or the next button
     * @param {Function} onClick onClick callback
-    * @return {Object} this
+    * @return {Object} self object, so that methods can be chained
     * @memberof module:Pagination
     * @instance
     */
     Pagination.prototype.createOuttermostPage = function (parent, title, isPrevious) {
         /*** create HTML */
+        let button_name
+        isPrevious === true ? button_name = 'prev' : button_name = 'next'
         let li = parent.append('li')
+            
             .attr('class', 'page-item')
             .append('a')
+            .attr('id', `${this.id}_button_${button_name}`)
             .attr('class', 'page-link')
             .attr('href', '#')
             .attr('aria-label', title)
@@ -316,26 +293,23 @@ define(function (require, exports, module) {
         }
 
         /*** create ButtonEvo */
-        let element_coords = li.node().getBoundingClientRect()
         let buttonTitle = isPrevious ? 'previous' : 'next'
         if (!this.hasButton(this.buttons, `${buttonTitle}`)) {
             this.buttons.push(
                 {
                     id: `${buttonTitle}`,
-                    button: new ButtonEVO(`${buttonTitle}_page`, {
-                        width: element_coords.width,
-                        height: element_coords.height,
-                        top: this.coords.top + 20, // element_coords.top - 20, // this 20 is the margin, but i can't figure out how to work it arround
-                        left: element_coords.left
-                    }, {
+                    button: new ButtonEVO(`${this.id}_${buttonTitle}_page`, 
+                        {width: 0,height: 0,top: 0,left: 0}, 
+                        {
                             softLabel: "",
                             backgroundColor: "steelblue",
                             opacity: "0.2",
                             borderRadius: "4px",
                             fontsize: 34,
-                            parent: `${this.id}`,
+                            parent: `${this.id}_button_${button_name}`,
                             callback: this.callback,
-                            zIndex: 10
+                            zIndex: 10,
+                            position: 'absolute'
                         })
                 }
             )
@@ -354,37 +328,49 @@ define(function (require, exports, module) {
     * @instance
     */
     Pagination.prototype.hasButton = function (button_array, value) {
-        let found
-        found = button_array.find(function (element) { return element.id === value })
-        return found !== undefined;
+        return button_array.find(function (element) { return element.id === value }) !== undefined;
     }
 
     /**
+     * @protected
     * @function <a name="setActivePage">setActivePage</a>
-    * @description Set the active index of pagination
-    * @param {Integer} page index page active
-    * @return {Object} this
+    * @description Set the active index of pagination. It defines the active page on paginator
+    * @param {Object} state PVS state of the model
+    * @return {Object} self object, so that methods can be chained
     * @memberof module:Pagination
     * @instance
     */
-    Pagination.prototype.setActivePage = function (page) {
-        this.activeIndex = page;
-        this.render();
+    Pagination.prototype.setActivePage = function (state) {
+        let activePageState = this.getActiveIndex(state)
+
+        /* remove all old active pages */
+        this.div.selectAll('.page-item')
+                .each(function () {
+                    d3.select(this).classed('active', false)
+                })
+        /* set new active page */
+        this.div.select(`#${this.id}_li_${activePageState}`)
+                .classed('active', true)
+               
+        this.activeIndex = activePageState;
         return this;
     }
 
     /**
+     * @protected
     * @function <a name="getActiveIndex">getActiveIndex</a>
-    * @description Get the active index of the paginator
-    * @return {Number} the active page index
+    * @description Get the active index of the paginator given state
+    * @param { Object } state PVS state of model
+    * @return {Number} the active page index on given state
     * @memberof module:Pagination
     * @instance
     */
-    Pagination.prototype.getActiveIndex = function () {
-        return this.activeIndex;
+    Pagination.prototype.getActiveIndex = function (state) {
+        return this.evaluate(this.displayKey, state);
     }
 
     /**
+     * @protected
     * @function <a name="getTotalPages">getTotalPages</a>
     * @description returns the total number of pages
     * @return {Number} the number of existing pages
@@ -392,8 +378,51 @@ define(function (require, exports, module) {
     * @instance
     */
     Pagination.prototype.getTotalPages = function () {
-        return this.pages.length
+        return this.pages
     }
+
+
+    /** 
+     * @protected
+     * @function <a name="resizeButtonWidgets">resizeButtonWidgets</a>
+     * @description resizes each button based on created pagination html
+     * @return { Object } self object, so that methods can be chained
+     * @memberof module:Pagination
+     * @instance
+    */
+    Pagination.prototype.resizeButtonWidgets = function (state, opt) {
+        let liCoords
+        this.buttons.forEach((elem) => {
+            let x = d3.select(elem.button.parent)
+            liCoords = x.node().getBoundingClientRect()
+            elem.button.base.style('width', `${liCoords.width}px`)
+            elem.button.base.style('height', `${liCoords.height}px`)
+            elem.button.overlay.style('width', `${liCoords.width}px`)
+            elem.button.overlay.style('height', `${liCoords.height}px`)
+            elem.button.render(state)
+        })
+
+        return this
+    }
+
+    /**  
+     * @protected
+     * @function <a name="renderButtonWidgets">renderButtonWidgets</a>
+     * @description call render method for each button in widget
+     * @return { Object } self object, so that methods can be chained
+     * @memberof module:Pagination
+     * @instance
+    */
+    Pagination.prototype.renderButtonWidgets = function () {
+        this.buttons.forEach((button) => {
+            button.button.render()
+        })
+        return this
+    }
+
     module.exports = Pagination
 }
 )
+
+/* FUTURE WORK - handle a number of pages greater than it fit on widget */
+/* Create a div for each page and render only elements inside active div */

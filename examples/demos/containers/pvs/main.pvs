@@ -15,15 +15,19 @@ main: THEORY
     mode: Mode,
     modeTab: Mode,
     isReady: bool,
-    battery_level: nonneg_real
+    battery_level: nonneg_real,
+    pag_number: nonneg_real,
+    pag_active: nonneg_real
   #]
 
   %-- init function
   init: State = (#
     mode := BATTERY,
     modeTab := DATE,
-    isReady := false,
-    battery_level := 50
+    isReady := true,
+    battery_level := 50,
+    pag_number := 14,
+    pag_active := 3
   #)
 
 modePillChanger(m: Mode)(st: State): State = st WITH [ mode := m ]
@@ -63,6 +67,85 @@ per_click_nav_tab_cancel_page(st: State): bool = true
   click_nav_tab_cancel_page(st: State): State =
     modeTabChanger(CANCEL)(st)
 
+%% pagination modePillChanger
+activePageChanger(p: nonneg_real)(st: State): State = st WITH [ pag_active := p ]
+leave(p: nonneg_real)(st: State): State = st
 
+per_click_pagination_previous_page(st: State):bool = true
+  click_pagination_previous_page(st:State): State =
+     COND
+     pag_active(st) = 1
+      -> LET st = leave(1)(st)
+          IN activePageChanger(1)(st),
+      pag_active(st) = 2
+      -> LET st = leave(1)(st)
+          IN activePageChanger(1)(st),
+      pag_active(st) = 3
+      -> LET st = leave(2)(st)
+          IN activePageChanger(2)(st),
+      pag_active(st) = 4
+      -> LET st = leave(3)(st)
+          IN activePageChanger(3)(st),
+      pag_active(st) = 5
+      -> LET st = leave(5)(st)
+          IN activePageChanger(4)(st),
+      pag_active(st) = 6
+      -> LET st = leave(5)(st)
+          IN activePageChanger(5)(st),
+      pag_active(st) = 7
+      -> LET st = leave(6)(st)
+          IN activePageChanger(6)(st),
+      ELSE -> st
+      ENDCOND
+
+
+per_click_pagination_next_page(st: State):bool = true
+  click_pagination_next_page(st:State): State =
+     COND
+     pag_active(st) = 1
+      -> LET st = leave(2)(st)
+          IN activePageChanger(2)(st),
+      pag_active(st) = 2
+      -> LET st = leave(3)(st)
+          IN activePageChanger(3)(st),
+      pag_active(st) = 3
+      -> LET st = leave(4)(st)
+          IN activePageChanger(4)(st),
+      pag_active(st) = 4
+      -> LET st = leave(5)(st)
+          IN activePageChanger(5)(st),
+      pag_active(st) = 5
+      -> LET st = leave(6)(st)
+          IN activePageChanger(6)(st),
+      pag_active(st) = 6
+      -> LET st = leave(7)(st)
+          IN activePageChanger(7)(st),
+      pag_active(st) = 7
+      -> LET st = leave(7)(st)
+          IN activePageChanger(7)(st),
+      ELSE -> st
+      ENDCOND
+
+per_click_pagination_page_1(st: State):bool = true
+  click_pagination_page_1(st:State): State =
+      activePageChanger(1)(st)
+per_click_pagination_page_2(st: State):bool = true
+  click_pagination_page_2(st:State): State =
+      activePageChanger(2)(st)
+per_click_pagination_page_3(st: State):bool = true
+  click_pagination_page_3(st:State): State =
+      activePageChanger(3)(st)
+per_click_pagination_page_4(st: State):bool = true
+  click_pagination_page_4(st:State): State =
+      activePageChanger(4)(st)
+per_click_pagination_page_5(st: State):bool = true
+  click_pagination_page_5(st:State): State =
+      activePageChanger(5)(st)
+per_click_pagination_page_6(st: State):bool = true
+  click_pagination_page_6(st:State): State =
+      activePageChanger(6)(st)
+per_click_pagination_page_7(st: State):bool = true
+  click_pagination_page_7(st:State): State =
+      activePageChanger(7)(st)
 
 END main
