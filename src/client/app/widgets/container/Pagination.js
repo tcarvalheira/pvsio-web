@@ -264,7 +264,7 @@ define(function (require, exports, module) {
     * @param {String} title The title of the button, shown if not useIcons.
     * @param {Boolean} isPrevious set if it is the previous or the next button
     * @param {Function} onClick onClick callback
-    * @return {Object} self object, so that methods can be chained
+    * @return {Object} The object itself, so that methods can be chained
     * @memberof module:Pagination
     * @instance
     */
@@ -336,7 +336,7 @@ define(function (require, exports, module) {
     * @function <a name="setActivePage">setActivePage</a>
     * @description Set the active index of pagination. It defines the active page on paginator
     * @param {Object} state PVS state of the model
-    * @return {Object} self object, so that methods can be chained
+    * @return {Object} The object itself, so that methods can be chained
     * @memberof module:Pagination
     * @instance
     */
@@ -386,7 +386,7 @@ define(function (require, exports, module) {
      * @protected
      * @function <a name="resizeButtonWidgets">resizeButtonWidgets</a>
      * @description resizes each button based on created pagination html
-     * @return { Object } self object, so that methods can be chained
+     * @return { Object } The object itself, so that methods can be chained
      * @memberof module:Pagination
      * @instance
     */
@@ -409,7 +409,7 @@ define(function (require, exports, module) {
      * @protected
      * @function <a name="renderButtonWidgets">renderButtonWidgets</a>
      * @description call render method for each button in widget
-     * @return { Object } self object, so that methods can be chained
+     * @return { Object } The object itself, so that methods can be chained
      * @memberof module:Pagination
      * @instance
     */

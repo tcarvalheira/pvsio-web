@@ -159,7 +159,7 @@ define(function (require, exports, module) {
      * @protected
      * @function <a name="setIconClass">setIconClass</a>
      * @description This method will set the icon class to be shown
-     * @return self object
+     * @return The object itself
      * @memberof module:Battery
      * @instance
     */
@@ -237,7 +237,7 @@ define(function (require, exports, module) {
     * @protected
    * @function <a name="createIcon">createIcon</a>
    * @description This method creates the necessary HTML for the icon render
-   * @return returns self object to do chained calls
+   * @return returns The object itself to do chained calls
    * @memberof module:Battery
    * @instance
    */
@@ -261,7 +261,7 @@ define(function (require, exports, module) {
     * @protected 
    * @function <a name="createText">createText</a>
    * @description This method creates a BasicDisplayEVO widget to render the level text
-   * @return self object for chained calls
+   * @return The object itself for chained calls
    * @memberof module:Battery
    * @instance
    */
@@ -288,7 +288,7 @@ define(function (require, exports, module) {
     /**
    * @function <a name="showIcon">showIcon</a>
    * @description Show the icon on widget
-   * @return return self object for chained calls
+   * @return return The object itself for chained calls
    * @memberof module:Battery
    * @instance
    */
@@ -299,7 +299,7 @@ define(function (require, exports, module) {
     /**
    * @function <a name="hideIcon">hideIcon</a>
    * @description Hide widget icon
-   * @return returns self object for chained calls
+   * @return returns The object itself for chained calls
    * @memberof module:Battery
    * @instance
    */
@@ -312,7 +312,7 @@ define(function (require, exports, module) {
     /**
     * @function <a name="showText">showText</a>
     * @description shows text with battery level
-    * @return returns self object for chained calls
+    * @return returns The object itself for chained calls
     * @memberof module:Battery
     * @instance
     */
@@ -324,7 +324,7 @@ define(function (require, exports, module) {
     /**
     * @function <a name="hideText">hideText</a>
     * @description hides battery level text from the widget
-    * @return returns self object for chained calls 
+    * @return returns The object itself for chained calls 
     * @memberof module:Battery
     * @instance
     */

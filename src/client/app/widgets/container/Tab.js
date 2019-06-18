@@ -89,7 +89,7 @@ define(function (require, exports, module) {
     * @function <a name="createHTML">createHTML</a>
     * @description this method creates the necessary HTML elements to show the tab or pills. 
     * It also creates the wodgets buttons to control widget behaviour.
-    * @return {Object} self object, so that methods can be chained
+    * @return {Object} The object itself, so that methods can be chained
     * @memberof module:Tab
     * @instance
     */
@@ -165,7 +165,7 @@ define(function (require, exports, module) {
      * @function <a name="setActiveTab">setActiveTab</a>
      * @description Sets new active tab. It will remove all active marks and set a new one
      * @param { String } state PVS state where it will find active page.
-     * @return { Object } self object, so that methods can be chained
+     * @return { Object } The object itself, so that methods can be chained
      * @memberof module:Tab
      * @instance
     */
@@ -221,7 +221,7 @@ define(function (require, exports, module) {
      * @param {Object} opt Style options overriding the style attributes used when the widget was created.
      *                     The override style options are temporary, i.e., they are applied only for the present invocation of the render method.
      *                     Available options are either html style attributes or the following widget attributes:
-     * @return { Object } self object, so that methods can be chained
+     * @return { Object } The object itself, so that methods can be chained
      * @memberof module:Tab
      * @instance
     */

@@ -286,7 +286,7 @@ define(function (require, exports, module) {
     * @function <a name="setDate">setDate</a>
     * @description Set widget date. It will update date and rerender widget with the new date
     * @param {String} date A date string representing desired date for the widget
-    * @return self object to chained calls
+    * @return The object itself to chained calls
     * @memberof module:DateTime
     * @instance
     */

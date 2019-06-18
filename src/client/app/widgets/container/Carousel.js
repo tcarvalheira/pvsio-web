@@ -144,7 +144,7 @@ define(function (require, exports, module) {
      * @function <a name="createMasterDiv">createMasterDiv</a>
      * @description Create HTML master div to Carousel. All other elements of carousel should be loaded into this div. 
      * The method should only be used when option usePreDoneHTML is set to false.
-     * @return {Object} self object so that one can chain methods.
+     * @return {Object} The object itself so that one can chain methods.
      * @memberof module:Carousel
      * @instance
      */
@@ -172,7 +172,7 @@ define(function (require, exports, module) {
      * @function <a name="createHTMLButtons">createHTMLButtons</a>
      * @description This method appends the necessary HTML to create the HTML buttons. 
      * This method should only be used when option usePreDoneHTML is set to false.
-     * @return {Object} self object, so that methods can be chained
+     * @return {Object} The object itself, so that methods can be chained
      * @memberof modulo:Carousel
      * @instance
      */
@@ -211,7 +211,7 @@ define(function (require, exports, module) {
      * @function <a name="createHTML">createHTML</a>
      * @description This method appends the necessary HTML to widget div in order to render the carousel properly. 
      * This method should only be used when option usePreDoneHTML is set to false.
-     * @return {Object} self object, so that methods can be chained
+     * @return {Object} The object itself, so that methods can be chained
      * @memberof module:Carousel
      * @instance
      */
@@ -265,7 +265,7 @@ define(function (require, exports, module) {
      * @function <a name="loadMasterDivPreDoneHTML">loadMasterDivPreDoneHTML</a>
      * @description Loads this.masterDiv and change its id. This element will be loaded into widget div.
      * This method shoud called before widget creation.
-     * @return {Object} self object, so that methods can be chained
+     * @return {Object} The object itself, so that methods can be chained
      * @memberof module:Carousel
      * @instance
     */
@@ -289,7 +289,7 @@ define(function (require, exports, module) {
      * ol Element with id <widget_id>_indicators - defining carousel bottom indicators
      * a Element with id <widget_id>_left_controller - defining previous button
      * a Element with id <widget_id>_rigth_controller - defining next button
-     * @return {Object} self object so that one can chain methods
+     * @return {Object} The object itself so that one can chain methods
      * @memberof module:Carousel
      * @instance
      */
@@ -315,7 +315,7 @@ define(function (require, exports, module) {
      * @function <a name="render">render</a>
      * @description Rendering function for Carousel container based on PVS state
      * @param {Object} state JSON object with the current value of the state attributes of the modelled system
-     * @return {Obect} self object so that methods can be chained
+     * @return {Obect} The object itself so that methods can be chained
      * @memberof module:Carousel
      * @instance
      */
@@ -375,7 +375,7 @@ define(function (require, exports, module) {
      * @private
     * @function <a name="createButtons">createButtons</a>
     * @description This method will create the action buttons for the carousel. This Buttons will be ButtonEVO widgets.
-    * @return {Object} self object, so that methods can be chained
+    * @return {Object} The object itself, so that methods can be chained
     * @memberof module:Carousel
     * @instance
     */
@@ -428,7 +428,7 @@ define(function (require, exports, module) {
     	/**
         * @function <a name="hideCarouselElements">hideCarouselElements</a>
         * @description Hide all elements inside carousel.
-        * @return {Object} self object, so that methods can be chained
+        * @return {Object} The object itself, so that methods can be chained
         * @memberof module:Carousel
         * @instance
         */
@@ -450,7 +450,7 @@ define(function (require, exports, module) {
     	/**
         * @function <a name="reveal">reveal</a>
         * @description Reveal all elements in carousel
-        * @return {Object} self object, so that methods can be chained
+        * @return {Object} The object itself, so that methods can be chained
         * @memberof module:Carousel
         * @instance
         */
@@ -479,7 +479,7 @@ define(function (require, exports, module) {
      * On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.</li>
      * @param {String} [opt.ride=false] Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.</li>
      * @param {Boolean} [opt.wrap=true] Whether the carousel should cycle continuously or have hard stops.</li>
-     * @return {Object} self object, so that methods can be chained
+     * @return {Object} The object itself, so that methods can be chained
      * @memberof module:Carousel
      * @instance
      */
@@ -492,7 +492,7 @@ define(function (require, exports, module) {
     /**
      * @function <a name="pause">pause</a>
      * @description Stops the carousel from cycling through items. This method does not take PVS state into account. Useful only when carousel should play regardless PVS state.
-     * @return {Object} self object, so that methods can be chained
+     * @return {Object} The object itself, so that methods can be chained
      * @memberof module:Carousel
      * @instance
      */
@@ -504,7 +504,7 @@ define(function (require, exports, module) {
     /**
          * @function <a name="prev">prev</a>
          * @description Cycles carousel to the previous item. This method does not take PVS state into account. Useful only when carousel should play regardless PVS state.
-         * @return {Object} self object, so that methods can be chained
+         * @return {Object} The object itself, so that methods can be chained
          * @memberof module:Carousel
          * @instance
          */
@@ -516,7 +516,7 @@ define(function (require, exports, module) {
     /**
      * @function <a name="next">Next</a>
      * @description Cycles carousel to the next item.This method does not take PVS state into account. Useful only when carousel should play regardless PVS state.
-     * @return {Object} self object, so that methods can be chained
+     * @return {Object} The object itself, so that methods can be chained
      * @memberof module:Carousel
      * @instance
      */
@@ -530,7 +530,7 @@ define(function (require, exports, module) {
      * @function <a name="goTo">goTo</a>
      * @description Cycles the carousel to a particular frame (0 based).This method does not take PVS state into account. Useful only when carousel should play regardless PVS state.
      * @param {Number} number Goto page number 
-     * @return {Object} self object, so that methods can be chained
+     * @return {Object} The object itself, so that methods can be chained
      * @memberof module:Carousel
      * @instance
      */
@@ -542,7 +542,7 @@ define(function (require, exports, module) {
     /**
      * @function <a name="dispose">dispose</a>
      * @description Destroys the carousel element. This method does not take PVS state into account. Useful only when carousel should play regardless PVS state.
-     * @return {Object} self object, so that methods can be chained
+     * @return {Object} The object itself, so that methods can be chained
      * @memberof module:Carousel
      * @instance
      */
