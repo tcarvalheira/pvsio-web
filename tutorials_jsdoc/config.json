@@ -15,10 +15,5 @@
             "outputSourceFiles": false,
             "outputSourcePath": false
         }
-    },
-    
-    "opts": {
-        "tutorials": "TutorialsMarkdown",
-        "readme": "TutorialsHomepage.md"
     }
 }

@@ -38,7 +38,10 @@
     <div class="container-overview">
     
         
-            <div class="description">Renders a carousel container with buttons to navigate through pages.</div>
+            <div class="description">Given pages, renders a carousel container with buttons to navigate through pages.
+This widget works in two different ways. On the onde hand it's responsible to create all HTML for the widget, 
+on the other hand it gives flexibility to load pre-done HTML and use it, as long as it meets some name conventions defined by widget.
+The content of each page is setted by defining page <widget_id>-<page_name> as parent on other widgets. This is another name convention</div>
         
 
         
@@ -119,6 +122,8 @@
 
 
 
+
+
     <h5>Example</h5>
     
         <p class="code-caption">Example use of the container.</p>
@@ -132,28 +137,19 @@
  require(["widgets/container/Carousel"], function (Carousel) {
       "use strict";
       var disp = new Carousel('giip',
-            {
-                width: 472,
-                height: 260,
-                top: 114,
-                left: 76
-            },
-            {
-                screens: [{"id" : "home", "title": "Home"}, 
-                            {"id": "basal_mgm", "title": "Basal Management"}, 
-                            {"id": "bolus_mgm", "title": "Bolus Management"}, 
-                            {"id": "config", "title": "Pump Configuration"}, 
-                            {"id": "data_mgm", "title": "Event Data Management"} ],
+            {width: 472,height: 260,top: 114,left: 76},
+            {screens: [{"id" : "home", "title": "Home", state: "NORMAL_OPERATION", idx:0}, 
+                            {"id": "basal_mgm", "title": "Basal Management", state: "BASAL_MANAGEMENT", idx:1}, 
+                            {"id": "bolus_mgm", "title": "Bolus Management", state: "BOLUS_MANAGEMENT", idx:2}, 
+                            {"id": "config", "title": "Pump Configuration", state: "PUMP_CONFIGURATION", idx:3}, 
+                            {"id": "data_mgm", "title": "Event Data Management", state: "EVENT_DATA_MANAGEMENT", idx:4} ],
                 parent: "device",
+                screensKey: 'pages',
                 callback: onMessageReceived,
-                onSlideBsCarousel: () => {
-                    //console.log('Carousel INIT')
-                },
-                onSlidBsCarousel: () => {
-                    //console.log('Carousel END')
-                }
-            })
-      disp.render();
+                interval: false,
+                backgroundColor: 'transparent',
+                visibleWhen: 'isReady=TRUE'})
+        disp.render()
  });</code></pre>
 
 
@@ -245,7 +241,7 @@
 
             
 
-            <td class="description last">The ID of the touchscreen button.</td>
+            <td class="description last">The ID of the carousel</td>
         </tr>
 
     
@@ -269,8 +265,7 @@
             
 
             <td class="description last">The four coordinates (top, left, width, height) of the display, specifying
-       the left, top corner, and the width and height of the (rectangular) widget area.
-       Default is { top: 0, left: 0, width: 32, height: 20 }.</td>
+       the left, top corner, and the width and height of the (rectangular) widget area.</td>
         </tr>
 
     
@@ -323,7 +318,7 @@
 
         <tr>
             
-                <td class="name"><code>number</code></td>
+                <td class="name"><code>interval</code></td>
             
 
             <td class="type">
@@ -350,7 +345,7 @@
             
                 <td class="default">
                 
-                    5000
+                    false
                 
                 </td>
             
@@ -606,8 +601,8 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
             
 
-            <td class="description last">The four coordinates (top, left, width, height) of the display, specifying
-       the left, top corner, and the width and height of the (rectangular) widget area.</td>
+            <td class="description last">The four coordinates (top, left, width, height) of the previous button, specifying
+       the left, top corner, and the width and height of the (rectangular) widget area. Default is {width: 70, hight: 50, top: <widget_height>-50, left: 0}</td>
         </tr>
 
     
@@ -738,8 +733,8 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
             
 
-            <td class="description last">The four coordinates (top, left, width, height) of the display, specifying
-       the left, top corner, and the width and height of the (rectangular) widget area.</td>
+            <td class="description last">The four coordinates (top, left, width, height) of the next button, specifying
+       the left, top corner, and the width and height of the (rectangular) widget area. {width: 70, hight: 50, top: <widget_height>-50, left: <widget_width>-70}</td>
         </tr>
 
     
@@ -818,12 +813,11 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
                 </td>
             
 
-            <td class="description last">Set if the widget should create the HTML code or reuse user HTML. This HTML should follow some naming conventions
-To use PreDoneHTML, there are some naming conventions. There should be:
-div Element of the id equals to <widget_id>
-ol Element with id <widget_id>_indicators
-a Element with id <widget_id>_left_controller
-a Element with id <widget_id>_rigth_controller</td>
+            <td class="description last">Set if the widget should create the HTML code or reuse user HTML. This HTML should follow some naming conventions:
+div Element of the id equals to <widget_id> - defining carouser wrapper
+ol Element with id <widget_id>_indicators - defining carousel bottom indicators
+a Element with id <widget_id>_left_controller - defining previous button
+a Element with id <widget_id>_rigth_controller - defining next button</td>
         </tr>
 
     
@@ -857,12 +851,88 @@ a Element with id <widget_id>_rigth_controller</td>
             
                 <td class="default">
                 
-                    {}
+                    []
                 
                 </td>
             
 
-            <td class="description last">Object with PVS states and corresponding index on carousel</td>
+            <td class="description last">Array of objects {id: 'a', title: 'b', state: 'c'}. This will be carousel pages. Each page state must match with PVS state.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>displayKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'mode'
+                
+                </td>
+            
+
+            <td class="description last">Key that holds active carousel page. PVS state must have this name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>visibleWhen</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Set when widget should or should not be displayed. This can be an expression to match with PVS state.</td>
         </tr>
 
     
@@ -933,6 +1003,8 @@ a Element with id <widget_id>_rigth_controller</td>
 
 
 
+
+
         
             
 
@@ -947,7 +1019,8 @@ a Element with id <widget_id>_rigth_controller</td>
 
 
 <div class="description">
-    This method appends the necessary html to widget div
+    This method appends the necessary HTML to widget div in order to render the carousel properly. 
+This method should only be used when option usePreDoneHTML is set to false.
 </div>
 
 
@@ -1009,11 +1082,13 @@ a Element with id <widget_id>_rigth_controller</td>
 
 
 
+
+
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    this
+    The object itself, so that methods can be chained
 </div>
 
 
@@ -1042,7 +1117,7 @@ a Element with id <widget_id>_rigth_controller</td>
     
 
     
-    <h4 class="name" id="%3Caname=%22cyle%22%3Ecyle%3C/a%3E"><span class="type-signature"></span><a name="cyle">cyle</a><span class="signature">(opt)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="%3Caname=%22createMasterDiv%22%3EcreateMasterDiv%3C/a%3E"><span class="type-signature">(protected) </span><a name="createMasterDiv">createMasterDiv</a><span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -1050,7 +1125,113 @@ a Element with id <widget_id>_rigth_controller</td>
 
 
 <div class="description">
-    Cycles through the carousel items from left to right
+    Create HTML master div to Carousel. All other elements of carousel should be loaded into this div. 
+The method should only be used when option usePreDoneHTML is set to false.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The object itself so that one can chain methods.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="%3Caname=%22cycle%22%3Ecycle%3C/a%3E"><span class="type-signature"></span><a name="cycle">cycle</a><span class="signature">(opt)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Cycles through the carousel items from left to right. This method does take into account the PVS state. It will be useful only when one wants to make carousel play alone, regardless PVS state.
 </div>
 
 
@@ -1242,8 +1423,7 @@ a Element with id <widget_id>_rigth_controller</td>
                 </td>
             
 
-            <td class="description last">If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it.
-
+            <td class="description last">If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it. 
 On touch-enabled devices, when set to "hover", cycling will pause on touchend (once the user finished interacting with the carousel) for two intervals, before automatically resuming. Note that this is in addition to the above mouse behavior.</li></td>
         </tr>
 
@@ -1388,11 +1568,13 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 
+
+
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    this
+    The object itself, so that methods can be chained
 </div>
 
 
@@ -1429,7 +1611,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 <div class="description">
-    Destroys the carousel element
+    Destroys the carousel element. This method does not take PVS state into account. Useful only when carousel should play regardless PVS state.
 </div>
 
 
@@ -1491,11 +1673,13 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 
+
+
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    this
+    The object itself, so that methods can be chained
 </div>
 
 
@@ -1532,7 +1716,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 <div class="description">
-    Cycles the carousel to a particular frame (0 based)
+    Cycles the carousel to a particular frame (0 based).This method does not take PVS state into account. Useful only when carousel should play regardless PVS state.
 </div>
 
 
@@ -1643,11 +1827,13 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 
+
+
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    this
+    The object itself, so that methods can be chained
 </div>
 
 
@@ -1676,7 +1862,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
     
 
     
-    <h4 class="name" id="%3Caname=%22hideCarouselElements%22%3EhideCarouselElements%3C/a%3E"><span class="type-signature"></span><a name="hideCarouselElements">hideCarouselElements</a><span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="%3Caname=%22hideCarouselElements%22%3EhideCarouselElements%3C/a%3E"><span class="type-signature"></span><a name="hideCarouselElements">hideCarouselElements</a><span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -1748,6 +1934,30 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The object itself, so that methods can be chained
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
 
 
@@ -1757,7 +1967,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
     
 
     
-    <h4 class="name" id="%3Caname=%22next%22%3ENext%3C/a%3E"><span class="type-signature"></span><a name="next">Next</a><span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="%3Caname=%22loadMasterDivPreDoneHTML%22%3EloadMasterDivPreDoneHTML%3C/a%3E"><span class="type-signature">(protected) </span><a name="loadMasterDivPreDoneHTML">loadMasterDivPreDoneHTML</a><span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -1765,7 +1975,8 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 <div class="description">
-    Cycles carousel to the next item
+    Loads this.masterDiv and change its id. This element will be loaded into widget div.
+This method shoud called before widget creation.
 </div>
 
 
@@ -1827,11 +2038,229 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 
+
+
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    this
+    The object itself, so that methods can be chained
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="%3Caname=%22loadPreDoneHTML%22%3EloadPreDoneHTML%3C/a%3E"><span class="type-signature">(protected) </span><a name="loadPreDoneHTML">loadPreDoneHTML</a><span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Load the Carousel predone HTML.
+This method defines the name conventions so that the carousel is properly loaded.
+This method should be used when option usePreDoneHTML is set to TRUE.
+div Element of the id equals to <widget_id> - defining carouser wrapper
+ol Element with id <widget_id>_indicators - defining carousel bottom indicators
+a Element with id <widget_id>_left_controller - defining previous button
+a Element with id <widget_id>_rigth_controller - defining next button
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The object itself so that one can chain methods
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="%3Caname=%22next%22%3ENext%3C/a%3E"><span class="type-signature"></span><a name="next">Next</a><span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Cycles carousel to the next item.This method does not take PVS state into account. Useful only when carousel should play regardless PVS state.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The object itself, so that methods can be chained
 </div>
 
 
@@ -1868,7 +2297,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 <div class="description">
-    Stops the carousel from cycling through items
+    Stops the carousel from cycling through items. This method does not take PVS state into account. Useful only when carousel should play regardless PVS state.
 </div>
 
 
@@ -1930,11 +2359,13 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 
+
+
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    this
+    The object itself, so that methods can be chained
 </div>
 
 
@@ -1971,7 +2402,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 <div class="description">
-    Cycles carousel to the previous item
+    Cycles carousel to the previous item. This method does not take PVS state into account. Useful only when carousel should play regardless PVS state.
 </div>
 
 
@@ -2033,11 +2464,13 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 
+
+
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    this
+    The object itself, so that methods can be chained
 </div>
 
 
@@ -2066,7 +2499,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
     
 
     
-    <h4 class="name" id="%3Caname=%22render%22%3Erender%3C/a%3E"><span class="type-signature"></span><a name="render">render</a><span class="signature">(state)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="%3Caname=%22render%22%3Erender%3C/a%3E"><span class="type-signature"></span><a name="render">render</a><span class="signature">(state)</span><span class="type-signature"> &rarr; {Obect}</span></h4>
     
 
     
@@ -2074,7 +2507,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 <div class="description">
-    Rendering function for button widgets.
+    Rendering function for Carousel container based on PVS state
 </div>
 
 
@@ -2187,6 +2620,30 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The object itself so that methods can be chained
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Obect</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
 
 
@@ -2196,7 +2653,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
     
 
     
-    <h4 class="name" id="%3Caname=%22reveal%22%3Ereveal%3C/a%3E"><span class="type-signature"></span><a name="reveal">reveal</a><span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="%3Caname=%22reveal%22%3Ereveal%3C/a%3E"><span class="type-signature"></span><a name="reveal">reveal</a><span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -2204,7 +2661,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 <div class="description">
-    Reveal all elements of carousel
+    Reveal all elements in carousel
 </div>
 
 
@@ -2268,6 +2725,30 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The object itself, so that methods can be chained
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
 
 
@@ -2293,7 +2774,7 @@ On touch-enabled devices, when set to "hover", cycling will pause on touchend (o
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Sep 25 2018 17:29:32 GMT+0100 (WEST)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Jul 23 2019 22:05:35 GMT+0100 (WEST)
 </footer>
 
 <script> prettyPrint(); </script>
